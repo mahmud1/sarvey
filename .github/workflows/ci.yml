@@ -244,16 +244,16 @@ jobs:
           rm -rf public
           mkdir -p public/docs
           mkdir -p public/images/
-          mkdir -p public/coverage
-          mkdir -p public/test_reports
+          # mkdir -p public/coverage
+          # mkdir -p public/test_reports
 
           cp -r docs/_build/html/* public/docs/
-          cp -r htmlcov/* public/coverage/
-          cp report.html public/test_reports/
+          # cp -r htmlcov/* public/coverage/
+          # cp report.html public/test_reports/
           ls -al public
           ls -al public/docs
-          ls -al public/coverage
-          ls -al public/test_reports
+          # ls -al public/coverage
+          # ls -al public/test_reports
         shell: bash
 
       - name: Upload to GitHub Pages
