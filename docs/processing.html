@@ -1,51 +1,111 @@
+
+
 <!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-<html lang="en" data-content_root="./">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Multitemporal InSAR processing workflow &mdash; SARvey 1.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/custom.css?v=86cf1cd6" />
 
-    <title>Multitemporal InSAR processing workflow &#8212; SARvey 1.1.0 documentation</title>
-    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
-    <link rel="stylesheet" type="text/css" href="_static/classic.css?v=2bf1fcf8" />
-    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=86cf1cd6" />
-    
-    <script src="_static/documentation_options.js?v=fc837d61"></script>
-    <script src="_static/doctools.js?v=9bcbadda"></script>
-    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
-    
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=fc837d61"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Demo Datasets" href="demo_datasets.html" />
     <link rel="prev" title="Preparation" href="preparation.html" /> 
-  </head><body>
-    <div class="related" role="navigation" aria-label="Related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="genindex.html" title="General Index"
-             accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
-          <a href="demo_datasets.html" title="Demo Datasets"
-             accesskey="N">next</a> |</li>
-        <li class="right" >
-          <a href="preparation.html" title="Preparation"
-             accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">SARvey 1.1.0 documentation</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">Multitemporal InSAR processing workflow</a></li> 
-      </ul>
-    </div>  
+</head>
 
-    <div class="document">
-      <div class="documentwrapper">
-        <div class="bodywrapper">
-          <div class="body" role="main">
-            
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            SARvey
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="readme.html">SARvey - survey with SAR</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/luhipi/sarvey">Source code repository</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usage.html">Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="preparation.html">Preparation</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Multitemporal InSAR processing workflow</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#configuration-file">Configuration file</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#processing-steps-for-two-step-unwrapping-workflow">Processing steps for two-step unwrapping workflow</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#step-0-preparation">Step 0: Preparation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#step-1-consistency-check">Step 1: Consistency Check</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#step-2-unwrapping">Step 2: Unwrapping</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#option-1-unwrapping-in-time-and-space">Option 1) Unwrapping in time and space</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#option-2-unwrapping-in-space">Option 2) Unwrapping in space</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#step-3-filtering">Step 3: Filtering</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#step-4-densification">Step 4: Densification</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id1">Option 1: Unwrapping in time and space</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id2">Option 2: Unwrapping in space</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#handling-big-datasets">Handling big datasets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#processing-steps-for-one-step-unwrapping-workflow">Processing steps for one-step unwrapping workflow</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#literature">Literature</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="demo_datasets.html">Demo Datasets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">Python API reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="authors.html">Credits</a></li>
+<li class="toctree-l1"><a class="reference internal" href="history.html">History</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">SARvey</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Multitemporal InSAR processing workflow</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/processing.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
   <section id="multitemporal-insar-processing-workflow">
-<span id="processing"></span><h1>Multitemporal InSAR processing workflow<a class="headerlink" href="#multitemporal-insar-processing-workflow" title="Link to this heading">¶</a></h1>
+<span id="processing"></span><h1>Multitemporal InSAR processing workflow<a class="headerlink" href="#multitemporal-insar-processing-workflow" title="Link to this heading"></a></h1>
 <p>The <cite>sarvey</cite> command line interface executes the multitemporal InSAR processing workflow.
 The workflow is described in the paper</p>
 <blockquote>
@@ -56,7 +116,7 @@ Two processing strategies are provided with either one- or two-step unwrapping.
 The workflow should be decided based on the characteristics of the displacement (spatial extend, magnitude, temporal behaviour).
 The parameters of each step are handled via the <a class="reference internal" href="#configuration-file">configuration file</a> for which the parameters are named within the description of each step.</p>
 <section id="configuration-file">
-<h2>Configuration file<a class="headerlink" href="#configuration-file" title="Link to this heading">¶</a></h2>
+<h2>Configuration file<a class="headerlink" href="#configuration-file" title="Link to this heading"></a></h2>
 <p>The configuration file is a JSON file containing all the parameters required to run <cite>sarvey</cite>.
 This file can be generated using the <cite>sarvey</cite> command with the <strong>“-g”</strong> flag, where you can specify your desired filename.</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sarvey<span class="w"> </span>-f<span class="w"> </span>config.json<span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="m">0</span><span class="w"> </span>-g
@@ -111,9 +171,9 @@ If you wish to perform DS analysis, change it to <cite>true</cite>. Note: If <ci
 </div></blockquote>
 </section>
 <section id="processing-steps-for-two-step-unwrapping-workflow">
-<h2>Processing steps for two-step unwrapping workflow<a class="headerlink" href="#processing-steps-for-two-step-unwrapping-workflow" title="Link to this heading">¶</a></h2>
+<h2>Processing steps for two-step unwrapping workflow<a class="headerlink" href="#processing-steps-for-two-step-unwrapping-workflow" title="Link to this heading"></a></h2>
 <section id="step-0-preparation">
-<h3>Step 0: Preparation<a class="headerlink" href="#step-0-preparation" title="Link to this heading">¶</a></h3>
+<h3>Step 0: Preparation<a class="headerlink" href="#step-0-preparation" title="Link to this heading"></a></h3>
 <ul class="simple">
 <li><dl class="simple">
 <dt>Loading the resampled SLC data:</dt><dd><p>The resampled SLC (Single Look Complex) data is read from the inputs/slcStack.h5
@@ -164,7 +224,7 @@ The temporal coherence is used to select the first- and second-order points in t
 </ul>
 </section>
 <section id="step-1-consistency-check">
-<h3>Step 1: Consistency Check<a class="headerlink" href="#step-1-consistency-check" title="Link to this heading">¶</a></h3>
+<h3>Step 1: Consistency Check<a class="headerlink" href="#step-1-consistency-check" title="Link to this heading"></a></h3>
 <ul class="simple">
 <li><dl class="simple">
 <dt>Selecting candidates for first order points:</dt><dd><p>Candidates for the first-order points are selected based on the temporal coherence threshold (<strong>consistency_check:coherence_p1</strong>).
@@ -215,7 +275,7 @@ The residuals of the integration are used to identify outliers.</p>
 </ul>
 </section>
 <section id="step-2-unwrapping">
-<h3>Step 2: Unwrapping<a class="headerlink" href="#step-2-unwrapping" title="Link to this heading">¶</a></h3>
+<h3>Step 2: Unwrapping<a class="headerlink" href="#step-2-unwrapping" title="Link to this heading"></a></h3>
 <p>This step unwraps the phase of the first-order points and retrieves their displacement time series.
 Two unwrapping options (<strong>general:apply_temporal_unwrapping</strong>, also applies to step 4) are implemented and should be chosen based on the characteristics of the displacement (spatial extend, magnitude, temporal behaviour).</p>
 <ul class="simple">
@@ -229,7 +289,7 @@ Two unwrapping options (<strong>general:apply_temporal_unwrapping</strong>, also
 </li>
 </ul>
 <section id="option-1-unwrapping-in-time-and-space">
-<h4>Option 1) Unwrapping in time and space<a class="headerlink" href="#option-1-unwrapping-in-time-and-space" title="Link to this heading">¶</a></h4>
+<h4>Option 1) Unwrapping in time and space<a class="headerlink" href="#option-1-unwrapping-in-time-and-space" title="Link to this heading"></a></h4>
 <ul class="simple">
 <li><dl class="simple">
 <dt>Integrating parameters from arcs to points:</dt><dd><p>The temporal unwrapping results of the spatial network from consistency check in step 1 are used in this step.
@@ -269,7 +329,7 @@ Or, the spatial network is re-created with a delaunay network.</p>
 </ul>
 </section>
 <section id="option-2-unwrapping-in-space">
-<h4>Option 2) Unwrapping in space<a class="headerlink" href="#option-2-unwrapping-in-space" title="Link to this heading">¶</a></h4>
+<h4>Option 2) Unwrapping in space<a class="headerlink" href="#option-2-unwrapping-in-space" title="Link to this heading"></a></h4>
 <ul class="simple">
 <li><dl class="simple">
 <dt>Spatial unwrapping:</dt><dd><p>The interferograms are unwrapped independently in space with a sparse point network unwrapping method (<strong>general:spatial_unwrapping_method</strong>) (Bioucas-Dias and Valadao 2007, Boykov and Kolmogorov 2004).
@@ -294,7 +354,7 @@ Or, the spatial network is re-created with a delaunay network.</p>
 </section>
 </section>
 <section id="step-3-filtering">
-<h3>Step 3: Filtering<a class="headerlink" href="#step-3-filtering" title="Link to this heading">¶</a></h3>
+<h3>Step 3: Filtering<a class="headerlink" href="#step-3-filtering" title="Link to this heading"></a></h3>
 <p>In this step, the atmospheric phase screen (APS) is estimated from the displacement time series of the first-order points.
 Afterwards, the APS is interpolated to the location of the second-order points.
 The filtering can be skipped by setting <strong>filtering:apply_aps_filtering</strong> to True.
@@ -345,7 +405,7 @@ After filtering, the estimated APS is interpolated to the location of the second
 For example, a threshold of 0.8 would result in p2_coh80_aps.h5 and p2_coh80_ifg_wr.h5.</p>
 </section>
 <section id="step-4-densification">
-<h3>Step 4: Densification<a class="headerlink" href="#step-4-densification" title="Link to this heading">¶</a></h3>
+<h3>Step 4: Densification<a class="headerlink" href="#step-4-densification" title="Link to this heading"></a></h3>
 <p>The densification step is the last step of the two-step unwrapping workflow.
 So far, the displacement was only estimated at the sparse locations of the first-order points.
 The second-order points selected during step 3 (filtering) are added to the first-order points to densify the final set of points.
@@ -364,7 +424,7 @@ During the densification, first, the estimated APS is removed from both first- a
 <p>The placeholder XX depends on the threshold for the temporal coherence used for selecting the second-order points during filtering in step 3.
 For example, a threshold of 0.8 would result in p2_coh80_ifg_unw.h5 and p2_coh80_ts.h5.</p>
 <section id="id1">
-<h4>Option 1: Unwrapping in time and space<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h4>
+<h4>Option 1: Unwrapping in time and space<a class="headerlink" href="#id1" title="Link to this heading"></a></h4>
 <ul class="simple">
 <li><dl class="simple">
 <dt>Removing APS from interferograms</dt><dd><p>The wrapped interferograms are corrected for the interpolated APS for both the first and second order points.</p>
@@ -415,7 +475,7 @@ It is created with a delaunay network.</p>
 </ul>
 </section>
 <section id="id2">
-<h4>Option 2: Unwrapping in space<a class="headerlink" href="#id2" title="Link to this heading">¶</a></h4>
+<h4>Option 2: Unwrapping in space<a class="headerlink" href="#id2" title="Link to this heading"></a></h4>
 <ul class="simple">
 <li><dl class="simple">
 <dt>Removing APS from interferograms</dt><dd><p>The wrapped interferograms are corrected for the interpolated APS for both the first and second order points.</p>
@@ -428,7 +488,7 @@ It is created with a delaunay network.</p>
 </section>
 </section>
 <section id="handling-big-datasets">
-<h2>Handling big datasets<a class="headerlink" href="#handling-big-datasets" title="Link to this heading">¶</a></h2>
+<h2>Handling big datasets<a class="headerlink" href="#handling-big-datasets" title="Link to this heading"></a></h2>
 <p>The processing of large datasets can be computationally expensive and time-consuming.
 Especially the estimation of the temporal phase coherence in step 0 is a bottleneck, also in terms of memory consumption.
 Therefore, it is recommended to set <strong>general:num_cores</strong> for parallel processing.
@@ -437,7 +497,7 @@ However, only use the patching option if the memory is not sufficient to process
 Using multiple patches will slow down the processing due to the overhead of loading and saving the data multiple times.</p>
 </section>
 <section id="processing-steps-for-one-step-unwrapping-workflow">
-<h2>Processing steps for one-step unwrapping workflow<a class="headerlink" href="#processing-steps-for-one-step-unwrapping-workflow" title="Link to this heading">¶</a></h2>
+<h2>Processing steps for one-step unwrapping workflow<a class="headerlink" href="#processing-steps-for-one-step-unwrapping-workflow" title="Link to this heading"></a></h2>
 <p>The one-step unwrapping workflow is an alternative to the two-step unwrapping workflow.
 The steps are similar to the workflow described above, but is only executed until step 2.
 This workflow is meant for processing small areas where the atmospheric filtering is not required as the reference point will be selected close to the area of interest.
@@ -447,7 +507,7 @@ For this purpose, the pixels are selected without gridding (set <strong>preparat
 Since the densification step is not performed, you should reduce the coherence threshold (<strong>consistency_check:coherence_p1</strong>) to select the desired number of points.</p>
 </section>
 <section id="literature">
-<h2>Literature<a class="headerlink" href="#literature" title="Link to this heading">¶</a></h2>
+<h2>Literature<a class="headerlink" href="#literature" title="Link to this heading"></a></h2>
 <ul class="simple">
 <li><p>Piter A, Haghshenas Haghighi M, Motagh M (2024). Challenges and Opportunities of Sentinel-1 InSAR for Transport Infrastructure Monitoring. PFG – Journal of Photogrammetry, Remote Sensing and Geoinformation Science, 92, 609-627.</p></li>
 <li><p>Zhao F, Mallorqui JJ (2019). A Temporal Phase Coherence Estimation Algorithm and Its Application on DInSAR Pixel Selection. IEEE Transactions on Geoscience and Remote Sensing 57(11):8350–8361, DOI 10.1109/TGRS.2019.2920536</p></li>
@@ -464,94 +524,34 @@ Since the densification step is not performed, you should reduce the coherence t
 </section>
 
 
-            <div class="clearer"></div>
+           </div>
           </div>
-        </div>
-      </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="Main">
-        <div class="sphinxsidebarwrapper">
-  <div>
-    <h3><a href="index.html">Table of Contents</a></h3>
-    <ul>
-<li><a class="reference internal" href="#">Multitemporal InSAR processing workflow</a><ul>
-<li><a class="reference internal" href="#configuration-file">Configuration file</a></li>
-<li><a class="reference internal" href="#processing-steps-for-two-step-unwrapping-workflow">Processing steps for two-step unwrapping workflow</a><ul>
-<li><a class="reference internal" href="#step-0-preparation">Step 0: Preparation</a></li>
-<li><a class="reference internal" href="#step-1-consistency-check">Step 1: Consistency Check</a></li>
-<li><a class="reference internal" href="#step-2-unwrapping">Step 2: Unwrapping</a><ul>
-<li><a class="reference internal" href="#option-1-unwrapping-in-time-and-space">Option 1) Unwrapping in time and space</a></li>
-<li><a class="reference internal" href="#option-2-unwrapping-in-space">Option 2) Unwrapping in space</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#step-3-filtering">Step 3: Filtering</a></li>
-<li><a class="reference internal" href="#step-4-densification">Step 4: Densification</a><ul>
-<li><a class="reference internal" href="#id1">Option 1: Unwrapping in time and space</a></li>
-<li><a class="reference internal" href="#id2">Option 2: Unwrapping in space</a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li><a class="reference internal" href="#handling-big-datasets">Handling big datasets</a></li>
-<li><a class="reference internal" href="#processing-steps-for-one-step-unwrapping-workflow">Processing steps for one-step unwrapping workflow</a></li>
-<li><a class="reference internal" href="#literature">Literature</a></li>
-</ul>
-</li>
-</ul>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="preparation.html" class="btn btn-neutral float-left" title="Preparation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="demo_datasets.html" class="btn btn-neutral float-right" title="Demo Datasets" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
 
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, IPI - Leibniz Universitaet Hannover.</p>
   </div>
-  <div>
-    <h4>Previous topic</h4>
-    <p class="topless"><a href="preparation.html"
-                          title="previous chapter">Preparation</a></p>
-  </div>
-  <div>
-    <h4>Next topic</h4>
-    <p class="topless"><a href="demo_datasets.html"
-                          title="next chapter">Demo Datasets</a></p>
-  </div>
-  <div role="note" aria-label="source link">
-    <h3>This Page</h3>
-    <ul class="this-page-menu">
-      <li><a href="_sources/processing.rst.txt"
-            rel="nofollow">Show Source</a></li>
-    </ul>
-   </div>
-<search id="searchbox" style="display: none" role="search">
-  <h3 id="searchlabel">Quick search</h3>
-    <div class="searchformwrapper">
-    <form class="search" action="search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
-      <input type="submit" value="Go" />
-    </form>
-    </div>
-</search>
-<script>document.getElementById('searchbox').style.display = "block"</script>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
         </div>
       </div>
-      <div class="clearer"></div>
-    </div>
-    <div class="related" role="navigation" aria-label="Related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
-          <a href="demo_datasets.html" title="Demo Datasets"
-             >next</a> |</li>
-        <li class="right" >
-          <a href="preparation.html" title="Preparation"
-             >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">SARvey 1.1.0 documentation</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">Multitemporal InSAR processing workflow</a></li> 
-      </ul>
-    </div>
-    <div class="footer" role="contentinfo">
-    &#169; Copyright 2024, IPI - Leibniz Universitaet Hannover.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3.
-    </div>
-  </body>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
 </html>

@@ -1,59 +1,116 @@
+
+
 <!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-<html lang="en" data-content_root="./">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Preparation &mdash; SARvey 1.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/custom.css?v=86cf1cd6" />
 
-    <title>Preparation &#8212; SARvey 1.1.0 documentation</title>
-    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
-    <link rel="stylesheet" type="text/css" href="_static/classic.css?v=2bf1fcf8" />
-    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=86cf1cd6" />
-    
-    <script src="_static/documentation_options.js?v=fc837d61"></script>
-    <script src="_static/doctools.js?v=9bcbadda"></script>
-    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
-    
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=fc837d61"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Multitemporal InSAR processing workflow" href="processing.html" />
     <link rel="prev" title="Usage" href="usage.html" /> 
-  </head><body>
-    <div class="related" role="navigation" aria-label="Related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="genindex.html" title="General Index"
-             accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
-          <a href="processing.html" title="Multitemporal InSAR processing workflow"
-             accesskey="N">next</a> |</li>
-        <li class="right" >
-          <a href="usage.html" title="Usage"
-             accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">SARvey 1.1.0 documentation</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">Preparation</a></li> 
-      </ul>
-    </div>  
+</head>
 
-    <div class="document">
-      <div class="documentwrapper">
-        <div class="bodywrapper">
-          <div class="body" role="main">
-            
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            SARvey
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="readme.html">SARvey - survey with SAR</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/luhipi/sarvey">Source code repository</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usage.html">Usage</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Preparation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#preprocessing">Preprocessing</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#isce">ISCE</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#gamma">GAMMA</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#snap">SNAP</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#loading-data-to-miaplpy-format">Loading Data to MiaplPy Format</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#loading-data-into-miaplpy"><strong>Loading Data into MiaplPy</strong></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#check-the-data"><strong>Check the data</strong></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#optional-steps">Optional Steps</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#phase-linking"><strong>Phase Linking</strong></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#subset-data">Subset Data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#create-manual-mask">Create Manual Mask</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="processing.html">Multitemporal InSAR processing workflow</a></li>
+<li class="toctree-l1"><a class="reference internal" href="demo_datasets.html">Demo Datasets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">Python API reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="authors.html">Credits</a></li>
+<li class="toctree-l1"><a class="reference internal" href="history.html">History</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">SARvey</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Preparation</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/preparation.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
   <section id="preparation">
-<span id="id1"></span><h1>Preparation<a class="headerlink" href="#preparation" title="Link to this heading">¶</a></h1>
+<span id="id1"></span><h1>Preparation<a class="headerlink" href="#preparation" title="Link to this heading"></a></h1>
 <p>SARvey requires a coregistered stack of SLC and the related geometry information in the <a class="reference external" href="https://github.com/insarlab/MiaplPy">MiaplPy</a> data format.
 The coregistered stack of SLC can be created using an InSAR processor, such as ISCE, GAMMA, or SNAP.
 Currently MiaplPy only supports <a class="reference external" href="https://github.com/isce-framework/isce2">ISCE</a>. Support for GAMMA and <a class="reference external" href="https://step.esa.int/main/toolboxes/snap">SNAP</a> is planned for future.
 After creating the coregistered stack of SLC, run the “load_data” step from MiaplPy to create the “inputs” directory which contains “slcStack.h5” and “geometryRadar.h5”.</p>
 <section id="preprocessing">
-<h2>Preprocessing<a class="headerlink" href="#preprocessing" title="Link to this heading">¶</a></h2>
+<h2>Preprocessing<a class="headerlink" href="#preprocessing" title="Link to this heading"></a></h2>
 <section id="isce">
-<h3>ISCE<a class="headerlink" href="#isce" title="Link to this heading">¶</a></h3>
+<h3>ISCE<a class="headerlink" href="#isce" title="Link to this heading"></a></h3>
 <p>… ISCE brief processing to be added</p>
 <p>The ISCE products should have the following directory structure that is later in <a class="reference internal" href="#loading-data-into-miaplpy">Loading Data into MiaplPy</a> step.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>ISCE_processed_data
@@ -80,18 +137,18 @@ After creating the coregistered stack of SLC, run the “load_data” step from 
 </div>
 </section>
 <section id="gamma">
-<h3>GAMMA<a class="headerlink" href="#gamma" title="Link to this heading">¶</a></h3>
+<h3>GAMMA<a class="headerlink" href="#gamma" title="Link to this heading"></a></h3>
 <p>Support is in progress.</p>
 </section>
 <section id="snap">
-<h3>SNAP<a class="headerlink" href="#snap" title="Link to this heading">¶</a></h3>
+<h3>SNAP<a class="headerlink" href="#snap" title="Link to this heading"></a></h3>
 <p>Support is planned for future.</p>
 </section>
 </section>
 <section id="loading-data-to-miaplpy-format">
-<h2>Loading Data to MiaplPy Format<a class="headerlink" href="#loading-data-to-miaplpy-format" title="Link to this heading">¶</a></h2>
+<h2>Loading Data to MiaplPy Format<a class="headerlink" href="#loading-data-to-miaplpy-format" title="Link to this heading"></a></h2>
 <section id="loading-data-into-miaplpy">
-<h3><strong>Loading Data into MiaplPy</strong><a class="headerlink" href="#loading-data-into-miaplpy" title="Link to this heading">¶</a></h3>
+<h3><strong>Loading Data into MiaplPy</strong><a class="headerlink" href="#loading-data-into-miaplpy" title="Link to this heading"></a></h3>
 <p>Run the <cite>load_data</cite> step of MiaplPy to convert the preprocessed stack of SLC to <cite>slcStack.h5</cite> and <cite>geometryRadar.h5</cite>.
 Refer to <a class="reference external" href="https://github.com/insarlab/MiaplPy">MiaplPy</a> instruction on how to prepare the stack of coregistered SLC and modify the template file.</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>miaplpyApp<span class="w"> </span>miaplpy_template_file.txt<span class="w"> </span>--dostep<span class="w"> </span>load_data
@@ -105,7 +162,7 @@ Refer to <a class="reference external" href="https://github.com/insarlab/MiaplPy
 </div>
 </section>
 <section id="check-the-data">
-<h3><strong>Check the data</strong><a class="headerlink" href="#check-the-data" title="Link to this heading">¶</a></h3>
+<h3><strong>Check the data</strong><a class="headerlink" href="#check-the-data" title="Link to this heading"></a></h3>
 <p>Use <cite>info.py</cite> from <a class="reference external" href="https://github.com/insarlab/MintPy">MintPy</a> to check the files’ information.</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>info.py<span class="w"> </span>inputs/slcStack.h5
 info.py<span class="w"> </span>inputs/geometryRadar.h5
@@ -119,9 +176,9 @@ view.py<span class="w"> </span>inputs/geometryRadar.h5
 </section>
 </section>
 <section id="optional-steps">
-<h2>Optional Steps<a class="headerlink" href="#optional-steps" title="Link to this heading">¶</a></h2>
+<h2>Optional Steps<a class="headerlink" href="#optional-steps" title="Link to this heading"></a></h2>
 <section id="phase-linking">
-<h3><strong>Phase Linking</strong><a class="headerlink" href="#phase-linking" title="Link to this heading">¶</a></h3>
+<h3><strong>Phase Linking</strong><a class="headerlink" href="#phase-linking" title="Link to this heading"></a></h3>
 <p>This step is optional. You can run it if you wish to perform distributed scatterers (DS) analysis.
 <strong>Caution:</strong> This step is computationally heavy and might be time-consuming for large datasets.</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>miaplpyApp<span class="w"> </span>miaplpy_template_file.txt<span class="w"> </span>--dostep<span class="w"> </span>phase_linking
@@ -139,7 +196,7 @@ view.py<span class="w"> </span>inputs/geometryRadar.h5
 </div>
 </section>
 <section id="subset-data">
-<h3>Subset Data<a class="headerlink" href="#subset-data" title="Link to this heading">¶</a></h3>
+<h3>Subset Data<a class="headerlink" href="#subset-data" title="Link to this heading"></a></h3>
 <p>Data loaded into MiaplPy can be subset using <a class="reference external" href="https://github.com/insarlab/MintPy">Mintpy</a>’s subset function.
 This is particularly useful if you have a dataset in MiaplPy format and want to crop a small area of it.
 Both slcStack.h5 and geometryRadar.h5 should be subset with the same range and azimuth coordinate ranges.
@@ -159,7 +216,7 @@ subset.py<span class="w"> </span>maskPS.h5<span class="w"> </span>-x<span class=
 <p><a class="reference internal" href="#check-the-data">Check the data</a> after subsetting it and make sure all products look correct.</p>
 </section>
 <section id="create-manual-mask">
-<h3>Create Manual Mask<a class="headerlink" href="#create-manual-mask" title="Link to this heading">¶</a></h3>
+<h3>Create Manual Mask<a class="headerlink" href="#create-manual-mask" title="Link to this heading"></a></h3>
 <p>A mask can be created manually using MintPy’s <cite>generate_mask.py</cite> tool.
 This is particularly useful if you want to limit the MTInSAR processing to certain areas.
 Run <cite>generate_mask.py -h</cite> for information about parameters.
@@ -185,91 +242,34 @@ After complete the selection, close the figure/window to continue.</p>
 </section>
 
 
-            <div class="clearer"></div>
+           </div>
           </div>
-        </div>
-      </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="Main">
-        <div class="sphinxsidebarwrapper">
-  <div>
-    <h3><a href="index.html">Table of Contents</a></h3>
-    <ul>
-<li><a class="reference internal" href="#">Preparation</a><ul>
-<li><a class="reference internal" href="#preprocessing">Preprocessing</a><ul>
-<li><a class="reference internal" href="#isce">ISCE</a></li>
-<li><a class="reference internal" href="#gamma">GAMMA</a></li>
-<li><a class="reference internal" href="#snap">SNAP</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#loading-data-to-miaplpy-format">Loading Data to MiaplPy Format</a><ul>
-<li><a class="reference internal" href="#loading-data-into-miaplpy"><strong>Loading Data into MiaplPy</strong></a></li>
-<li><a class="reference internal" href="#check-the-data"><strong>Check the data</strong></a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#optional-steps">Optional Steps</a><ul>
-<li><a class="reference internal" href="#phase-linking"><strong>Phase Linking</strong></a></li>
-<li><a class="reference internal" href="#subset-data">Subset Data</a></li>
-<li><a class="reference internal" href="#create-manual-mask">Create Manual Mask</a></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="usage.html" class="btn btn-neutral float-left" title="Usage" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="processing.html" class="btn btn-neutral float-right" title="Multitemporal InSAR processing workflow" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
 
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, IPI - Leibniz Universitaet Hannover.</p>
   </div>
-  <div>
-    <h4>Previous topic</h4>
-    <p class="topless"><a href="usage.html"
-                          title="previous chapter">Usage</a></p>
-  </div>
-  <div>
-    <h4>Next topic</h4>
-    <p class="topless"><a href="processing.html"
-                          title="next chapter">Multitemporal InSAR processing workflow</a></p>
-  </div>
-  <div role="note" aria-label="source link">
-    <h3>This Page</h3>
-    <ul class="this-page-menu">
-      <li><a href="_sources/preparation.rst.txt"
-            rel="nofollow">Show Source</a></li>
-    </ul>
-   </div>
-<search id="searchbox" style="display: none" role="search">
-  <h3 id="searchlabel">Quick search</h3>
-    <div class="searchformwrapper">
-    <form class="search" action="search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
-      <input type="submit" value="Go" />
-    </form>
-    </div>
-</search>
-<script>document.getElementById('searchbox').style.display = "block"</script>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
         </div>
       </div>
-      <div class="clearer"></div>
-    </div>
-    <div class="related" role="navigation" aria-label="Related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
-          <a href="processing.html" title="Multitemporal InSAR processing workflow"
-             >next</a> |</li>
-        <li class="right" >
-          <a href="usage.html" title="Usage"
-             >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">SARvey 1.1.0 documentation</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">Preparation</a></li> 
-      </ul>
-    </div>
-    <div class="footer" role="contentinfo">
-    &#169; Copyright 2024, IPI - Leibniz Universitaet Hannover.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3.
-    </div>
-  </body>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
 </html>

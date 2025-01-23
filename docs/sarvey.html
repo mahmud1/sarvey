@@ -1,70 +1,141 @@
+
+
 <!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-<html lang="en" data-content_root="./">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>sarvey package &mdash; SARvey 1.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/custom.css?v=86cf1cd6" />
 
-    <title>sarvey package &#8212; SARvey 1.1.0 documentation</title>
-    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
-    <link rel="stylesheet" type="text/css" href="_static/classic.css?v=2bf1fcf8" />
-    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=86cf1cd6" />
-    
-    <script src="_static/documentation_options.js?v=fc837d61"></script>
-    <script src="_static/doctools.js?v=9bcbadda"></script>
-    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
-    
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=fc837d61"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Contributing" href="contributing.html" />
     <link rel="prev" title="Python API reference" href="modules.html" /> 
-  </head><body>
-    <div class="related" role="navigation" aria-label="Related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="genindex.html" title="General Index"
-             accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
-          <a href="contributing.html" title="Contributing"
-             accesskey="N">next</a> |</li>
-        <li class="right" >
-          <a href="modules.html" title="Python API reference"
-             accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">SARvey 1.1.0 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="modules.html" accesskey="U">Python API reference</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">sarvey package</a></li> 
-      </ul>
-    </div>  
+</head>
 
-    <div class="document">
-      <div class="documentwrapper">
-        <div class="bodywrapper">
-          <div class="body" role="main">
-            
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            SARvey
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="readme.html">SARvey - survey with SAR</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/luhipi/sarvey">Source code repository</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usage.html">Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="preparation.html">Preparation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="processing.html">Multitemporal InSAR processing workflow</a></li>
+<li class="toctree-l1"><a class="reference internal" href="demo_datasets.html">Demo Datasets</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">Python API reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">sarvey package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sarvey-coherence-module">sarvey.coherence module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sarvey-config-module">sarvey.config module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-sarvey.console">sarvey.console module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#sarvey.console.printCurrentConfig"><code class="docutils literal notranslate"><span class="pre">printCurrentConfig()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sarvey.console.printStep"><code class="docutils literal notranslate"><span class="pre">printStep()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sarvey.console.showLogoSARvey"><code class="docutils literal notranslate"><span class="pre">showLogoSARvey()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#sarvey-densification-module">sarvey.densification module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sarvey-filtering-module">sarvey.filtering module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sarvey-geolocation-module">sarvey.geolocation module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sarvey-ifg-network-module">sarvey.ifg_network module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sarvey-objects-module">sarvey.objects module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sarvey-osm-utils-module">sarvey.osm_utils module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sarvey-preparation-module">sarvey.preparation module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sarvey-processing-module">sarvey.processing module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sarvey-sarvey-export-module">sarvey.sarvey_export module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sarvey-sarvey-mask-module">sarvey.sarvey_mask module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sarvey-sarvey-mti-module">sarvey.sarvey_mti module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sarvey-sarvey-osm-module">sarvey.sarvey_osm module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sarvey-sarvey-plot-module">sarvey.sarvey_plot module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sarvey-triangulation-module">sarvey.triangulation module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sarvey-unwrapping-module">sarvey.unwrapping module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sarvey-utils-module">sarvey.utils module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-sarvey.version">sarvey.version module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sarvey-viewer-module">sarvey.viewer module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-sarvey">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="authors.html">Credits</a></li>
+<li class="toctree-l1"><a class="reference internal" href="history.html">History</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">SARvey</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="modules.html">Python API reference</a></li>
+      <li class="breadcrumb-item active">sarvey package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/sarvey.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
   <section id="sarvey-package">
-<h1>sarvey package<a class="headerlink" href="#sarvey-package" title="Link to this heading">¶</a></h1>
+<h1>sarvey package<a class="headerlink" href="#sarvey-package" title="Link to this heading"></a></h1>
 <section id="submodules">
-<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading">¶</a></h2>
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
 </section>
 <section id="sarvey-coherence-module">
-<h2>sarvey.coherence module<a class="headerlink" href="#sarvey-coherence-module" title="Link to this heading">¶</a></h2>
+<h2>sarvey.coherence module<a class="headerlink" href="#sarvey-coherence-module" title="Link to this heading"></a></h2>
 </section>
 <section id="sarvey-config-module">
-<h2>sarvey.config module<a class="headerlink" href="#sarvey-config-module" title="Link to this heading">¶</a></h2>
+<h2>sarvey.config module<a class="headerlink" href="#sarvey-config-module" title="Link to this heading"></a></h2>
 </section>
 <section id="module-sarvey.console">
-<span id="sarvey-console-module"></span><h2>sarvey.console module<a class="headerlink" href="#module-sarvey.console" title="Link to this heading">¶</a></h2>
+<span id="sarvey-console-module"></span><h2>sarvey.console module<a class="headerlink" href="#module-sarvey.console" title="Link to this heading"></a></h2>
 <p>Console module for SARvey.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="sarvey.console.printCurrentConfig">
-<span class="sig-prename descclassname"><span class="pre">sarvey.console.</span></span><span class="sig-name descname"><span class="pre">printCurrentConfig</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config_section</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config_section_default</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">logger</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sarvey/console.html#printCurrentConfig"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sarvey.console.printCurrentConfig" title="Link to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">sarvey.console.</span></span><span class="sig-name descname"><span class="pre">printCurrentConfig</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config_section</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config_section_default</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">logger</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sarvey/console.html#printCurrentConfig"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sarvey.console.printCurrentConfig" title="Link to this definition"></a></dt>
 <dd><p>Print the current parameters and their default values from the config file to console.</p>
 <section id="parameters">
-<h3>Parameters<a class="headerlink" href="#parameters" title="Link to this heading">¶</a></h3>
+<h3>Parameters<a class="headerlink" href="#parameters" title="Link to this heading"></a></h3>
 <dl class="simple">
 <dt>config_section: dict</dt><dd><p>Section of the configuration class which contains the selected parameters.</p>
 </dd>
@@ -78,10 +149,10 @@
 
 <dl class="py function">
 <dt class="sig sig-object py" id="sarvey.console.printStep">
-<span class="sig-prename descclassname"><span class="pre">sarvey.console.</span></span><span class="sig-name descname"><span class="pre">printStep</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">step</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">step_dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">logger</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sarvey/console.html#printStep"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sarvey.console.printStep" title="Link to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">sarvey.console.</span></span><span class="sig-name descname"><span class="pre">printStep</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">step</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">step_dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">logger</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sarvey/console.html#printStep"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sarvey.console.printStep" title="Link to this definition"></a></dt>
 <dd><p>Print the current step to console.</p>
 <section id="id1">
-<h3>Parameters<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h3>
+<h3>Parameters<a class="headerlink" href="#id1" title="Link to this heading"></a></h3>
 <dl class="simple">
 <dt>step: int</dt><dd><p>current step number</p>
 </dd>
@@ -95,10 +166,10 @@
 
 <dl class="py function">
 <dt class="sig sig-object py" id="sarvey.console.showLogoSARvey">
-<span class="sig-prename descclassname"><span class="pre">sarvey.console.</span></span><span class="sig-name descname"><span class="pre">showLogoSARvey</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">logger</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">step</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sarvey/console.html#showLogoSARvey"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sarvey.console.showLogoSARvey" title="Link to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">sarvey.console.</span></span><span class="sig-name descname"><span class="pre">showLogoSARvey</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">logger</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">step</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sarvey/console.html#showLogoSARvey"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sarvey.console.showLogoSARvey" title="Link to this definition"></a></dt>
 <dd><p>ShowLogoSARvey.</p>
 <section id="id2">
-<h3>Parameters<a class="headerlink" href="#id2" title="Link to this heading">¶</a></h3>
+<h3>Parameters<a class="headerlink" href="#id2" title="Link to this heading"></a></h3>
 <dl class="simple">
 <dt>logger: Logger</dt><dd><p>logging handler</p>
 </dd>
@@ -110,164 +181,95 @@
 
 </section>
 <section id="sarvey-densification-module">
-<h2>sarvey.densification module<a class="headerlink" href="#sarvey-densification-module" title="Link to this heading">¶</a></h2>
+<h2>sarvey.densification module<a class="headerlink" href="#sarvey-densification-module" title="Link to this heading"></a></h2>
 </section>
 <section id="sarvey-filtering-module">
-<h2>sarvey.filtering module<a class="headerlink" href="#sarvey-filtering-module" title="Link to this heading">¶</a></h2>
+<h2>sarvey.filtering module<a class="headerlink" href="#sarvey-filtering-module" title="Link to this heading"></a></h2>
 </section>
 <section id="sarvey-geolocation-module">
-<h2>sarvey.geolocation module<a class="headerlink" href="#sarvey-geolocation-module" title="Link to this heading">¶</a></h2>
+<h2>sarvey.geolocation module<a class="headerlink" href="#sarvey-geolocation-module" title="Link to this heading"></a></h2>
 </section>
 <section id="sarvey-ifg-network-module">
-<h2>sarvey.ifg_network module<a class="headerlink" href="#sarvey-ifg-network-module" title="Link to this heading">¶</a></h2>
+<h2>sarvey.ifg_network module<a class="headerlink" href="#sarvey-ifg-network-module" title="Link to this heading"></a></h2>
 </section>
 <section id="sarvey-objects-module">
-<h2>sarvey.objects module<a class="headerlink" href="#sarvey-objects-module" title="Link to this heading">¶</a></h2>
+<h2>sarvey.objects module<a class="headerlink" href="#sarvey-objects-module" title="Link to this heading"></a></h2>
 </section>
 <section id="sarvey-osm-utils-module">
-<h2>sarvey.osm_utils module<a class="headerlink" href="#sarvey-osm-utils-module" title="Link to this heading">¶</a></h2>
+<h2>sarvey.osm_utils module<a class="headerlink" href="#sarvey-osm-utils-module" title="Link to this heading"></a></h2>
 </section>
 <section id="sarvey-preparation-module">
-<h2>sarvey.preparation module<a class="headerlink" href="#sarvey-preparation-module" title="Link to this heading">¶</a></h2>
+<h2>sarvey.preparation module<a class="headerlink" href="#sarvey-preparation-module" title="Link to this heading"></a></h2>
 </section>
 <section id="sarvey-processing-module">
-<h2>sarvey.processing module<a class="headerlink" href="#sarvey-processing-module" title="Link to this heading">¶</a></h2>
+<h2>sarvey.processing module<a class="headerlink" href="#sarvey-processing-module" title="Link to this heading"></a></h2>
 </section>
 <section id="sarvey-sarvey-export-module">
-<h2>sarvey.sarvey_export module<a class="headerlink" href="#sarvey-sarvey-export-module" title="Link to this heading">¶</a></h2>
+<h2>sarvey.sarvey_export module<a class="headerlink" href="#sarvey-sarvey-export-module" title="Link to this heading"></a></h2>
 </section>
 <section id="sarvey-sarvey-mask-module">
-<h2>sarvey.sarvey_mask module<a class="headerlink" href="#sarvey-sarvey-mask-module" title="Link to this heading">¶</a></h2>
+<h2>sarvey.sarvey_mask module<a class="headerlink" href="#sarvey-sarvey-mask-module" title="Link to this heading"></a></h2>
 </section>
 <section id="sarvey-sarvey-mti-module">
-<h2>sarvey.sarvey_mti module<a class="headerlink" href="#sarvey-sarvey-mti-module" title="Link to this heading">¶</a></h2>
+<h2>sarvey.sarvey_mti module<a class="headerlink" href="#sarvey-sarvey-mti-module" title="Link to this heading"></a></h2>
 </section>
 <section id="sarvey-sarvey-osm-module">
-<h2>sarvey.sarvey_osm module<a class="headerlink" href="#sarvey-sarvey-osm-module" title="Link to this heading">¶</a></h2>
+<h2>sarvey.sarvey_osm module<a class="headerlink" href="#sarvey-sarvey-osm-module" title="Link to this heading"></a></h2>
 </section>
 <section id="sarvey-sarvey-plot-module">
-<h2>sarvey.sarvey_plot module<a class="headerlink" href="#sarvey-sarvey-plot-module" title="Link to this heading">¶</a></h2>
+<h2>sarvey.sarvey_plot module<a class="headerlink" href="#sarvey-sarvey-plot-module" title="Link to this heading"></a></h2>
 </section>
 <section id="sarvey-triangulation-module">
-<h2>sarvey.triangulation module<a class="headerlink" href="#sarvey-triangulation-module" title="Link to this heading">¶</a></h2>
+<h2>sarvey.triangulation module<a class="headerlink" href="#sarvey-triangulation-module" title="Link to this heading"></a></h2>
 </section>
 <section id="sarvey-unwrapping-module">
-<h2>sarvey.unwrapping module<a class="headerlink" href="#sarvey-unwrapping-module" title="Link to this heading">¶</a></h2>
+<h2>sarvey.unwrapping module<a class="headerlink" href="#sarvey-unwrapping-module" title="Link to this heading"></a></h2>
 </section>
 <section id="sarvey-utils-module">
-<h2>sarvey.utils module<a class="headerlink" href="#sarvey-utils-module" title="Link to this heading">¶</a></h2>
+<h2>sarvey.utils module<a class="headerlink" href="#sarvey-utils-module" title="Link to this heading"></a></h2>
 </section>
 <section id="module-sarvey.version">
-<span id="sarvey-version-module"></span><h2>sarvey.version module<a class="headerlink" href="#module-sarvey.version" title="Link to this heading">¶</a></h2>
+<span id="sarvey-version-module"></span><h2>sarvey.version module<a class="headerlink" href="#module-sarvey.version" title="Link to this heading"></a></h2>
 <p>Version module for SARvey.</p>
 </section>
 <section id="sarvey-viewer-module">
-<h2>sarvey.viewer module<a class="headerlink" href="#sarvey-viewer-module" title="Link to this heading">¶</a></h2>
+<h2>sarvey.viewer module<a class="headerlink" href="#sarvey-viewer-module" title="Link to this heading"></a></h2>
 </section>
 <section id="module-sarvey">
-<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-sarvey" title="Link to this heading">¶</a></h2>
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-sarvey" title="Link to this heading"></a></h2>
 <p>Top-level package for SARvey.</p>
 </section>
 </section>
 
 
-            <div class="clearer"></div>
+           </div>
           </div>
-        </div>
-      </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="Main">
-        <div class="sphinxsidebarwrapper">
-  <div>
-    <h3><a href="index.html">Table of Contents</a></h3>
-    <ul>
-<li><a class="reference internal" href="#">sarvey package</a><ul>
-<li><a class="reference internal" href="#submodules">Submodules</a></li>
-<li><a class="reference internal" href="#sarvey-coherence-module">sarvey.coherence module</a></li>
-<li><a class="reference internal" href="#sarvey-config-module">sarvey.config module</a></li>
-<li><a class="reference internal" href="#module-sarvey.console">sarvey.console module</a><ul>
-<li><a class="reference internal" href="#sarvey.console.printCurrentConfig"><code class="docutils literal notranslate"><span class="pre">printCurrentConfig()</span></code></a></li>
-<li><a class="reference internal" href="#sarvey.console.printStep"><code class="docutils literal notranslate"><span class="pre">printStep()</span></code></a></li>
-<li><a class="reference internal" href="#sarvey.console.showLogoSARvey"><code class="docutils literal notranslate"><span class="pre">showLogoSARvey()</span></code></a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#sarvey-densification-module">sarvey.densification module</a></li>
-<li><a class="reference internal" href="#sarvey-filtering-module">sarvey.filtering module</a></li>
-<li><a class="reference internal" href="#sarvey-geolocation-module">sarvey.geolocation module</a></li>
-<li><a class="reference internal" href="#sarvey-ifg-network-module">sarvey.ifg_network module</a></li>
-<li><a class="reference internal" href="#sarvey-objects-module">sarvey.objects module</a></li>
-<li><a class="reference internal" href="#sarvey-osm-utils-module">sarvey.osm_utils module</a></li>
-<li><a class="reference internal" href="#sarvey-preparation-module">sarvey.preparation module</a></li>
-<li><a class="reference internal" href="#sarvey-processing-module">sarvey.processing module</a></li>
-<li><a class="reference internal" href="#sarvey-sarvey-export-module">sarvey.sarvey_export module</a></li>
-<li><a class="reference internal" href="#sarvey-sarvey-mask-module">sarvey.sarvey_mask module</a></li>
-<li><a class="reference internal" href="#sarvey-sarvey-mti-module">sarvey.sarvey_mti module</a></li>
-<li><a class="reference internal" href="#sarvey-sarvey-osm-module">sarvey.sarvey_osm module</a></li>
-<li><a class="reference internal" href="#sarvey-sarvey-plot-module">sarvey.sarvey_plot module</a></li>
-<li><a class="reference internal" href="#sarvey-triangulation-module">sarvey.triangulation module</a></li>
-<li><a class="reference internal" href="#sarvey-unwrapping-module">sarvey.unwrapping module</a></li>
-<li><a class="reference internal" href="#sarvey-utils-module">sarvey.utils module</a></li>
-<li><a class="reference internal" href="#module-sarvey.version">sarvey.version module</a></li>
-<li><a class="reference internal" href="#sarvey-viewer-module">sarvey.viewer module</a></li>
-<li><a class="reference internal" href="#module-sarvey">Module contents</a></li>
-</ul>
-</li>
-</ul>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="modules.html" class="btn btn-neutral float-left" title="Python API reference" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="contributing.html" class="btn btn-neutral float-right" title="Contributing" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
 
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, IPI - Leibniz Universitaet Hannover.</p>
   </div>
-  <div>
-    <h4>Previous topic</h4>
-    <p class="topless"><a href="modules.html"
-                          title="previous chapter">Python API reference</a></p>
-  </div>
-  <div>
-    <h4>Next topic</h4>
-    <p class="topless"><a href="contributing.html"
-                          title="next chapter">Contributing</a></p>
-  </div>
-  <div role="note" aria-label="source link">
-    <h3>This Page</h3>
-    <ul class="this-page-menu">
-      <li><a href="_sources/sarvey.rst.txt"
-            rel="nofollow">Show Source</a></li>
-    </ul>
-   </div>
-<search id="searchbox" style="display: none" role="search">
-  <h3 id="searchlabel">Quick search</h3>
-    <div class="searchformwrapper">
-    <form class="search" action="search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
-      <input type="submit" value="Go" />
-    </form>
-    </div>
-</search>
-<script>document.getElementById('searchbox').style.display = "block"</script>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
         </div>
       </div>
-      <div class="clearer"></div>
-    </div>
-    <div class="related" role="navigation" aria-label="Related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
-          <a href="contributing.html" title="Contributing"
-             >next</a> |</li>
-        <li class="right" >
-          <a href="modules.html" title="Python API reference"
-             >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">SARvey 1.1.0 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="modules.html" >Python API reference</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">sarvey package</a></li> 
-      </ul>
-    </div>
-    <div class="footer" role="contentinfo">
-    &#169; Copyright 2024, IPI - Leibniz Universitaet Hannover.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3.
-    </div>
-  </body>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
 </html>
