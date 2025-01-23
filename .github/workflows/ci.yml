@@ -38,12 +38,12 @@ jobs:
           source activate ci_env
         shell: bash
 
-  # test_sarvey:
-  #   runs-on: self-hosted
-  #   needs: before_script
-  #   steps:
-  #     - name: Checkout code
-  #       uses: actions/checkout@v4
+  test_sarvey:
+    runs-on: self-hosted
+    needs: before_script
+    steps:
+      # - name: Checkout code
+      #   uses: actions/checkout@v4
 
   #     - name: Set up Python
   #       uses: actions/setup-python@v5
@@ -69,14 +69,14 @@ jobs:
   #         make pytest
   #       shell: bash
 
-  #     - name: create docs
-  #       if: env.SKIP_DEPLOY == 'false'
-  #       run: |
-  #         conda init bash
-  #         source ~/.bashrc
-  #         source activate ci_env
-  #         make docs
-  #       shell: bash
+      - name: create docs
+        if: env.SKIP_DEPLOY == 'false'
+        run: |
+          conda init bash
+          source ~/.bashrc
+          source activate ci_env
+          make docs
+        shell: bash
 
   #     - name: Upload coverage report
   #       if: env.SKIP_DEPLOY == 'false'
@@ -92,12 +92,12 @@ jobs:
   #         name: test-report
   #         path: report.html
 
-  #     - name: Upload docs
-  #       if: env.SKIP_DEPLOY == 'false'
-  #       uses: actions/upload-artifact@v4
-  #       with:
-  #         name: docs
-  #         path: docs/_build/html/
+      - name: Upload docs
+        if: env.SKIP_DEPLOY == 'false'
+        uses: actions/upload-artifact@v4
+        with:
+          name: docs
+          path: docs/_build/html/
 
   #     - name: Upload cobertura coverage report
   #       if: env.SKIP_DEPLOY == 'false'
