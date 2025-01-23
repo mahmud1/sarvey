@@ -42,8 +42,8 @@ jobs:
     runs-on: self-hosted
     # needs: before_script
     steps:
-      # - name: Checkout code
-      #   uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
 
   #     - name: Set up Python
   #       uses: actions/setup-python@v5
@@ -78,19 +78,19 @@ jobs:
           make docs
         shell: bash
 
-  #     - name: Upload coverage report
-  #       if: env.SKIP_DEPLOY == 'false'
-  #       uses: actions/upload-artifact@v4
-  #       with:
-  #         name: coverage-report
-  #         path: htmlcov/
+      - name: Upload coverage report
+        if: env.SKIP_DEPLOY == 'false'
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: htmlcov/
 
-  #     - name: Upload report.html
-  #       if: env.SKIP_DEPLOY == 'false'
-  #       uses: actions/upload-artifact@v4
-  #       with:
-  #         name: test-report
-  #         path: report.html
+      - name: Upload report.html
+        if: env.SKIP_DEPLOY == 'false'
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-report
+          path: report.html
 
       - name: Upload docs
         if: env.SKIP_DEPLOY == 'false'
@@ -99,19 +99,19 @@ jobs:
           name: docs
           path: docs/_build/html/
 
-  #     - name: Upload cobertura coverage report
-  #       if: env.SKIP_DEPLOY == 'false'
-  #       uses: actions/upload-artifact@v4
-  #       with:
-  #         name: cobertura-coverage
-  #         path: coverage.xml
+      - name: Upload cobertura coverage report
+        if: env.SKIP_DEPLOY == 'false'
+        uses: actions/upload-artifact@v4
+        with:
+          name: cobertura-coverage
+          path: coverage.xml
 
-  #     - name: Upload junit report
-  #       if: env.SKIP_DEPLOY == 'false'
-  #       uses: actions/upload-artifact@v4
-  #       with:
-  #         name: junit-report
-  #         path: report.xml
+      - name: Upload junit report
+        if: env.SKIP_DEPLOY == 'false'
+        uses: actions/upload-artifact@v4
+        with:
+          name: junit-report
+          path: report.xml
 
   # test_styles:
   #   runs-on: self-hosted
@@ -205,10 +205,9 @@ jobs:
   #         shell: bash
 
   deploy_pages:
-    needs: test_sarvey
     runs-on: self-hosted
 
-    # needs: test_sarvey
+    needs: test_sarvey
     if: github.ref == 'refs/heads/test-runner'
     steps:
       - name: Checkout code
