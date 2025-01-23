@@ -243,11 +243,16 @@ jobs:
       - name: Deploy to GitHub Pages
         if: env.SKIP_DEPLOY == 'false'
         run: |
-          # rm -rf public
+          rm -rf public
+          mkdir -p public
           # mkdir -p public/docs
           # mkdir -p public/images/
           # mkdir -p public/coverage
           # mkdir -p public/test_reports
+
+        
+          git clone --branch gh-pages https://github.com/${{ github.repository }} gh-pages-temp
+          cp -r gh-pages-temp/* public/
 
           
 
@@ -255,6 +260,7 @@ jobs:
           if [[ "${GITHUB_REF}" == refs/tags/* ]]; then
             TAG_NAME=${GITHUB_REF##*/}
             echo "Deploying to GitHub Pages for version tag: $TAG_NAME"
+            rm -rf  public/tags/$TAG_NAME
             mkdir -p public/tags/$TAG_NAME
             cp -r public/docs/* public/tags/$TAG_NAME/
           else
