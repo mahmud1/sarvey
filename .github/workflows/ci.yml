@@ -78,7 +78,8 @@ jobs:
           source ~/.bashrc
           source activate sarvey
           ### install dependency
-          pip install sphinx sphinx-autodoc-typehints 
+          # pip install sphinx sphinx-autodoc-typehints 
+          pip install sphinx_rtd_theme
 
           make docs
         shell: bash
