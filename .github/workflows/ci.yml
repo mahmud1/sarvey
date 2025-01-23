@@ -262,7 +262,7 @@ jobs:
             echo "Deploying to GitHub Pages for version tag: $TAG_NAME"
             rm -rf  public/tags/$TAG_NAME
             mkdir -p public/tags/$TAG_NAME
-            cp -r public/docs/* public/tags/$TAG_NAME/
+            cp -r docs/_build/html/* public/tags/$TAG_NAME/
           else
             echo "Deploying to the main documentation page"
             rm -rf public/docs
