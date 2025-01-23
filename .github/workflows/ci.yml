@@ -35,7 +35,7 @@ jobs:
         run: |
           conda init bash
           source ~/.bashrc
-         source activate sarvey
+          source activate sarvey
         shell: bash
 
   test_sarvey:
