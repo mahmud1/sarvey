@@ -4,13 +4,13 @@ on:
   pull_request:
   push:
     branches:
-      - main
+      - test-runner
 
 permissions:
   contents: write
 
 env:
-    SKIP_DEPLOY: false
+    SKIP_DEPLOY: true
     SKIP_INSTALL: false
     SKIP_TEST: false
 
