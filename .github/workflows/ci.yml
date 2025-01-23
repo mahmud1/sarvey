@@ -74,7 +74,7 @@ jobs:
         run: |
           conda init bash
           source ~/.bashrc
-          # source activate ci_env
+          source activate sarvey
           make docs
         shell: bash
 
