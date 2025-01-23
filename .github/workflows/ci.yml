@@ -75,6 +75,9 @@ jobs:
           conda init bash
           source ~/.bashrc
           source activate sarvey
+          ### install dependency
+          pip install sphinx sphinx-autodoc-typehints 
+
           make docs
         shell: bash
 
