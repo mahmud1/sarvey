@@ -34,11 +34,14 @@
     </style>
 </head>
 <body>
-    <h1 style="margin: 20px;">Documentation Navigation</h1>
+    <div id="header">
+        <img id="logo" src="_static/logo.png" alt="Logo">
+        <h1 style="margin: 0;">Documentation Navigation</h1>
+    </div>
     <div id="dropdown-container">
-        <label for="versionSelect">Select a version:</label>
+        <label for="versionSelect">Version:</label>
         <select id="versionSelect" onchange="loadContent()">
-            <option value="">-- Select a version --</option>
+            <!-- <option value="">-- Select a version --</option> -->
             <!-- Options will be populated here -->
         </select>
     </div>
