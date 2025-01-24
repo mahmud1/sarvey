@@ -9,6 +9,14 @@
             font-family: Arial, sans-serif;
             margin: 20px;
         }
+        #dropdown-container {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+        }
+        #content {
+            margin-top: 60px; /* Space for the dropdown */
+        }
         select {
             padding: 10px;
             font-size: 16px;
@@ -17,55 +25,76 @@
 </head>
 <body>
     <h1>Documentation Navigation</h1>
-    <label for="tagSelect">Select a version:</label>
-    <select id="tagSelect" onchange="navigateToTag()">
-        <option value="docs/index.html">Latest Documentation</option>
-        <!-- Subdirectories will be populated here -->
-    </select>
+    <div id="dropdown-container">
+        <label for="versionSelect">Select a version:</label>
+        <select id="versionSelect" onchange="loadContent()">
+            <option value="">-- Select a version --</option>
+            <!-- Options will be populated here -->
+        </select>
+    </div>
+
+    <div id="content">
+        <p>Select a version from the dropdown to view the documentation here.</p>
+    </div>
 
     <script>
-        // fetch the list of subdirectories
-        async function fetchSubdirectories() {
+        // function to fetch the tags from the JSON file
+        async function fetchTags() {
             try {
-                const response = await fetch('tags.json'); // fetch the JSON file
+                const response = await fetch('tags.json'); // adjust the path as necessary
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
                 }
                 const data = await response.json();
                 populateDropdown(data);
             } catch (error) {
-                console.error('Error fetching subdirectories:', error);
+                console.error('Error fetching tags:', error);
             }
         }
 
-        // populate the dropdown
+        // function to populate the dropdown
         function populateDropdown(data) {
-            const select = document.getElementById('tagSelect');
+            const select = document.getElementById('versionSelect');
 
-            // Add latest documentation option
+            // add latest documentation option
             const latestOption = document.createElement('option');
             latestOption.value = data.latest;
             latestOption.textContent = 'Latest Documentation';
             select.appendChild(latestOption);
 
-            // add tags to the dropdown
+            // ddd tags to the dropdown
             for (const [tag, path] of Object.entries(data.tags)) {
                 const option = document.createElement('option');
                 option.value = path;
-                option.textContent = tag; // Display the tag name
+                option.textContent = tag; // display the tag name
                 select.appendChild(option);
             }
         }
 
-        // navigate to the selected tag
-        function navigateToTag() {
-            const select = document.getElementById('tagSelect');
+        // function to load content into the page
+        async function loadContent() {
+            const select = document.getElementById('versionSelect');
             const selectedValue = select.value;
-            window.location.href = selectedValue;
+            const contentDiv = document.getElementById('content');
+
+            if (selectedValue) {
+                try {
+                    const response = await fetch(selectedValue);
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    const content = await response.text();
+                    contentDiv.innerHTML = content; // load the content into the div
+                } catch (error) {
+                    contentDiv.innerHTML = `<p>Error loading content: ${error.message}</p>`;
+                }
+            } else {
+                contentDiv.innerHTML = `<p>Select a version from the dropdown to view the documentation here.</p>`;
+            }
         }
 
-        // fetch subdirectories on page load
-        window.onload = fetchSubdirectories;
+        // fetch tags on page load
+        window.onload = fetchTags;
     </script>
 </body>
 </html>
