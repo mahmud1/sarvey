@@ -100,8 +100,7 @@
             await loadContent(); // Load the default content
         }
 
-        // function to load content into the iframe
-        // function to load content into the iframe
+// function to load content into the iframe
 async function loadContent() {
     const select = document.getElementById('versionSelect');
     const selectedValue = select.value;
@@ -122,26 +121,23 @@ async function loadContent() {
             const iframeDocument = iframe.contentDocument || iframe.contentWindow.document;
             const links = iframeDocument.getElementsByTagName('a');
 
+            // Get the current page's origin
+            const currentOrigin = window.location.origin;
+
             for (let link of links) {
                 const href = link.getAttribute('href');
-                if (href && (href.startsWith('http://') || href.startsWith('https://'))) {
-                    // If the link is external, set target to _blank
-                    link.setAttribute('target', '_blank');
-                } else if (href) {
-                    // If the link is internal (absolute), adjust the path
-                    const basePath = selectedValue.substring(0, selectedValue.lastIndexOf('/'));
-                    
-                    // Check if the href is an absolute path
-                    if (href.startsWith('/')) {
-                        // If it's an absolute path, construct the full URL
-                        const newHref = window.location.origin + href; // Use the current origin
-                        console.log(`Adjusting absolute link: ${href} to ${newHref}`); // Log the adjustment
-                        link.setAttribute('href', newHref);
+                if (href) {
+                    // Create a new URL object to easily compare origins
+                    const linkUrl = new URL(href, currentOrigin);
+
+                    // Check if the link's origin matches the current page's origin
+                    if (linkUrl.origin === currentOrigin) {
+                        // If the link is internal, do nothing (or adjust if needed)
+                        console.log(`Internal link: ${href}`);
                     } else {
-                        // If it's a relative path, adjust it based on the base path
-                        const newHref = new URL(href, basePath).href; // Create a new URL based on the base path
-                        console.log(`Adjusting relative link: ${href} to ${newHref}`); // Log the adjustment
-                        link.setAttribute('href', newHref);
+                        // If the link is external, set target to _blank
+                        link.setAttribute('target', '_blank');
+                        console.log(`External link: ${href}`);
                     }
                 }
             }
