@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Documentation Navigation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        select {
+            padding: 10px;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Documentation Navigation</h1>
+    <label for="tagSelect">Select a version:</label>
+    <select id="tagSelect" onchange="navigateToTag()">
+        <option value="docs/index.html">Latest Documentation</option>
+        <!-- Subdirectories will be populated here -->
+    </select>
+
+    <script>
+        // fetch the list of subdirectories
+        async function fetchSubdirectories() {
+            const response = await fetch('tags/'); 
+            const text = await response.text();
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(text, 'text/html');
+            const links = htmlDoc.querySelectorAll('a');
+
+            const select = document.getElementById('tagSelect');
+
+            links.forEach(link => {
+                const href = link.getAttribute('href');
+                if (href && href.endsWith('/')) { // check if it's a directory
+                    const option = document.createElement('option');
+                    option.value = `tags/${href}index.html`; 
+                    option.textContent = href.replace('/', ''); // remove trailing slash for display
+                    select.appendChild(option);
+                }
+            });
+        }
+
+        function navigateToTag() {
+            const select = document.getElementById('tagSelect');
+            const selectedValue = select.value;
+            window.location.href = selectedValue;
+        }
+
+        // fetch subdirectories on page load
+        window.onload = fetchSubdirectories;
+    </script>
+</body>
+</html>
