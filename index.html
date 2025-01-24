@@ -115,13 +115,30 @@
                 cssLink.rel = 'stylesheet';
                 cssLink.href = selectedValue.replace('.html', '_static/style.css'); // Adjust the path to your CSS
                 document.head.appendChild(cssLink);
+    
+                // Adjust links in the iframe after it loads
+                iframe.onload = () => {
+                    const iframeDocument = iframe.contentDocument || iframe.contentWindow.document;
+                    const links = iframeDocument.getElementsByTagName('a');
+    
+                    for (let link of links) {
+                        const href = link.getAttribute('href');
+                        if (href && (href.startsWith('http://') || href.startsWith('https://'))) {
+                            // If the link is external, set target to _blank
+                            link.setAttribute('target', '_blank');
+                        } else if (href) {
+                            // If the link is internal, adjust the path
+                            link.setAttribute('href', selectedValue.substring(0, selectedValue.lastIndexOf('/')) + '/' + href);
+                        }
+                    }
+                };
             } else {
                 iframe.src = ""; // Clear the iframe if no version is selected
             }
         }
-
+    
         // fetch tags on page load
         window.onload = fetchTags;
     </script>
-</body>
+    </body>
 </html>
