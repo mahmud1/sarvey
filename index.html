@@ -24,7 +24,27 @@
             top: 5px;
             right: 5px;
             z-index: 1000; 
+            background-color: white;
+            border: 1px solid #ccc; /* Light border */
+            border-radius: 4px; /* Rounded corners */
+            padding: 5px; /* Padding around the dropdown */
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
         }
+
+        select {
+            padding: 8px; 
+            font-size: 14px; 
+            border: 1px solid #ccc; /* Light border */
+            border-radius: 4px; /* Rounded corners */
+            background-color: #f9f9f9; 
+            cursor: pointer; 
+            transition: border-color 0.3s; /* Smooth transition for border color */
+        }
+
+        select:hover {
+            border-color: #888; /* Darker border on hover */
+        }
+
         #content {
             margin-top: 50px; 
             height: calc(100vh - 50px); 
