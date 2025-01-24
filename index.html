@@ -7,15 +7,25 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            margin: 20px;
+            margin: 0;
+            padding: 0;
         }
         #dropdown-container {
-            position: absolute;
+            position: fixed; /* Keep it fixed on the page */
             top: 20px;
             right: 20px;
+            z-index: 1000; /* Ensure it stays above other content */
         }
         #content {
             margin-top: 60px; /* Space for the dropdown */
+            height: calc(100vh - 80px); /* Full height minus dropdown space */
+            width: 100%; /* Full width */
+            border: none; /* No border for the iframe */
+        }
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none; /* No border for the iframe */
         }
         select {
             padding: 10px;
@@ -24,7 +34,7 @@
     </style>
 </head>
 <body>
-    <h1>Documentation Navigation</h1>
+    <h1 style="margin: 20px;">Documentation Navigation</h1>
     <div id="dropdown-container">
         <label for="versionSelect">Select a version:</label>
         <select id="versionSelect" onchange="loadContent()">
@@ -33,9 +43,9 @@
         </select>
     </div>
 
-    <div id="content">
-        <p>Select a version from the dropdown to view the documentation here.</p>
-    </div>
+    <iframe id="content" src="" title="Documentation Content">
+        <p>Your browser does not support iframes.</p>
+    </iframe>
 
     <script>
         // function to fetch the tags from the JSON file
@@ -79,52 +89,28 @@
             await loadContent(); // Load the default content
         }
 
-        // function to load content into the page
+        // function to load content into the iframe
         async function loadContent() {
             const select = document.getElementById('versionSelect');
             const selectedValue = select.value;
-            const contentDiv = document.getElementById('content');
+            const iframe = document.getElementById('content');
 
             if (selectedValue) {
-                try {
-                    const response = await fetch(selectedValue);
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    const content = await response.text();
-                    contentDiv.innerHTML = content; // load the content into the div
+                // Load the selected documentation in the iframe
+                iframe.src = selectedValue;
 
-                    // Load the CSS from the _static directory
-                    const cssLink = document.createElement('link');
-                    cssLink.rel = 'stylesheet';
-                    cssLink.href = selectedValue.replace('.html', '_static/style.css'); // Adjust the path to your CSS
-                    document.head.appendChild(cssLink);
-
-                    // Adjust links in the loaded content
-                    adjustLinks(contentDiv, selectedValue);
-                } catch (error) {
-                    contentDiv.innerHTML = `<p>Error loading content: ${error.message}</p>`;
-                }
+                // Load the CSS from the _static directory
+                const cssLink = document.createElement('link');
+                cssLink.rel = 'stylesheet';
+                cssLink.href = selectedValue.replace('.html', '_static/style.css'); // Adjust the path to your CSS
+                document.head.appendChild(cssLink);
             } else {
-                contentDiv.innerHTML = `<p>Select a version from the dropdown to view the documentation here.</p>`;
-            }
-        }
-
-        // function to adjust links in the loaded content
-        function adjustLinks(contentDiv, selectedValue) {
-            const basePath = selectedValue.substring(0, selectedValue.lastIndexOf('/')); // Get the base path
-            const links = contentDiv.getElementsByTagName('a');
-
-            for (let link of links) {
-                const href = link.getAttribute('href');
-                if (href && !href.startsWith('http')) { // Only adjust relative links
-                    // Update the link to point to the correct path
-                    link.setAttribute('href', basePath + '/' + href);
-                }
+                iframe.src = ""; // Clear the iframe if no version is selected
             }
         }
 
         // fetch tags on page load
         window.onload = fetchTags;
     </script>
-</
+</body>
+</html>
