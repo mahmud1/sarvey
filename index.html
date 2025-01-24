@@ -101,7 +101,8 @@
         }
 
         // function to load content into the iframe
-        async function loadContent() {
+        // function to load content into the iframe
+async function loadContent() {
     const select = document.getElementById('versionSelect');
     const selectedValue = select.value;
     const iframe = document.getElementById('content');
@@ -127,9 +128,21 @@
                     // If the link is external, set target to _blank
                     link.setAttribute('target', '_blank');
                 } else if (href) {
-                    // If the link is internal, adjust the path
+                    // If the link is internal (absolute), adjust the path
                     const basePath = selectedValue.substring(0, selectedValue.lastIndexOf('/'));
-                    link.setAttribute('href', basePath + '/' + href);
+                    
+                    // Check if the href is an absolute path
+                    if (href.startsWith('/')) {
+                        // If it's an absolute path, construct the full URL
+                        const newHref = window.location.origin + href; // Use the current origin
+                        console.log(`Adjusting absolute link: ${href} to ${newHref}`); // Log the adjustment
+                        link.setAttribute('href', newHref);
+                    } else {
+                        // If it's a relative path, adjust it based on the base path
+                        const newHref = new URL(href, basePath).href; // Create a new URL based on the base path
+                        console.log(`Adjusting relative link: ${href} to ${newHref}`); // Log the adjustment
+                        link.setAttribute('href', newHref);
+                    }
                 }
             }
         };
@@ -137,6 +150,7 @@
         iframe.src = ""; // Clear the iframe if no version is selected
     }
 }
+
     
         // fetch tags on page load
         window.onload = fetchTags;
