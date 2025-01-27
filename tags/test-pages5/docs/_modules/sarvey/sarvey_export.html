@@ -1,0 +1,412 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>sarvey.sarvey_export &mdash; SARvey 1.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=86cf1cd6" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=fc837d61"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            SARvey
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../readme.html">SARvey - survey with SAR</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/luhipi/sarvey">Source code repository</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../usage.html">Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../preparation.html">Preparation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../processing.html">Multitemporal InSAR processing workflow</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../demo_datasets.html">Demo Datasets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modules.html">Python API reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../authors.html">Credits</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../history.html">History</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">SARvey</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">sarvey.sarvey_export</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for sarvey.sarvey_export</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python</span>
+
+<span class="c1"># SARvey - A multitemporal InSAR time series tool for the derivation of displacements.</span>
+<span class="c1">#</span>
+<span class="c1"># Copyright (C) 2021-2024 Andreas Piter (IPI Hannover, piter@ipi.uni-hannover.de)</span>
+<span class="c1">#</span>
+<span class="c1"># This software was developed together with FERN.Lab (fernlab@gfz-potsdam.de) in the context</span>
+<span class="c1"># of the SAR4Infra project with funds of the German Federal Ministry for Digital and</span>
+<span class="c1"># Transport and contributions from Landesamt fuer Vermessung und Geoinformation</span>
+<span class="c1"># Schleswig-Holstein and Landesbetrieb Strassenbau und Verkehr Schleswig-Holstein.</span>
+<span class="c1">#</span>
+<span class="c1"># This program is free software: you can redistribute it and/or modify it under</span>
+<span class="c1"># the terms of the GNU General Public License as published by the Free Software</span>
+<span class="c1"># Foundation, either version 3 of the License, or (at your option) any later</span>
+<span class="c1"># version.</span>
+<span class="c1">#</span>
+<span class="c1"># Important: This package uses PyMaxFlow. The core of PyMaxflows library is the C++</span>
+<span class="c1"># implementation by Vladimir Kolmogorov. It is also licensed under the GPL, but it REQUIRES that you</span>
+<span class="c1"># cite [BOYKOV04] (see LICENSE) in any resulting publication if you use this code for research purposes.</span>
+<span class="c1"># This requirement extends to SARvey.</span>
+<span class="c1">#</span>
+<span class="c1"># This program is distributed in the hope that it will be useful, but WITHOUT</span>
+<span class="c1"># ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS</span>
+<span class="c1"># FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more</span>
+<span class="c1"># details.</span>
+<span class="c1">#</span>
+<span class="c1"># You should have received a copy of the GNU Lesser General Public License along</span>
+<span class="c1"># with this program. If not, see &lt;https://www.gnu.org/licenses/&gt;.</span>
+
+<span class="sd">&quot;&quot;&quot;Console script for exporting data from SARvey format to GIS formats.&quot;&quot;&quot;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">argparse</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">logging</span><span class="w"> </span><span class="kn">import</span> <span class="n">Logger</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">os.path</span><span class="w"> </span><span class="kn">import</span> <span class="n">join</span><span class="p">,</span> <span class="n">dirname</span><span class="p">,</span> <span class="n">basename</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">geopandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">gpd</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pyproj</span><span class="w"> </span><span class="kn">import</span> <span class="n">CRS</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pyproj.aoi</span><span class="w"> </span><span class="kn">import</span> <span class="n">AreaOfInterest</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pyproj.database</span><span class="w"> </span><span class="kn">import</span> <span class="n">query_utm_crs_info</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">shapely</span><span class="w"> </span><span class="kn">import</span> <span class="n">Point</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">shapely.errors</span><span class="w"> </span><span class="kn">import</span> <span class="n">ShapelyDeprecationWarning</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">sarvey.config</span><span class="w"> </span><span class="kn">import</span> <span class="n">loadConfiguration</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sarvey.console</span><span class="w"> </span><span class="kn">import</span> <span class="n">showLogoSARvey</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sarvey.objects</span><span class="w"> </span><span class="kn">import</span> <span class="n">Points</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">sarvey.utils</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">ut</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sarvey.geolocation</span><span class="w"> </span><span class="kn">import</span> <span class="n">calculateGeolocationCorrection</span>
+
+
+<span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s2">&quot;ignore&quot;</span><span class="p">,</span> <span class="n">category</span><span class="o">=</span><span class="n">ShapelyDeprecationWarning</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="exportDataToGisFormat">
+<a class="viewcode-back" href="../../sarvey.html#sarvey.sarvey_export.exportDataToGisFormat">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">exportDataToGisFormat</span><span class="p">(</span><span class="o">*</span><span class="p">,</span> <span class="n">file_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">output_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">input_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+                          <span class="n">correct_geolocation</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">no_timeseries</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">logger</span><span class="p">:</span> <span class="n">Logger</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Export data to GIS format (shp or gpkg).</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    file_path: str</span>
+<span class="sd">        Path to the input file.</span>
+<span class="sd">    output_path: str</span>
+<span class="sd">        Path for writing output file.</span>
+<span class="sd">    input_path: str</span>
+<span class="sd">        Path to slcStack.h5 and geometryRadar.h5.</span>
+<span class="sd">    correct_geolocation: bool</span>
+<span class="sd">        Correct geolocation or not</span>
+<span class="sd">    no_timeseries: bool</span>
+<span class="sd">        Export time series data or not</span>
+<span class="sd">    logger: Logger</span>
+<span class="sd">        Logger handle.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">point_obj</span> <span class="o">=</span> <span class="n">Points</span><span class="p">(</span><span class="n">file_path</span><span class="o">=</span><span class="n">file_path</span><span class="p">,</span> <span class="n">logger</span><span class="o">=</span><span class="n">logger</span><span class="p">)</span>
+
+    <span class="n">point_obj</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">input_path</span><span class="o">=</span><span class="n">input_path</span><span class="p">)</span>
+
+    <span class="c1"># todo: add corrected height to output</span>
+    <span class="c1"># todo: add option to mask the output to e.g. linear infrastructures or other AOI</span>
+
+    <span class="n">vel</span><span class="p">,</span> <span class="n">demerr</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">coherence</span><span class="p">,</span> <span class="n">omega</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">ut</span><span class="o">.</span><span class="n">estimateParameters</span><span class="p">(</span><span class="n">obj</span><span class="o">=</span><span class="n">point_obj</span><span class="p">,</span> <span class="n">ifg_space</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+    <span class="n">stc</span> <span class="o">=</span> <span class="n">ut</span><span class="o">.</span><span class="n">spatiotemporalConsistency</span><span class="p">(</span><span class="n">coord_utm</span><span class="o">=</span><span class="n">point_obj</span><span class="o">.</span><span class="n">coord_utm</span><span class="p">,</span> <span class="n">phase</span><span class="o">=</span><span class="n">point_obj</span><span class="o">.</span><span class="n">phase</span><span class="p">,</span>
+                                       <span class="n">wavelength</span><span class="o">=</span><span class="n">point_obj</span><span class="o">.</span><span class="n">wavelength</span><span class="p">)</span>
+
+    <span class="n">point_obj</span><span class="o">.</span><span class="n">phase</span> <span class="o">*=</span> <span class="n">point_obj</span><span class="o">.</span><span class="n">wavelength</span> <span class="o">/</span> <span class="p">(</span><span class="mi">4</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span>  <span class="c1"># in [m]</span>
+
+    <span class="c1"># extract displacement</span>
+    <span class="n">defo_ts</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">point_obj</span><span class="o">.</span><span class="n">phase</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">point_obj</span><span class="o">.</span><span class="n">num_points</span><span class="p">):</span>
+        <span class="n">phase_topo</span> <span class="o">=</span> <span class="p">(</span><span class="n">point_obj</span><span class="o">.</span><span class="n">ifg_net_obj</span><span class="o">.</span><span class="n">pbase</span> <span class="o">/</span> <span class="p">(</span><span class="n">point_obj</span><span class="o">.</span><span class="n">slant_range</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">point_obj</span><span class="o">.</span><span class="n">loc_inc</span><span class="p">[</span><span class="n">i</span><span class="p">]))</span> <span class="o">*</span>
+                      <span class="n">demerr</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+        <span class="n">defo_ts</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">point_obj</span><span class="o">.</span><span class="n">phase</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:]</span> <span class="o">-</span> <span class="n">phase_topo</span>
+
+    <span class="c1"># transform into meters</span>
+    <span class="n">defo_ts</span> <span class="o">*=</span> <span class="mi">1000</span>  <span class="c1"># in [mm]</span>
+
+    <span class="n">utm_crs_list</span> <span class="o">=</span> <span class="n">query_utm_crs_info</span><span class="p">(</span>
+        <span class="n">datum_name</span><span class="o">=</span><span class="s2">&quot;WGS 84&quot;</span><span class="p">,</span>
+        <span class="n">area_of_interest</span><span class="o">=</span><span class="n">AreaOfInterest</span><span class="p">(</span>
+            <span class="n">west_lon_degree</span><span class="o">=</span><span class="n">point_obj</span><span class="o">.</span><span class="n">coord_lalo</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span>
+            <span class="n">south_lat_degree</span><span class="o">=</span><span class="n">point_obj</span><span class="o">.</span><span class="n">coord_lalo</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span>
+            <span class="n">east_lon_degree</span><span class="o">=</span><span class="n">point_obj</span><span class="o">.</span><span class="n">coord_lalo</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">(),</span>
+            <span class="n">north_lat_degree</span><span class="o">=</span><span class="n">point_obj</span><span class="o">.</span><span class="n">coord_lalo</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">(),</span>
+        <span class="p">),</span>
+        <span class="n">contains</span><span class="o">=</span><span class="kc">True</span>
+    <span class="p">)</span>
+
+    <span class="n">utm_epsg</span> <span class="o">=</span> <span class="n">utm_crs_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">code</span>
+
+    <span class="n">dates</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;D</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">date</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;-&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">date</span> <span class="ow">in</span> <span class="n">point_obj</span><span class="o">.</span><span class="n">ifg_net_obj</span><span class="o">.</span><span class="n">dates</span><span class="p">]</span>
+
+    <span class="n">dates</span> <span class="o">=</span> <span class="n">dates</span><span class="p">[:</span><span class="n">point_obj</span><span class="o">.</span><span class="n">phase</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>  <span class="c1"># remove dates which were not processed</span>
+
+    <span class="k">if</span> <span class="n">no_timeseries</span><span class="p">:</span>
+        <span class="n">df_points</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({})</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">df_points</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="n">date</span><span class="p">:</span> <span class="p">()</span> <span class="k">for</span> <span class="n">date</span> <span class="ow">in</span> <span class="n">dates</span><span class="p">})</span>
+
+    <span class="k">if</span> <span class="n">correct_geolocation</span><span class="p">:</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Calculate geolocation correction.&quot;</span><span class="p">)</span>
+        <span class="n">coord_correction</span> <span class="o">=</span> <span class="n">calculateGeolocationCorrection</span><span class="p">(</span><span class="n">path_geom</span><span class="o">=</span><span class="n">input_path</span><span class="p">,</span>
+                                                          <span class="n">point_obj</span><span class="o">=</span><span class="n">point_obj</span><span class="p">,</span>
+                                                          <span class="n">demerr</span><span class="o">=</span><span class="n">demerr</span><span class="p">,</span>
+                                                          <span class="n">logger</span><span class="o">=</span><span class="n">logger</span><span class="p">)</span>
+        <span class="n">coord_correction_norm</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">coord_correction</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">max_error_index</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">coord_correction_norm</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Maximum geolocation correction: </span><span class="si">{</span><span class="n">coord_correction_norm</span><span class="p">[</span><span class="n">max_error_index</span><span class="p">]</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2"> m &quot;</span>
+                    <span class="sa">f</span><span class="s2">&quot;corresponding to </span><span class="si">{</span><span class="n">demerr</span><span class="p">[</span><span class="n">max_error_index</span><span class="p">]</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2"> m DEM correction&quot;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">coord_correction</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;geolocation correction skipped.&quot;</span><span class="p">)</span>
+
+    <span class="n">coord_utm</span> <span class="o">=</span> <span class="n">point_obj</span><span class="o">.</span><span class="n">coord_utm</span>
+    <span class="n">coord_utm</span> <span class="o">+=</span> <span class="n">coord_correction</span>
+    <span class="n">df_points</span><span class="p">[</span><span class="s1">&#39;coord&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">coord_utm</span><span class="p">)</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+    <span class="n">df_points</span><span class="p">[</span><span class="s1">&#39;coord&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df_points</span><span class="p">[</span><span class="s1">&#39;coord&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">Point</span><span class="p">)</span>
+    <span class="n">df_points</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;point_id&#39;</span><span class="p">,</span> <span class="n">point_obj</span><span class="o">.</span><span class="n">point_id</span><span class="o">.</span><span class="n">tolist</span><span class="p">())</span>
+    <span class="n">df_points</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;velocity&#39;</span><span class="p">,</span> <span class="n">vel</span> <span class="o">*</span> <span class="mi">1000</span><span class="p">)</span>  <span class="c1"># in [mm]</span>
+    <span class="n">df_points</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;coherence&#39;</span><span class="p">,</span> <span class="n">coherence</span><span class="p">)</span>
+    <span class="n">df_points</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;omega&#39;</span><span class="p">,</span> <span class="n">omega</span><span class="p">)</span>
+    <span class="n">df_points</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="s1">&#39;st_consistency&#39;</span><span class="p">,</span> <span class="n">stc</span> <span class="o">*</span> <span class="mi">1000</span><span class="p">)</span>  <span class="c1"># in [mm]</span>
+    <span class="n">df_points</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="s1">&#39;dem_error&#39;</span><span class="p">,</span> <span class="n">demerr</span><span class="p">)</span>  <span class="c1"># in [m]</span>
+    <span class="n">df_points</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="s1">&#39;dem&#39;</span><span class="p">,</span> <span class="n">point_obj</span><span class="o">.</span><span class="n">height</span><span class="p">)</span>  <span class="c1"># in [m]</span>
+
+    <span class="n">df_points</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="n">col</span><span class="p">[:</span><span class="mi">10</span><span class="p">]</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">df_points</span><span class="o">.</span><span class="n">columns</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">no_timeseries</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">date</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">dates</span><span class="p">):</span>
+            <span class="n">df_points</span><span class="p">[</span><span class="n">date</span><span class="p">]</span> <span class="o">=</span> <span class="n">defo_ts</span><span class="p">[:,</span> <span class="n">i</span><span class="p">]</span>
+
+    <span class="n">gdf_points</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">(</span><span class="n">df_points</span><span class="p">,</span> <span class="n">geometry</span><span class="o">=</span><span class="s1">&#39;coord&#39;</span><span class="p">)</span>
+    <span class="n">gdf_points</span> <span class="o">=</span> <span class="n">gdf_points</span><span class="o">.</span><span class="n">set_crs</span><span class="p">(</span><span class="n">CRS</span><span class="o">.</span><span class="n">from_epsg</span><span class="p">(</span><span class="n">utm_epsg</span><span class="p">))</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">msg</span><span class="o">=</span><span class="s2">&quot;write to file.&quot;</span><span class="p">)</span>
+    <span class="n">gdf_points</span><span class="o">.</span><span class="n">to_file</span><span class="p">(</span><span class="n">output_path</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="createParser">
+<a class="viewcode-back" href="../../sarvey.html#sarvey.sarvey_export.createParser">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">createParser</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Create_parser.&quot;&quot;&quot;</span>
+    <span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">(</span>
+        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Export InSAR time series results from &#39;.h5&#39; to GIS data formats.&quot;</span><span class="p">,</span>
+        <span class="n">formatter_class</span><span class="o">=</span><span class="n">argparse</span><span class="o">.</span><span class="n">RawTextHelpFormatter</span><span class="p">,</span>
+        <span class="n">epilog</span><span class="o">=</span><span class="s2">&quot;&quot;&quot;EXAMPLE:</span>
+<span class="s2">        sarvey_export outputs/p2_coh50_ts.h5 -o outputs/shp/p2_coh50.shp             # export time series to shapefile</span>
+<span class="s2">        sarvey_export outputs/p2_coh50_ts.h5 -o outputs/shp/p2_coh50.gpkg            # export time series to geopackage</span>
+<span class="s2">        sarvey_export outputs/p2_coh90_ts.h5 -o outputs/shp/p2_coh90.shp -g          # apply geolocation correction</span>
+<span class="s2">        sarvey_export outputs/p2_coh90_ts.h5 -o outputs/shp/p2_coh90.shp -g -t       # skip time series data</span>
+<span class="s2">        &quot;&quot;&quot;</span><span class="p">)</span>
+
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;file_path&#39;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Path to input file.&#39;</span><span class="p">)</span>
+
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;-o&quot;</span><span class="p">,</span> <span class="s2">&quot;--output_path&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s2">&quot;output_path&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+                        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Path to output file. If empty, the name of the input file will be used.&quot;</span><span class="p">)</span>
+
+    <span class="c1"># parser.add_argument(&quot;-f&quot;, &quot;--format&quot;, type=str, required=False, metavar=&quot;FILE&quot;, dest=&quot;format&quot;,</span>
+    <span class="c1">#                     help=&quot;Output file format (if not already specified within &#39;-o&#39;). Can be &#39;shp&#39;, &#39;gpkg&#39;,</span>
+    <span class="c1">#                     &#39;csv&#39;.&quot;)</span>
+
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;-l&quot;</span><span class="p">,</span> <span class="s2">&quot;--log_dir&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">metavar</span><span class="o">=</span><span class="s2">&quot;FILE&quot;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s2">&quot;log_dir&quot;</span><span class="p">,</span>
+                        <span class="n">default</span><span class="o">=</span><span class="s2">&quot;logfiles/&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Logfile directory (default: &#39;logfiles/&#39;)&quot;</span><span class="p">)</span>
+
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;-w&#39;</span><span class="p">,</span> <span class="s1">&#39;--workdir&#39;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s2">&quot;workdir&quot;</span><span class="p">,</span>
+                        <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Working directory (default: current directory).&#39;</span><span class="p">)</span>
+
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;-g&#39;</span><span class="p">,</span> <span class="s1">&#39;--correct_geo&#39;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_true&quot;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s2">&quot;correct_geolocation&quot;</span><span class="p">,</span>
+                        <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Correct Geolocation (default: False).&#39;</span><span class="p">)</span>
+
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;-t&#39;</span><span class="p">,</span> <span class="s1">&#39;--no-time-series&#39;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_true&quot;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s2">&quot;no_timeseries&quot;</span><span class="p">,</span>
+                        <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Do not export time series (default: False).&#39;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">parser</span></div>
+
+
+
+<div class="viewcode-block" id="main">
+<a class="viewcode-back" href="../../sarvey.html#sarvey.sarvey_export.main">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="n">iargs</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Run Main.</span>
+
+<span class="sd">    :param iargs:</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">parser</span> <span class="o">=</span> <span class="n">createParser</span><span class="p">()</span>
+    <span class="n">args</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">(</span><span class="n">iargs</span><span class="p">)</span>
+
+    <span class="n">log_format</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">Formatter</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%(asctime)s</span><span class="s1"> - </span><span class="si">%(levelname)s</span><span class="s1"> - </span><span class="si">%(message)s</span><span class="s1">&#39;</span><span class="p">)</span>
+    <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+    <span class="n">console_handler</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">StreamHandler</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="p">)</span>
+    <span class="n">console_handler</span><span class="o">.</span><span class="n">setFormatter</span><span class="p">(</span><span class="n">log_format</span><span class="p">)</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">addHandler</span><span class="p">(</span><span class="n">console_handler</span><span class="p">)</span>
+    <span class="n">logging_level</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLevelName</span><span class="p">(</span><span class="s2">&quot;INFO&quot;</span><span class="p">)</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging_level</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">workdir</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">args</span><span class="o">.</span><span class="n">workdir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">curdir</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">msg</span><span class="o">=</span><span class="s2">&quot;Working directory: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">workdir</span><span class="p">))</span>
+
+    <span class="n">args</span><span class="o">.</span><span class="n">log_dir</span> <span class="o">=</span> <span class="n">join</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">workdir</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">log_dir</span><span class="p">)</span>
+    <span class="n">current_datetime</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2">-%H-%M-%S&quot;</span><span class="p">,</span> <span class="n">time</span><span class="o">.</span><span class="n">localtime</span><span class="p">())</span>
+    <span class="n">log_filename</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;sarvey_export_</span><span class="si">{</span><span class="n">current_datetime</span><span class="si">}</span><span class="s2">.log&quot;</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">log_dir</span><span class="p">):</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">log_dir</span><span class="p">)</span>
+    <span class="n">file_handler</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">FileHandler</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="n">join</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">log_dir</span><span class="p">,</span> <span class="n">log_filename</span><span class="p">))</span>
+    <span class="n">file_handler</span><span class="o">.</span><span class="n">setFormatter</span><span class="p">(</span><span class="n">log_format</span><span class="p">)</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">addHandler</span><span class="p">(</span><span class="n">file_handler</span><span class="p">)</span>
+
+    <span class="n">showLogoSARvey</span><span class="p">(</span><span class="n">logger</span><span class="o">=</span><span class="n">logger</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="s2">&quot;Export results&quot;</span><span class="p">)</span>
+
+    <span class="c1"># read config file to retrieve location of inputs</span>
+    <span class="n">config_file_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">join</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">workdir</span><span class="p">,</span> <span class="n">dirname</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">file_path</span><span class="p">),</span> <span class="s2">&quot;config.json&quot;</span><span class="p">))</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">config_file_path</span><span class="p">):</span>
+        <span class="c1"># check if any config file is available in upper directory (backward compatibility)</span>
+        <span class="n">files</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">f</span><span class="p">)</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">join</span><span class="p">(</span><span class="n">dirname</span><span class="p">(</span><span class="n">config_file_path</span><span class="p">),</span> <span class="s2">&quot;..&quot;</span><span class="p">))</span>
+                          <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">f</span><span class="p">)])</span>
+        <span class="n">potential_configs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([(</span><span class="n">basename</span><span class="p">(</span><span class="n">f</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;json&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="s2">&quot;config&quot;</span> <span class="ow">in</span> <span class="n">basename</span><span class="p">(</span><span class="n">f</span><span class="p">))</span>
+                                      <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">files</span><span class="p">])</span>
+        <span class="k">if</span> <span class="n">potential_configs</span><span class="p">[</span><span class="n">potential_configs</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">FileNotFoundError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Backup configuration file not found: </span><span class="si">{</span><span class="n">config_file_path</span><span class="si">}</span><span class="s2">!&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="n">msg</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Backup configuration file not found: </span><span class="si">{</span><span class="n">config_file_path</span><span class="si">}</span><span class="s2">!&quot;</span><span class="p">)</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="n">msg</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Other configuration files automatically detected: </span><span class="si">{</span><span class="n">files</span><span class="p">[</span><span class="n">potential_configs</span><span class="p">]</span><span class="si">}</span><span class="s2">!&quot;</span><span class="p">)</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="n">msg</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Automatically selected configuration file: </span><span class="si">{</span><span class="n">files</span><span class="p">[</span><span class="n">potential_configs</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2">!&quot;</span><span class="p">)</span>
+            <span class="n">config_file_path</span> <span class="o">=</span> <span class="n">files</span><span class="p">[</span><span class="n">potential_configs</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="n">config</span> <span class="o">=</span> <span class="n">loadConfiguration</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="n">config_file_path</span><span class="p">)</span>
+
+    <span class="c1"># create output directory</span>
+    <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">output_path</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+        <span class="n">output_dir</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">workdir</span>
+        <span class="n">output_fname</span> <span class="o">=</span> <span class="n">basename</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">file_path</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span>
+        <span class="n">output_format</span> <span class="o">=</span> <span class="s2">&quot;shp&quot;</span>
+        <span class="n">args</span><span class="o">.</span><span class="n">output_path</span> <span class="o">=</span> <span class="n">join</span><span class="p">(</span><span class="n">output_dir</span><span class="p">,</span> <span class="n">output_fname</span> <span class="o">+</span> <span class="s2">&quot;.&quot;</span> <span class="o">+</span> <span class="n">output_format</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">output_dir</span> <span class="o">=</span> <span class="n">join</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">workdir</span><span class="p">,</span> <span class="n">dirname</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">output_path</span><span class="p">))</span>
+        <span class="n">output_fname</span> <span class="o">=</span> <span class="n">basename</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">output_path</span><span class="p">)</span>
+        <span class="n">name_splitted</span> <span class="o">=</span> <span class="n">output_fname</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">name_splitted</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">args</span><span class="o">.</span><span class="n">output_path</span> <span class="o">=</span> <span class="n">join</span><span class="p">(</span><span class="n">output_dir</span><span class="p">,</span> <span class="n">output_fname</span> <span class="o">+</span> <span class="s2">&quot;.shp&quot;</span><span class="p">)</span>  <span class="c1"># use shapefile as default format</span>
+        <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">name_splitted</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="n">output_format</span> <span class="o">=</span> <span class="n">name_splitted</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>  <span class="c1"># use specified format</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">output_format</span> <span class="o">!=</span> <span class="s2">&quot;shp&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">output_format</span> <span class="o">!=</span> <span class="s2">&quot;gpkg&quot;</span><span class="p">):</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">msg</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Output format not supported: </span><span class="si">{</span><span class="n">output_format</span><span class="si">}</span><span class="s2">!&quot;</span><span class="p">)</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">msg</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Detected output format: </span><span class="si">{</span><span class="n">output_format</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+            <span class="n">args</span><span class="o">.</span><span class="n">output_path</span> <span class="o">=</span> <span class="n">join</span><span class="p">(</span><span class="n">output_dir</span><span class="p">,</span> <span class="n">output_fname</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">msg</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Output format was not recognized! </span><span class="si">{</span><span class="n">output_fname</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span>
+
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">msg</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Output file: </span><span class="si">{</span><span class="n">args</span><span class="o">.</span><span class="n">output_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="c1"># specify geolocation status</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">msg</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Correct geolocation: </span><span class="si">{</span><span class="n">args</span><span class="o">.</span><span class="n">correct_geolocation</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="c1"># specify time series flag</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">msg</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Export time series data: </span><span class="si">{</span><span class="ow">not</span><span class="w"> </span><span class="n">args</span><span class="o">.</span><span class="n">no_timeseries</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">output_dir</span><span class="p">):</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">output_dir</span><span class="p">)</span>
+
+    <span class="n">exportDataToGisFormat</span><span class="p">(</span><span class="n">file_path</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">file_path</span><span class="p">,</span> <span class="n">output_path</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">output_path</span><span class="p">,</span>
+                          <span class="n">input_path</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">general</span><span class="o">.</span><span class="n">input_path</span><span class="p">,</span>
+                          <span class="n">correct_geolocation</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">correct_geolocation</span><span class="p">,</span> <span class="n">no_timeseries</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">no_timeseries</span><span class="p">,</span>
+                          <span class="n">logger</span><span class="o">=</span><span class="n">logger</span><span class="p">)</span></div>
+
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">main</span><span class="p">()</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, IPI - Leibniz Universitaet Hannover.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
