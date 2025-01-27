@@ -1,9 +1,9 @@
 {
     "latest": "main/docs/index.html",
     "tags": {
-        "v2.0.0 (stable)": "tags/test-theme1/index.html"
-        "v1.1.0": "tags/test-deploy5/index.html",
-        "v1.0.0": "tags/test-deploy5/index.html",
+        "2.0.0 (stable)": "tags/test-theme1/index.html"
+        "1.1.0": "tags/test-deploy5/index.html",
+        "1.0.0": "tags/test-deploy5/index.html",
     }
 }
 
