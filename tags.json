@@ -1,5 +1,5 @@
 {
-    "Stable": "main/docs/index.html",
+    "dev": "main/docs/index.html",
     "tags": {
         "2.0 (stable)": "tags/test-theme1/index.html",
         "1.1": "tags/test-deploy5/index.html",
