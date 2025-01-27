@@ -1,8 +1,8 @@
 {
     "Stable": "main/docs/index.html",
     "tags": {
-        "v1.0": "tags/test-deploy5/index.html",
+        "v2.0": "tags/test-theme1/index.html",
         "v1.1": "tags/test-deploy5/index.html",
-        "v2.0": "tags/test-theme1/index.html"
+        "v1.0": "tags/test-deploy5/index.html"
     }
 }
