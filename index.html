@@ -115,7 +115,7 @@
 
         // function to load default content
         async function loadDefaultContent(data) {
-            const [defaultPathtag, defaultPath] of data.latest; // or set a specific default version
+            const [defaultPathtag, defaultPath] = data.latest; // or set a specific default version
             document.getElementById('versionSelect').value = defaultPath; // Set the dropdown to the default
             await loadContent(); // Load the default content
         }
