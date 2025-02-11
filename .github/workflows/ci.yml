@@ -44,7 +44,7 @@ jobs:
           conda create --name ci_temp_env --clone ci_env
           # source activate ci_temp_env
           # TODO: create the ci_env with the installation of the following packages and remove the following line
-          # mamba install json5 cmcrameri conda-forge::sphinx_rtd_theme
+          mamba install conda-forge::sphinx_rtd_theme
         shell: bash
 
   test_sarvey:
