@@ -66,7 +66,8 @@ jobs:
           source ~/.bashrc
           conda activate ci_temp_env
           rm -rf tests/testdata
-          wget -nv -c -O testdata.zip https://seafile.projekt.uni-hannover.de/f/4b3be399dffa488e98db/?dl=1
+          # wget -nv -c -O testdata.zip https://seafile.projekt.uni-hannover.de/f/4b3be399dffa488e98db/?dl=1
+          wget -nv -c -O testdata.zip https://seafile.projekt.uni-hannover.de/f/104b499f6f7e4360877d/?dl=1
           unzip testdata.zip
           mv testdata tests/
           mamba list
