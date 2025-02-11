@@ -4,7 +4,7 @@ on:
   pull_request:
   push:
     branches:
-      - test-runner-2
+      - test-runner2
   release:
     types: 
       - published
