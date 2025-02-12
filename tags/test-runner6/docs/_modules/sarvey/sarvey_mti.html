@@ -1,0 +1,439 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>sarvey.sarvey_mti &mdash; SARvey 1.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=86cf1cd6" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=fc837d61"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            SARvey
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../readme.html">SARvey - survey with SAR</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/luhipi/sarvey">Source code repository</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../usage.html">Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../preparation.html">Preparation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../processing.html">Multitemporal InSAR processing workflow</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../demo_datasets.html">Demo Datasets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modules.html">Python API reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../authors.html">Credits</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../history.html">History</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">SARvey</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">sarvey.sarvey_mti</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for sarvey.sarvey_mti</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python</span>
+
+<span class="c1"># SARvey - A multitemporal InSAR time series tool for the derivation of displacements.</span>
+<span class="c1">#</span>
+<span class="c1"># Copyright (C) 2021-2024 Andreas Piter (IPI Hannover, piter@ipi.uni-hannover.de)</span>
+<span class="c1">#</span>
+<span class="c1"># This software was developed together with FERN.Lab (fernlab@gfz-potsdam.de) in the context</span>
+<span class="c1"># of the SAR4Infra project with funds of the German Federal Ministry for Digital and</span>
+<span class="c1"># Transport and contributions from Landesamt fuer Vermessung und Geoinformation</span>
+<span class="c1"># Schleswig-Holstein and Landesbetrieb Strassenbau und Verkehr Schleswig-Holstein.</span>
+<span class="c1">#</span>
+<span class="c1"># This program is free software: you can redistribute it and/or modify it under</span>
+<span class="c1"># the terms of the GNU General Public License as published by the Free Software</span>
+<span class="c1"># Foundation, either version 3 of the License, or (at your option) any later</span>
+<span class="c1"># version.</span>
+<span class="c1">#</span>
+<span class="c1"># Important: This package uses PyMaxFlow. The core of PyMaxflows library is the C++</span>
+<span class="c1"># implementation by Vladimir Kolmogorov. It is also licensed under the GPL, but it REQUIRES that you</span>
+<span class="c1"># cite [BOYKOV04] (see LICENSE) in any resulting publication if you use this code for research purposes.</span>
+<span class="c1"># This requirement extends to SARvey.</span>
+<span class="c1">#</span>
+<span class="c1"># This program is distributed in the hope that it will be useful, but WITHOUT</span>
+<span class="c1"># ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS</span>
+<span class="c1"># FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more</span>
+<span class="c1"># details.</span>
+<span class="c1">#</span>
+<span class="c1"># You should have received a copy of the GNU Lesser General Public License along</span>
+<span class="c1"># with this program. If not, see &lt;https://www.gnu.org/licenses/&gt;.</span>
+
+<span class="sd">&quot;&quot;&quot;MTI module for SARvey.&quot;&quot;&quot;</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">argparse</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">shutil</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">os.path</span><span class="w"> </span><span class="kn">import</span> <span class="n">join</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">json5</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">logging</span><span class="w"> </span><span class="kn">import</span> <span class="n">Logger</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pydantic.schema</span><span class="w"> </span><span class="kn">import</span> <span class="n">schema</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">sarvey.console</span><span class="w"> </span><span class="kn">import</span> <span class="n">printStep</span><span class="p">,</span> <span class="n">printCurrentConfig</span><span class="p">,</span> <span class="n">showLogoSARvey</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sarvey.processing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Processing</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sarvey.config</span><span class="w"> </span><span class="kn">import</span> <span class="n">Config</span><span class="p">,</span> <span class="n">loadConfiguration</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sarvey.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">checkIfRequiredFilesExist</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">matplotlib</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s1">&#39;QtAgg&#39;</span><span class="p">)</span>
+<span class="k">except</span> <span class="ne">ImportError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+
+<span class="n">EXAMPLE</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;Example:</span>
+<span class="s2">  sarvey -f config.json 0 0 -g                   # create default config file with the name config.json and exit</span>
+<span class="s2">  sarvey -f config.json 0 0                      # run only preparation step</span>
+<span class="s2">  sarvey -f config.json 0 4                      # run all processing steps</span>
+
+<span class="s2">  sarvey -f config.json 0 0 -p                   # print explanation of the configuration parameters to console</span>
+<span class="s2">&quot;&quot;&quot;</span>
+
+<span class="n">STEP_DICT</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="mi">0</span><span class="p">:</span> <span class="s2">&quot;PREPARATION&quot;</span><span class="p">,</span>
+    <span class="mi">1</span><span class="p">:</span> <span class="s2">&quot;CONSISTENCY CHECK&quot;</span><span class="p">,</span>
+    <span class="mi">2</span><span class="p">:</span> <span class="s2">&quot;UNWRAPPING&quot;</span><span class="p">,</span>
+    <span class="mi">3</span><span class="p">:</span> <span class="s2">&quot;FILTERING&quot;</span><span class="p">,</span>
+    <span class="mi">4</span><span class="p">:</span> <span class="s2">&quot;DENSIFICATION&quot;</span><span class="p">,</span>
+<span class="p">}</span>
+
+
+<div class="viewcode-block" id="run">
+<a class="viewcode-back" href="../../sarvey.html#sarvey.sarvey_mti.run">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">run</span><span class="p">(</span><span class="o">*</span><span class="p">,</span> <span class="n">config</span><span class="p">:</span> <span class="n">Config</span><span class="p">,</span> <span class="n">args</span><span class="p">:</span> <span class="n">argparse</span><span class="o">.</span><span class="n">Namespace</span><span class="p">,</span> <span class="n">logger</span><span class="p">:</span> <span class="n">Logger</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Run the specified processing steps.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    config: Config</span>
+<span class="sd">        object of configuration class.</span>
+<span class="sd">    args: argparse.Namespace</span>
+<span class="sd">        command line input arguments</span>
+<span class="sd">    logger: Logger</span>
+<span class="sd">        Logging handler.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">showLogoSARvey</span><span class="p">(</span><span class="n">logger</span><span class="o">=</span><span class="n">logger</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="s2">&quot;MTInSAR&quot;</span><span class="p">)</span>
+
+    <span class="n">steps</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">start</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">stop</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+
+    <span class="n">config_default_dict</span> <span class="o">=</span> <span class="n">generateTemplateFromConfigModel</span><span class="p">()</span>
+
+    <span class="n">proc_obj</span> <span class="o">=</span> <span class="n">Processing</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">general</span><span class="o">.</span><span class="n">output_path</span><span class="p">,</span> <span class="n">config</span><span class="o">=</span><span class="n">config</span><span class="p">,</span> <span class="n">logger</span><span class="o">=</span><span class="n">logger</span><span class="p">)</span>
+
+    <span class="n">printCurrentConfig</span><span class="p">(</span><span class="n">config_section</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">general</span><span class="o">.</span><span class="n">dict</span><span class="p">(),</span>
+                       <span class="n">config_section_default</span><span class="o">=</span><span class="n">config_default_dict</span><span class="p">[</span><span class="s2">&quot;general&quot;</span><span class="p">],</span>
+                       <span class="n">logger</span><span class="o">=</span><span class="n">logger</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">config</span><span class="o">.</span><span class="n">phase_linking</span><span class="o">.</span><span class="n">use_phase_linking_results</span><span class="p">:</span>
+        <span class="n">printCurrentConfig</span><span class="p">(</span><span class="n">config_section</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">phase_linking</span><span class="o">.</span><span class="n">dict</span><span class="p">(),</span>
+                           <span class="n">config_section_default</span><span class="o">=</span><span class="n">config_default_dict</span><span class="p">[</span><span class="s2">&quot;phase_linking&quot;</span><span class="p">],</span>
+                           <span class="n">logger</span><span class="o">=</span><span class="n">logger</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="mi">0</span> <span class="ow">in</span> <span class="n">steps</span><span class="p">:</span>
+        <span class="n">printStep</span><span class="p">(</span><span class="n">step</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">step_dict</span><span class="o">=</span><span class="n">STEP_DICT</span><span class="p">,</span> <span class="n">logger</span><span class="o">=</span><span class="n">logger</span><span class="p">)</span>
+        <span class="n">printCurrentConfig</span><span class="p">(</span><span class="n">config_section</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">preparation</span><span class="o">.</span><span class="n">dict</span><span class="p">(),</span>
+                           <span class="n">config_section_default</span><span class="o">=</span><span class="n">config_default_dict</span><span class="p">[</span><span class="s2">&quot;preparation&quot;</span><span class="p">],</span>
+                           <span class="n">logger</span><span class="o">=</span><span class="n">logger</span><span class="p">)</span>
+        <span class="n">proc_obj</span><span class="o">.</span><span class="n">runPreparation</span><span class="p">()</span>
+    <span class="n">required_files</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;background_map.h5&quot;</span><span class="p">,</span> <span class="s2">&quot;coordinates_utm.h5&quot;</span><span class="p">,</span> <span class="s2">&quot;ifg_network.h5&quot;</span><span class="p">,</span> <span class="s2">&quot;ifg_stack.h5&quot;</span><span class="p">,</span>
+                      <span class="s2">&quot;temporal_coherence.h5&quot;</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="mi">1</span> <span class="ow">in</span> <span class="n">steps</span><span class="p">:</span>
+        <span class="n">checkIfRequiredFilesExist</span><span class="p">(</span>
+            <span class="n">path_to_files</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">general</span><span class="o">.</span><span class="n">output_path</span><span class="p">,</span>
+            <span class="n">required_files</span><span class="o">=</span><span class="n">required_files</span><span class="p">,</span>
+            <span class="n">logger</span><span class="o">=</span><span class="n">logger</span>
+        <span class="p">)</span>
+        <span class="n">printStep</span><span class="p">(</span><span class="n">step</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">step_dict</span><span class="o">=</span><span class="n">STEP_DICT</span><span class="p">,</span> <span class="n">logger</span><span class="o">=</span><span class="n">logger</span><span class="p">)</span>
+        <span class="n">printCurrentConfig</span><span class="p">(</span><span class="n">config_section</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">consistency_check</span><span class="o">.</span><span class="n">dict</span><span class="p">(),</span>
+                           <span class="n">config_section_default</span><span class="o">=</span><span class="n">config_default_dict</span><span class="p">[</span><span class="s2">&quot;consistency_check&quot;</span><span class="p">],</span>
+                           <span class="n">logger</span><span class="o">=</span><span class="n">logger</span><span class="p">)</span>
+        <span class="n">proc_obj</span><span class="o">.</span><span class="n">runConsistencyCheck</span><span class="p">()</span>
+    <span class="n">required_files</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="s2">&quot;point_network.h5&quot;</span><span class="p">,</span> <span class="s2">&quot;point_network_parameter.h5&quot;</span><span class="p">,</span> <span class="s2">&quot;p1_ifg_wr.h5&quot;</span><span class="p">])</span>
+
+    <span class="k">if</span> <span class="mi">2</span> <span class="ow">in</span> <span class="n">steps</span><span class="p">:</span>
+        <span class="n">checkIfRequiredFilesExist</span><span class="p">(</span>
+            <span class="n">path_to_files</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">general</span><span class="o">.</span><span class="n">output_path</span><span class="p">,</span>
+            <span class="n">required_files</span><span class="o">=</span><span class="n">required_files</span><span class="p">,</span>
+            <span class="n">logger</span><span class="o">=</span><span class="n">logger</span>
+        <span class="p">)</span>
+        <span class="n">printStep</span><span class="p">(</span><span class="n">step</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">step_dict</span><span class="o">=</span><span class="n">STEP_DICT</span><span class="p">,</span> <span class="n">logger</span><span class="o">=</span><span class="n">logger</span><span class="p">)</span>
+        <span class="n">printCurrentConfig</span><span class="p">(</span><span class="n">config_section</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">unwrapping</span><span class="o">.</span><span class="n">dict</span><span class="p">(),</span>
+                           <span class="n">config_section_default</span><span class="o">=</span><span class="n">config_default_dict</span><span class="p">[</span><span class="s2">&quot;unwrapping&quot;</span><span class="p">],</span>
+                           <span class="n">logger</span><span class="o">=</span><span class="n">logger</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">proc_obj</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">general</span><span class="o">.</span><span class="n">apply_temporal_unwrapping</span><span class="p">:</span>
+            <span class="n">proc_obj</span><span class="o">.</span><span class="n">runUnwrappingTimeAndSpace</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">proc_obj</span><span class="o">.</span><span class="n">runUnwrappingSpace</span><span class="p">()</span>
+    <span class="n">required_files</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="s2">&quot;p1_ifg_unw.h5&quot;</span><span class="p">,</span> <span class="s2">&quot;p1_ts.h5&quot;</span><span class="p">])</span>
+
+    <span class="k">if</span> <span class="mi">3</span> <span class="ow">in</span> <span class="n">steps</span><span class="p">:</span>
+        <span class="n">checkIfRequiredFilesExist</span><span class="p">(</span>
+            <span class="n">path_to_files</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">general</span><span class="o">.</span><span class="n">output_path</span><span class="p">,</span>
+            <span class="n">required_files</span><span class="o">=</span><span class="n">required_files</span><span class="p">,</span>
+            <span class="n">logger</span><span class="o">=</span><span class="n">logger</span>
+        <span class="p">)</span>
+        <span class="n">printStep</span><span class="p">(</span><span class="n">step</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">step_dict</span><span class="o">=</span><span class="n">STEP_DICT</span><span class="p">,</span> <span class="n">logger</span><span class="o">=</span><span class="n">logger</span><span class="p">)</span>
+        <span class="n">printCurrentConfig</span><span class="p">(</span><span class="n">config_section</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">filtering</span><span class="o">.</span><span class="n">dict</span><span class="p">(),</span>
+                           <span class="n">config_section_default</span><span class="o">=</span><span class="n">config_default_dict</span><span class="p">[</span><span class="s2">&quot;filtering&quot;</span><span class="p">],</span>
+                           <span class="n">logger</span><span class="o">=</span><span class="n">logger</span><span class="p">)</span>
+        <span class="n">proc_obj</span><span class="o">.</span><span class="n">runFiltering</span><span class="p">()</span>
+    <span class="n">coh_value</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">filtering</span><span class="o">.</span><span class="n">coherence_p2</span> <span class="o">*</span> <span class="mi">100</span><span class="p">)</span>
+    <span class="n">required_files</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="s2">&quot;p1_aps.h5&quot;</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;p2_coh</span><span class="si">{</span><span class="n">coh_value</span><span class="si">}</span><span class="s2">_ifg_wr.h5&quot;</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;p2_coh</span><span class="si">{</span><span class="n">coh_value</span><span class="si">}</span><span class="s2">_aps.h5&quot;</span><span class="p">])</span>
+
+    <span class="k">if</span> <span class="mi">4</span> <span class="ow">in</span> <span class="n">steps</span><span class="p">:</span>
+        <span class="n">checkIfRequiredFilesExist</span><span class="p">(</span>
+            <span class="n">path_to_files</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">general</span><span class="o">.</span><span class="n">output_path</span><span class="p">,</span>
+            <span class="n">required_files</span><span class="o">=</span><span class="n">required_files</span><span class="p">,</span>
+            <span class="n">logger</span><span class="o">=</span><span class="n">logger</span>
+        <span class="p">)</span>
+        <span class="n">printStep</span><span class="p">(</span><span class="n">step</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">step_dict</span><span class="o">=</span><span class="n">STEP_DICT</span><span class="p">,</span> <span class="n">logger</span><span class="o">=</span><span class="n">logger</span><span class="p">)</span>
+        <span class="n">printCurrentConfig</span><span class="p">(</span><span class="n">config_section</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">densification</span><span class="o">.</span><span class="n">dict</span><span class="p">(),</span>
+                           <span class="n">config_section_default</span><span class="o">=</span><span class="n">config_default_dict</span><span class="p">[</span><span class="s2">&quot;densification&quot;</span><span class="p">],</span>
+                           <span class="n">logger</span><span class="o">=</span><span class="n">logger</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">proc_obj</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">general</span><span class="o">.</span><span class="n">apply_temporal_unwrapping</span><span class="p">:</span>
+            <span class="n">proc_obj</span><span class="o">.</span><span class="n">runDensificationTimeAndSpace</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">proc_obj</span><span class="o">.</span><span class="n">runDensificationSpace</span><span class="p">()</span>
+
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">msg</span><span class="o">=</span><span class="s2">&quot;SARvey MTI finished normally.&quot;</span><span class="p">)</span>
+    <span class="c1"># close log-file to avoid problems with deleting the files</span>
+    <span class="k">if</span> <span class="n">logger</span><span class="o">.</span><span class="n">hasHandlers</span><span class="p">():</span>
+        <span class="k">for</span> <span class="n">handler</span> <span class="ow">in</span> <span class="n">logger</span><span class="o">.</span><span class="n">handlers</span><span class="p">[:]:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">removeHandler</span><span class="p">(</span><span class="n">handler</span><span class="p">)</span>
+            <span class="n">handler</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
+            <span class="n">handler</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
+
+
+
+<div class="viewcode-block" id="generateTemplateFromConfigModel">
+<a class="viewcode-back" href="../../sarvey.html#sarvey.sarvey_mti.generateTemplateFromConfigModel">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">generateTemplateFromConfigModel</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;GenerateTemplateFromConfigModel.&quot;&quot;&quot;</span>
+    <span class="n">top_level_schema</span> <span class="o">=</span> <span class="n">schema</span><span class="p">([</span><span class="n">Config</span><span class="p">])</span>
+    <span class="n">top_level_dict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">sec_name</span><span class="p">,</span> <span class="n">sec_def</span> <span class="ow">in</span> <span class="n">top_level_schema</span><span class="p">[</span><span class="s1">&#39;definitions&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="k">if</span> <span class="n">sec_name</span> <span class="o">==</span> <span class="s2">&quot;Config&quot;</span><span class="p">:</span>
+            <span class="c1"># substitute the class names of subsections in top_level_dict by the name of the sections in class Config</span>
+            <span class="k">for</span> <span class="n">subsec_name</span><span class="p">,</span> <span class="n">subsec_def</span> <span class="ow">in</span> <span class="n">sec_def</span><span class="p">[</span><span class="s2">&quot;properties&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="n">top_level_dict</span><span class="p">[</span><span class="n">subsec_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">top_level_dict</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">subsec_def</span><span class="p">[</span><span class="s2">&quot;title&quot;</span><span class="p">])</span>
+            <span class="k">continue</span>  <span class="c1"># don&#39;t add &quot;Config&quot; to top_level_dict</span>
+        <span class="n">sec_dict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">subsec_name</span><span class="p">,</span> <span class="n">subsec_def</span> <span class="ow">in</span> <span class="n">sec_def</span><span class="p">[</span><span class="s2">&quot;properties&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="s2">&quot;default&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">subsec_def</span><span class="p">:</span>
+                <span class="n">sec_dict</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="n">subsec_name</span><span class="p">:</span> <span class="kc">None</span><span class="p">})</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">sec_dict</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="n">subsec_name</span><span class="p">:</span> <span class="n">subsec_def</span><span class="p">[</span><span class="s2">&quot;default&quot;</span><span class="p">]})</span>
+        <span class="n">top_level_dict</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="n">sec_name</span><span class="p">:</span> <span class="n">sec_dict</span><span class="p">})</span>
+
+    <span class="k">return</span> <span class="n">top_level_dict</span></div>
+
+
+
+<div class="viewcode-block" id="createParser">
+<a class="viewcode-back" href="../../sarvey.html#sarvey.sarvey_mti.createParser">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">createParser</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Create_parser.</span>
+
+<span class="sd">    :return:</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">(</span>
+        <span class="n">description</span><span class="o">=</span><span class="s1">&#39;Multitemporal InSAR processing workflow</span><span class="se">\n\n</span><span class="s1">&#39;</span> <span class="o">+</span>
+                    <span class="s1">&#39;Run the following steps:</span><span class="se">\n</span><span class="s1">&#39;</span> <span class="o">+</span>
+                    <span class="s1">&#39;0 - preparation</span><span class="se">\n</span><span class="s1">&#39;</span> <span class="o">+</span>
+                    <span class="s1">&#39;1 - consistency check</span><span class="se">\n</span><span class="s1">&#39;</span> <span class="o">+</span>
+                    <span class="s1">&#39;2 - spatial unwrapping</span><span class="se">\n</span><span class="s1">&#39;</span> <span class="o">+</span>
+                    <span class="s1">&#39;3 - filtering</span><span class="se">\n</span><span class="s1">&#39;</span> <span class="o">+</span>
+                    <span class="s1">&#39;4 - densification&#39;</span><span class="p">,</span>
+        <span class="n">formatter_class</span><span class="o">=</span><span class="n">argparse</span><span class="o">.</span><span class="n">RawTextHelpFormatter</span><span class="p">,</span>
+        <span class="n">epilog</span><span class="o">=</span><span class="n">EXAMPLE</span><span class="p">)</span>
+
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;start&#39;</span><span class="p">,</span> <span class="n">choices</span><span class="o">=</span><span class="p">{</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">},</span> <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span>
+                        <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Start of processing&#39;</span><span class="p">)</span>
+
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;stop&#39;</span><span class="p">,</span> <span class="n">choices</span><span class="o">=</span><span class="p">{</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">},</span> <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span>
+                        <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Stop of processing&#39;</span><span class="p">)</span>
+
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;-f&quot;</span><span class="p">,</span> <span class="s2">&quot;--filepath&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">metavar</span><span class="o">=</span><span class="s2">&quot;FILE&quot;</span><span class="p">,</span>
+                        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Path to the config.json file.&quot;</span><span class="p">)</span>
+
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;-g&quot;</span><span class="p">,</span> <span class="s2">&quot;--generate_config&quot;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_true&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s2">&quot;generate_config&quot;</span><span class="p">,</span>
+                        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Write default configuration to file specified by &#39;-f&#39;.&quot;</span><span class="p">)</span>
+
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;-p&quot;</span><span class="p">,</span> <span class="s2">&quot;--print_config_explanation&quot;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_true&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                        <span class="n">dest</span><span class="o">=</span><span class="s2">&quot;print_config_explanation&quot;</span><span class="p">,</span>
+                        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Prints exhaustive explanations about configuration to console.&quot;</span><span class="p">)</span>
+
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;-w&#39;</span><span class="p">,</span> <span class="s1">&#39;--workdir&#39;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s2">&quot;workdir&quot;</span><span class="p">,</span>
+                        <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Working directory (default: current directory).&#39;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">parser</span></div>
+
+
+
+<div class="viewcode-block" id="main">
+<a class="viewcode-back" href="../../sarvey.html#sarvey.sarvey_mti.main">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="n">iargs</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Run Main.</span>
+
+<span class="sd">    :param iargs:</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">parser</span> <span class="o">=</span> <span class="n">createParser</span><span class="p">()</span>
+    <span class="n">args</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">(</span><span class="n">iargs</span><span class="p">)</span>
+
+    <span class="c1"># initiate logger</span>
+    <span class="n">logging_level</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLevelName</span><span class="p">(</span><span class="s1">&#39;DEBUG&#39;</span><span class="p">)</span>  <span class="c1"># set a default value before until level is read from config</span>
+
+    <span class="n">log_format</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">Formatter</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%(asctime)s</span><span class="s1"> - </span><span class="si">%(levelname)s</span><span class="s1"> - </span><span class="si">%(message)s</span><span class="s1">&#39;</span><span class="p">)</span>
+    <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+    <span class="n">console_handler</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">StreamHandler</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="p">)</span>
+    <span class="n">console_handler</span><span class="o">.</span><span class="n">setFormatter</span><span class="p">(</span><span class="n">log_format</span><span class="p">)</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">addHandler</span><span class="p">(</span><span class="n">console_handler</span><span class="p">)</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging_level</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">generate_config</span><span class="p">:</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">msg</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Write default config to file: </span><span class="si">{</span><span class="n">args</span><span class="o">.</span><span class="n">filepath</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+        <span class="n">default_config_dict</span> <span class="o">=</span> <span class="n">generateTemplateFromConfigModel</span><span class="p">()</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">filepath</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">json5</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">default_config_dict</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">))</span>
+        <span class="k">return</span> <span class="mi">0</span>
+
+    <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">print_config_explanation</span><span class="p">:</span>
+        <span class="n">top_level_schema</span> <span class="o">=</span> <span class="n">schema</span><span class="p">([</span><span class="n">Config</span><span class="p">])</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">json5</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">top_level_schema</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">))</span>
+        <span class="k">return</span> <span class="mi">0</span>
+
+    <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">stop</span> <span class="o">&lt;</span> <span class="n">args</span><span class="o">.</span><span class="n">start</span><span class="p">:</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">msg</span><span class="o">=</span><span class="s2">&quot;Choose Start &lt;= Stop!&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span>
+
+    <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">workdir</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">args</span><span class="o">.</span><span class="n">workdir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">curdir</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">msg</span><span class="o">=</span><span class="s2">&quot;Working directory: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">workdir</span><span class="p">))</span>
+
+    <span class="n">config_file_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">join</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">workdir</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">filepath</span><span class="p">))</span>
+
+    <span class="n">config</span> <span class="o">=</span> <span class="n">loadConfiguration</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="n">config_file_path</span><span class="p">)</span>
+
+    <span class="n">current_datetime</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2">-%H-%M-%S&quot;</span><span class="p">,</span> <span class="n">time</span><span class="o">.</span><span class="n">localtime</span><span class="p">())</span>
+    <span class="n">log_filename</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;sarvey_</span><span class="si">{</span><span class="n">current_datetime</span><span class="si">}</span><span class="s2">.log&quot;</span>
+    <span class="n">logpath</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">general</span><span class="o">.</span><span class="n">logfile_path</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">logpath</span><span class="p">):</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">logpath</span><span class="p">)</span>
+    <span class="n">file_handler</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">FileHandler</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="n">join</span><span class="p">(</span><span class="n">logpath</span><span class="p">,</span> <span class="n">log_filename</span><span class="p">))</span>
+    <span class="n">file_handler</span><span class="o">.</span><span class="n">setFormatter</span><span class="p">(</span><span class="n">log_format</span><span class="p">)</span>
+    <span class="n">file_logging_level</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLevelName</span><span class="p">(</span><span class="s2">&quot;DEBUG&quot;</span><span class="p">)</span>
+    <span class="n">file_handler</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">file_logging_level</span><span class="p">)</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">addHandler</span><span class="p">(</span><span class="n">file_handler</span><span class="p">)</span>
+
+    <span class="n">logging_level</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLevelName</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">general</span><span class="o">.</span><span class="n">logging_level</span><span class="p">)</span>
+    <span class="n">console_handler</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging_level</span><span class="p">)</span>
+
+    <span class="n">config</span><span class="o">.</span><span class="n">general</span><span class="o">.</span><span class="n">output_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">join</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">workdir</span><span class="p">,</span> <span class="n">config</span><span class="o">.</span><span class="n">general</span><span class="o">.</span><span class="n">output_path</span><span class="p">))</span>
+    <span class="k">if</span> <span class="n">config</span><span class="o">.</span><span class="n">consistency_check</span><span class="o">.</span><span class="n">mask_p1_file</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">config</span><span class="o">.</span><span class="n">consistency_check</span><span class="o">.</span><span class="n">mask_p1_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span>
+            <span class="n">join</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">workdir</span><span class="p">,</span> <span class="n">config</span><span class="o">.</span><span class="n">consistency_check</span><span class="o">.</span><span class="n">mask_p1_file</span><span class="p">))</span>
+    <span class="k">if</span> <span class="n">config</span><span class="o">.</span><span class="n">filtering</span><span class="o">.</span><span class="n">mask_p2_file</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">config</span><span class="o">.</span><span class="n">filtering</span><span class="o">.</span><span class="n">mask_p2_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span>
+            <span class="n">join</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">workdir</span><span class="p">,</span> <span class="n">config</span><span class="o">.</span><span class="n">filtering</span><span class="o">.</span><span class="n">mask_p2_file</span><span class="p">))</span>
+
+    <span class="c1"># create all necessary directories</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">general</span><span class="o">.</span><span class="n">output_path</span><span class="p">):</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">general</span><span class="o">.</span><span class="n">output_path</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">join</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">general</span><span class="o">.</span><span class="n">output_path</span><span class="p">,</span> <span class="s2">&quot;pic&quot;</span><span class="p">)):</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">join</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">general</span><span class="o">.</span><span class="n">output_path</span><span class="p">,</span> <span class="s2">&quot;pic&quot;</span><span class="p">))</span>
+
+    <span class="c1"># copy config file to output directory to ensure that there is always a backup config file with latest parameters</span>
+    <span class="n">shutil</span><span class="o">.</span><span class="n">copy2</span><span class="p">(</span><span class="n">src</span><span class="o">=</span><span class="n">config_file_path</span><span class="p">,</span> <span class="n">dst</span><span class="o">=</span><span class="n">join</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">general</span><span class="o">.</span><span class="n">output_path</span><span class="p">,</span> <span class="s2">&quot;config.json&quot;</span><span class="p">))</span>
+
+    <span class="n">run</span><span class="p">(</span><span class="n">config</span><span class="o">=</span><span class="n">config</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="n">args</span><span class="p">,</span> <span class="n">logger</span><span class="o">=</span><span class="n">logger</span><span class="p">)</span></div>
+
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">main</span><span class="p">()</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, IPI - Leibniz Universitaet Hannover.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
