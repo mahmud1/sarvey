@@ -1,0 +1,175 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Usage &mdash; SARvey 1.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/custom.css?v=86cf1cd6" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=fc837d61"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Preparation" href="preparation.html" />
+    <link rel="prev" title="Installation" href="installation.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            SARvey
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="readme.html">SARvey - survey with SAR</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/luhipi/sarvey">Source code repository</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Usage</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#command-line-tools">Command-line tools</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#usage-of-the-python-api">Usage of the Python API</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="preparation.html">Preparation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="processing.html">Multitemporal InSAR processing workflow</a></li>
+<li class="toctree-l1"><a class="reference internal" href="demo_datasets.html">Demo Datasets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">Python API reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="authors.html">Credits</a></li>
+<li class="toctree-l1"><a class="reference internal" href="history.html">History</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">SARvey</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Usage</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/usage.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="usage">
+<span id="id1"></span><h1>Usage<a class="headerlink" href="#usage" title="Link to this heading"></a></h1>
+<a class="reference internal image-reference" href="https://seafile.projekt.uni-hannover.de/f/39209355cabc4607bf0a/?dl=1"><img alt="SARvey workflow" class="align-center" src="https://seafile.projekt.uni-hannover.de/f/39209355cabc4607bf0a/?dl=1" style="width: 600px;" />
+</a>
+<p>Processing workflow for using the SARvey software to derive displacement time series. The minimal required processing
+steps and datasets are depicted in grey. All other steps are optional.</p>
+<section id="command-line-tools">
+<h2>Command-line tools<a class="headerlink" href="#command-line-tools" title="Link to this heading"></a></h2>
+<p>The following command-line tools are available and can be run directly in the terminal.</p>
+<dl>
+<dt><cite>sarvey</cite></dt><dd><p>A tool to derive displacements from the SLC stack with Multi-Temporal InSAR (MTI).
+A detailed description of the processing steps is given <a class="reference external" href="processing.html">here</a>.</p>
+</dd>
+<dt><cite>sarvey_plot</cite></dt><dd><p>A tool to plot the results from <cite>sarvey</cite> processing.</p>
+</dd>
+<dt><cite>sarvey_export</cite></dt><dd><p>A tool to export the results from <cite>sarvey</cite> processing to shapefile or geopackage.</p>
+</dd>
+<dt><cite>sarvey_mask</cite></dt><dd><p>A tool to create a mask from shapefile containing the area of interest, which can be used in <cite>sarvey</cite> processing.
+The tool reads from an input file, which is a shapefile or geopackage containing the geographic data.
+It supports both ‘LineString’ and ‘Polygon’ geometries.
+The tool first gets the spatial extent of the geographic data and searches the location of the polygon/line nodes in the image coordinates of the radar image.
+A buffer around the polygon/line is created specified by a width in pixel.
+The buffer is then used to create the mask.</p>
+<p>Here is an example of how to use the <cite>sarvey_mask</cite> tool:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sarvey_mask<span class="w"> </span>--input_file<span class="w"> </span>my_shapefile.shp<span class="w"> </span>--geom_file<span class="w"> </span>./inputs/geometryRadar.h5<span class="w"> </span>--out_file_name<span class="w"> </span>my_mask.h5<span class="w"> </span>--width<span class="w"> </span><span class="m">5</span>
+</pre></div>
+</div>
+</dd>
+<dt><cite>sarvey_osm</cite></dt><dd><p>A tool to download OpenStreetMap data for the area of interest specified by the spatial extend of the SLC stack.
+The tool first gets the spatial extent of the SAR image from the geometry file.
+It then uses this spatial extent to download the OpenStreetMap data for the corresponding area.
+The download of railway tracks, highways and bridges is supported.
+After downloading the data, the tool saves it to a shapefile.</p>
+<p>After downloading the OpenStreetMap data with <cite>sarvey_osm</cite>, you can use the <cite>sarvey_mask</cite> tool to create a mask from the shapefile.</p>
+<p>Here is an example of how to use the <cite>sarvey_osm</cite> tool:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sarvey_osm<span class="w"> </span>--geom<span class="w"> </span>./geometryRadar.h5<span class="w"> </span>--railway<span class="w">                       </span><span class="c1"># download railway</span>
+sarvey_osm<span class="w"> </span>--geom<span class="w"> </span>./geometryRadar.h5<span class="w"> </span>--highway<span class="w">                       </span><span class="c1"># download highway</span>
+sarvey_osm<span class="w"> </span>--geom<span class="w"> </span>./geometryRadar.h5<span class="w"> </span>--railway<span class="w"> </span>--bridge<span class="w">              </span><span class="c1"># download railway bridge</span>
+sarvey_osm<span class="w"> </span>--geom<span class="w"> </span>./geometryRadar.h5<span class="w"> </span>--railway<span class="w"> </span>-o<span class="w"> </span>mask_railway.shp<span class="w">   </span><span class="c1"># specify output path</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</section>
+<section id="usage-of-the-python-api">
+<h2>Usage of the Python API<a class="headerlink" href="#usage-of-the-python-api" title="Link to this heading"></a></h2>
+<p>To use SARvey in a project:</p>
+<blockquote>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">sarvey</span>
+</pre></div>
+</div>
+</div></blockquote>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="installation.html" class="btn btn-neutral float-left" title="Installation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="preparation.html" class="btn btn-neutral float-right" title="Preparation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, IPI - Leibniz Universitaet Hannover.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
