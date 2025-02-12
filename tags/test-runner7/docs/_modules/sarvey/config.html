@@ -1,0 +1,949 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>sarvey.config &mdash; SARvey 1.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=86cf1cd6" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=fc837d61"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            SARvey
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../readme.html">SARvey - survey with SAR</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/luhipi/sarvey">Source code repository</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../usage.html">Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../preparation.html">Preparation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../processing.html">Multitemporal InSAR processing workflow</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../demo_datasets.html">Demo Datasets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modules.html">Python API reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../authors.html">Credits</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../history.html">History</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">SARvey</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">sarvey.config</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for sarvey.config</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python</span>
+
+<span class="c1"># SARvey - A multitemporal InSAR time series tool for the derivation of displacements.</span>
+<span class="c1">#</span>
+<span class="c1"># Copyright (C) 2021-2024 Andreas Piter (IPI Hannover, piter@ipi.uni-hannover.de)</span>
+<span class="c1">#</span>
+<span class="c1"># This software was developed together with FERN.Lab (fernlab@gfz-potsdam.de) in the context</span>
+<span class="c1"># of the SAR4Infra project with funds of the German Federal Ministry for Digital and</span>
+<span class="c1"># Transport and contributions from Landesamt fuer Vermessung und Geoinformation</span>
+<span class="c1"># Schleswig-Holstein and Landesbetrieb Strassenbau und Verkehr Schleswig-Holstein.</span>
+<span class="c1">#</span>
+<span class="c1"># This program is free software: you can redistribute it and/or modify it under</span>
+<span class="c1"># the terms of the GNU General Public License as published by the Free Software</span>
+<span class="c1"># Foundation, either version 3 of the License, or (at your option) any later</span>
+<span class="c1"># version.</span>
+<span class="c1">#</span>
+<span class="c1"># Important: This package uses PyMaxFlow. The core of PyMaxflows library is the C++</span>
+<span class="c1"># implementation by Vladimir Kolmogorov. It is also licensed under the GPL, but it REQUIRES that you</span>
+<span class="c1"># cite [BOYKOV04] (see LICENSE) in any resulting publication if you use this code for research purposes.</span>
+<span class="c1"># This requirement extends to SARvey.</span>
+<span class="c1">#</span>
+<span class="c1"># This program is distributed in the hope that it will be useful, but WITHOUT</span>
+<span class="c1"># ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS</span>
+<span class="c1"># FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more</span>
+<span class="c1"># details.</span>
+<span class="c1">#</span>
+<span class="c1"># You should have received a copy of the GNU Lesser General Public License along</span>
+<span class="c1"># with this program. If not, see &lt;https://www.gnu.org/licenses/&gt;.</span>
+
+<span class="sd">&quot;&quot;&quot;Configuration module for SARvey.&quot;&quot;&quot;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">json5</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">date</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">json</span><span class="w"> </span><span class="kn">import</span> <span class="n">JSONDecodeError</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Optional</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pydantic</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseModel</span><span class="p">,</span> <span class="n">Field</span><span class="p">,</span> <span class="n">validator</span><span class="p">,</span> <span class="n">Extra</span>
+
+
+<div class="viewcode-block" id="General">
+<a class="viewcode-back" href="../../sarvey.html#sarvey.config.General">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">General</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">,</span> <span class="n">extra</span><span class="o">=</span><span class="n">Extra</span><span class="o">.</span><span class="n">forbid</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Template for settings in config file.&quot;&quot;&quot;</span>
+
+    <span class="n">input_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="n">title</span><span class="o">=</span><span class="s2">&quot;The path to the input data directory.&quot;</span><span class="p">,</span>
+        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Set the path of the input data directory.&quot;</span><span class="p">,</span>
+        <span class="n">default</span><span class="o">=</span><span class="s2">&quot;inputs/&quot;</span>
+    <span class="p">)</span>
+
+    <span class="n">output_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="n">title</span><span class="o">=</span><span class="s2">&quot;The path to the processing output data directory.&quot;</span><span class="p">,</span>
+        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Set the path of the processing output data directory.&quot;</span><span class="p">,</span>
+        <span class="n">default</span><span class="o">=</span><span class="s2">&quot;outputs/&quot;</span>
+    <span class="p">)</span>
+
+    <span class="n">num_cores</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Number of cores&quot;</span><span class="p">,</span>
+        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Set the number of cores for parallel processing.&quot;</span><span class="p">,</span>
+        <span class="n">default</span><span class="o">=</span><span class="mi">50</span>
+    <span class="p">)</span>
+
+    <span class="n">num_patches</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Number of patches&quot;</span><span class="p">,</span>
+        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Set the number of patches for processing large areas patch-wise.&quot;</span><span class="p">,</span>
+        <span class="n">default</span><span class="o">=</span><span class="mi">1</span>
+    <span class="p">)</span>
+
+    <span class="n">apply_temporal_unwrapping</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Apply temporal unwrapping&quot;</span><span class="p">,</span>
+        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Apply temporal unwrapping additionally to spatial unwrapping.&quot;</span><span class="p">,</span>
+        <span class="n">default</span><span class="o">=</span><span class="kc">True</span>
+    <span class="p">)</span>
+
+    <span class="n">spatial_unwrapping_method</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Spatial unwrapping method&quot;</span><span class="p">,</span>
+        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Select spatial unwrapping method from &#39;ilp&#39; and &#39;puma&#39;.&quot;</span><span class="p">,</span>
+        <span class="n">default</span><span class="o">=</span><span class="s1">&#39;puma&#39;</span>
+    <span class="p">)</span>
+
+    <span class="n">logging_level</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Logging level.&quot;</span><span class="p">,</span>
+        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Set loggig level.&quot;</span><span class="p">,</span>
+        <span class="n">default</span><span class="o">=</span><span class="s2">&quot;INFO&quot;</span>
+    <span class="p">)</span>
+
+    <span class="n">logfile_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Logfile Path.&quot;</span><span class="p">,</span>
+        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Path to directory where the logfiles should be saved.&quot;</span><span class="p">,</span>
+        <span class="n">default</span><span class="o">=</span><span class="s2">&quot;logfiles/&quot;</span>
+    <span class="p">)</span>
+
+<div class="viewcode-block" id="General.checkPathInputs">
+<a class="viewcode-back" href="../../sarvey.html#sarvey.config.General.checkPathInputs">[docs]</a>
+    <span class="nd">@validator</span><span class="p">(</span><span class="s1">&#39;input_path&#39;</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">checkPathInputs</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">v</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Check if the input path exists.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">v</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Empty string is not allowed.&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">v</span><span class="p">)):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;input_path is invalid: </span><span class="si">{</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">v</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">v</span><span class="p">),</span> <span class="s2">&quot;slcStack.h5&quot;</span><span class="p">)):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&#39;slcStack.h5&#39; does not exist: </span><span class="si">{</span><span class="n">v</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">v</span><span class="p">),</span> <span class="s2">&quot;geometryRadar.h5&quot;</span><span class="p">)):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&#39;geometryRadar.h5&#39; does not exist: </span><span class="si">{</span><span class="n">v</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">v</span></div>
+
+
+<div class="viewcode-block" id="General.checkNumCores">
+<a class="viewcode-back" href="../../sarvey.html#sarvey.config.General.checkNumCores">[docs]</a>
+    <span class="nd">@validator</span><span class="p">(</span><span class="s1">&#39;num_cores&#39;</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">checkNumCores</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">v</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Check if the number of cores is valid.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">v</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Number of cores must be greater than zero.&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">v</span></div>
+
+
+<div class="viewcode-block" id="General.checkNumPatches">
+<a class="viewcode-back" href="../../sarvey.html#sarvey.config.General.checkNumPatches">[docs]</a>
+    <span class="nd">@validator</span><span class="p">(</span><span class="s1">&#39;num_patches&#39;</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">checkNumPatches</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">v</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Check if the number of patches is valid.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">v</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Number of patches must be greater than zero.&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">v</span></div>
+
+
+<div class="viewcode-block" id="General.checkUnwMethod">
+<a class="viewcode-back" href="../../sarvey.html#sarvey.config.General.checkUnwMethod">[docs]</a>
+    <span class="nd">@validator</span><span class="p">(</span><span class="s1">&#39;spatial_unwrapping_method&#39;</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">checkUnwMethod</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">v</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Check if unwrapping_method is valid.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">v</span> <span class="o">!=</span> <span class="s2">&quot;ilp&quot;</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">v</span> <span class="o">!=</span> <span class="s2">&quot;puma&quot;</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Unwrapping method must be either &#39;ilp&#39; or &#39;puma&#39;.&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">v</span></div>
+
+
+<div class="viewcode-block" id="General.checkLoggingLevel">
+<a class="viewcode-back" href="../../sarvey.html#sarvey.config.General.checkLoggingLevel">[docs]</a>
+    <span class="nd">@validator</span><span class="p">(</span><span class="s1">&#39;logging_level&#39;</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">checkLoggingLevel</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">v</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Check if the logging level is valid.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">v</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Empty string is not allowed.&quot;</span><span class="p">)</span>
+        <span class="n">v</span> <span class="o">=</span> <span class="n">v</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">v</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;CRITICAL&quot;</span><span class="p">,</span> <span class="s2">&quot;ERROR&quot;</span><span class="p">,</span> <span class="s2">&quot;WARNING&quot;</span><span class="p">,</span> <span class="s2">&quot;INFO&quot;</span><span class="p">,</span> <span class="s2">&quot;DEBUG&quot;</span><span class="p">,</span> <span class="s2">&quot;NOTSET&quot;</span><span class="p">]:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Logging level must be one of (&#39;CRITICAL&#39;, &#39;ERROR&#39;, &quot;</span>
+                             <span class="s2">&quot;&#39;WARNING&#39;, &#39;INFO&#39;, &#39;DEBUG&#39;, &#39;NOTSET&#39;).&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">v</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="PhaseLinking">
+<a class="viewcode-back" href="../../sarvey.html#sarvey.config.PhaseLinking">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">PhaseLinking</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">,</span> <span class="n">extra</span><span class="o">=</span><span class="n">Extra</span><span class="o">.</span><span class="n">forbid</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Template for settings in config file.&quot;&quot;&quot;</span>
+
+    <span class="n">use_phase_linking_results</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Use phase linking results.&quot;</span><span class="p">,</span>
+        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Use pixels selected in phase linking.&quot;</span><span class="p">,</span>
+        <span class="n">default</span><span class="o">=</span><span class="kc">False</span>
+    <span class="p">)</span>
+
+    <span class="n">inverted_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="n">title</span><span class="o">=</span><span class="s2">&quot;The path to the phase linking inverted data directory.&quot;</span><span class="p">,</span>
+        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Set the path of the inverted data directory.&quot;</span><span class="p">,</span>
+        <span class="n">default</span><span class="o">=</span><span class="s2">&quot;inverted/&quot;</span>
+    <span class="p">)</span>
+
+    <span class="n">num_siblings</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Sibling threshold.&quot;</span><span class="p">,</span>
+        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Threshold on the number of siblings applied during phase linking to distinguish PS from DS&quot;</span>
+                    <span class="s2">&quot;candidates.&quot;</span><span class="p">,</span>
+        <span class="n">default</span><span class="o">=</span><span class="mi">20</span>
+    <span class="p">)</span>
+
+    <span class="n">mask_phase_linking_file</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Path to spatial mask file for phase linking results.&quot;</span><span class="p">,</span>
+        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Path to the mask file, e.g. created by sarvey_mask.&quot;</span><span class="p">,</span>
+        <span class="n">default</span><span class="o">=</span><span class="s2">&quot;&quot;</span>
+    <span class="p">)</span>
+
+    <span class="n">use_ps</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Use point-like scatterers.&quot;</span><span class="p">,</span>
+        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Use point-like scatterers (pixels with a low number of siblings) selected in phase linking.&quot;</span>
+                    <span class="s2">&quot;Is applied, only if &#39;use_phase_linking_results&#39; is true.&quot;</span><span class="p">,</span>
+        <span class="n">default</span><span class="o">=</span><span class="kc">False</span>
+    <span class="p">)</span>
+
+    <span class="n">mask_ps_file</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="n">title</span><span class="o">=</span><span class="s2">&quot;The path to the mask file for ps pixels from phase linking.&quot;</span><span class="p">,</span>
+        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Set the path of the &#39;maskPS.h5&#39; file (optional).&quot;</span><span class="p">,</span>
+        <span class="n">default</span><span class="o">=</span><span class="s2">&quot;maskPS.h5&quot;</span>
+    <span class="p">)</span>
+
+<div class="viewcode-block" id="PhaseLinking.checkPathInverted">
+<a class="viewcode-back" href="../../sarvey.html#sarvey.config.PhaseLinking.checkPathInverted">[docs]</a>
+    <span class="nd">@validator</span><span class="p">(</span><span class="s1">&#39;inverted_path&#39;</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">checkPathInverted</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">values</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Check if the inverted path exists.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">values</span><span class="p">[</span><span class="s2">&quot;use_phase_linking_results&quot;</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="n">v</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Empty string is not allowed.&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">v</span><span class="p">)):</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;inverted_path is invalid: </span><span class="si">{</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">v</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">v</span><span class="p">),</span> <span class="s2">&quot;phase_series.h5&quot;</span><span class="p">)):</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&#39;phase_series.h5&#39; does not exist: </span><span class="si">{</span><span class="n">v</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">v</span></div>
+
+
+<div class="viewcode-block" id="PhaseLinking.checkNumSiblings">
+<a class="viewcode-back" href="../../sarvey.html#sarvey.config.PhaseLinking.checkNumSiblings">[docs]</a>
+    <span class="nd">@validator</span><span class="p">(</span><span class="s1">&#39;num_siblings&#39;</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">checkNumSiblings</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">values</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Check is no_siblings is valid.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">values</span><span class="p">[</span><span class="s2">&quot;use_phase_linking_results&quot;</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="n">v</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;&#39;num_siblings&#39; has to be greater than 0.&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">v</span></div>
+
+
+<div class="viewcode-block" id="PhaseLinking.checkSpatialMaskPath">
+<a class="viewcode-back" href="../../sarvey.html#sarvey.config.PhaseLinking.checkSpatialMaskPath">[docs]</a>
+    <span class="nd">@validator</span><span class="p">(</span><span class="s1">&#39;mask_phase_linking_file&#39;</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">checkSpatialMaskPath</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">values</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Check if the path is correct.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">values</span><span class="p">[</span><span class="s2">&quot;use_phase_linking_results&quot;</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="n">v</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span> <span class="ow">or</span> <span class="n">v</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">return</span> <span class="kc">None</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">v</span><span class="p">)):</span>
+                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;mask_phase_linking_file path is invalid: </span><span class="si">{</span><span class="n">v</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">v</span></div>
+
+
+<div class="viewcode-block" id="PhaseLinking.checkUsePS">
+<a class="viewcode-back" href="../../sarvey.html#sarvey.config.PhaseLinking.checkUsePS">[docs]</a>
+    <span class="nd">@validator</span><span class="p">(</span><span class="s1">&#39;use_ps&#39;</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">checkUsePS</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">values</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Check if use_ps will be applied.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="ow">not</span> <span class="n">values</span><span class="p">[</span><span class="s2">&quot;use_phase_linking_results&quot;</span><span class="p">])</span> <span class="ow">and</span> <span class="n">v</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;&#39;use_ps&#39; will not be applied, because &#39;phase_linking&#39; is set to False.&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">v</span></div>
+
+
+<div class="viewcode-block" id="PhaseLinking.checkPathMaskFilePS">
+<a class="viewcode-back" href="../../sarvey.html#sarvey.config.PhaseLinking.checkPathMaskFilePS">[docs]</a>
+    <span class="nd">@validator</span><span class="p">(</span><span class="s1">&#39;mask_ps_file&#39;</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">checkPathMaskFilePS</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">values</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Check if the mask file exists.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">values</span><span class="p">[</span><span class="s2">&quot;use_phase_linking_results&quot;</span><span class="p">]</span> <span class="ow">and</span> <span class="n">values</span><span class="p">[</span><span class="s2">&quot;use_ps&quot;</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="n">v</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Empty string is not allowed.&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">v</span><span class="p">)):</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;mask_ps_file is invalid: </span><span class="si">{</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">v</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">v</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="Preparation">
+<a class="viewcode-back" href="../../sarvey.html#sarvey.config.Preparation">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">Preparation</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">,</span> <span class="n">extra</span><span class="o">=</span><span class="n">Extra</span><span class="o">.</span><span class="n">forbid</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Template for settings in config file.&quot;&quot;&quot;</span>
+
+    <span class="n">start_date</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Start date&quot;</span><span class="p">,</span>
+        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Format: YYYY-MM-DD.&quot;</span><span class="p">,</span>
+        <span class="n">default</span><span class="o">=</span><span class="kc">None</span>
+    <span class="p">)</span>
+
+    <span class="n">end_date</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="n">title</span><span class="o">=</span><span class="s2">&quot;End date&quot;</span><span class="p">,</span>
+        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Format: YYYY-MM-DD.&quot;</span><span class="p">,</span>
+        <span class="n">default</span><span class="o">=</span><span class="kc">None</span>
+    <span class="p">)</span>
+
+    <span class="n">ifg_network_type</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Interferogram network type.&quot;</span><span class="p">,</span>
+        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Set the intererogram network type: &#39;sb&#39; (small baseline), &#39;stb&#39; (small temporal baseline), &quot;</span>
+                    <span class="s2">&quot;&#39;stb_year&#39; (small temporal baseline and yearly ifgs), &#39;delaunay&#39; (delaunay network), &quot;</span>
+                    <span class="s2">&quot;or &#39;star&#39; (single-reference).&quot;</span><span class="p">,</span>
+        <span class="n">default</span><span class="o">=</span><span class="s2">&quot;sb&quot;</span>
+    <span class="p">)</span>
+
+    <span class="n">num_ifgs</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Number of interferograms&quot;</span><span class="p">,</span>
+        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Set the number of interferograms per image. Might be violated .&quot;</span><span class="p">,</span>
+        <span class="n">default</span><span class="o">=</span><span class="mi">3</span>
+    <span class="p">)</span>
+
+    <span class="n">max_tbase</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Maximum temporal baseline [days]&quot;</span><span class="p">,</span>
+        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Set the maximum temporal baseline for the ifg network. (required for: &#39;sb&#39;)&quot;</span><span class="p">,</span>
+        <span class="n">default</span><span class="o">=</span><span class="mi">100</span>
+    <span class="p">)</span>
+
+    <span class="n">filter_window_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Size of filtering window [pixel]&quot;</span><span class="p">,</span>
+        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Set the size of window for lowpass filtering.&quot;</span><span class="p">,</span>
+        <span class="n">default</span><span class="o">=</span><span class="mi">9</span>
+    <span class="p">)</span>
+
+<div class="viewcode-block" id="Preparation.checkDates">
+<a class="viewcode-back" href="../../sarvey.html#sarvey.config.Preparation.checkDates">[docs]</a>
+    <span class="nd">@validator</span><span class="p">(</span><span class="s1">&#39;start_date&#39;</span><span class="p">,</span> <span class="s1">&#39;end_date&#39;</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">checkDates</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">v</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Check if date format is valid.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">v</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+            <span class="n">v</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="k">if</span> <span class="n">v</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">date</span><span class="o">.</span><span class="n">fromisoformat</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Date needs to be in format: YYYY-MM-DD. </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">v</span></div>
+
+
+<div class="viewcode-block" id="Preparation.checkNetworkType">
+<a class="viewcode-back" href="../../sarvey.html#sarvey.config.Preparation.checkNetworkType">[docs]</a>
+    <span class="nd">@validator</span><span class="p">(</span><span class="s1">&#39;ifg_network_type&#39;</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">checkNetworkType</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">v</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Check if the ifg network type is valid.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">v</span> <span class="o">!=</span> <span class="s2">&quot;sb&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">v</span> <span class="o">!=</span> <span class="s2">&quot;star&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">v</span> <span class="o">!=</span> <span class="s2">&quot;delaunay&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">v</span> <span class="o">!=</span> <span class="s2">&quot;stb&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">v</span> <span class="o">!=</span> <span class="s2">&quot;stb_year&quot;</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Interferogram network type has to be &#39;sb&#39;, &#39;stb&#39;, Ästb_year&#39;, &#39;delaunay&#39; or &#39;star&#39;.&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">v</span></div>
+
+
+<div class="viewcode-block" id="Preparation.checkNumIfgs">
+<a class="viewcode-back" href="../../sarvey.html#sarvey.config.Preparation.checkNumIfgs">[docs]</a>
+    <span class="nd">@validator</span><span class="p">(</span><span class="s1">&#39;num_ifgs&#39;</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">checkNumIfgs</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">v</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Check if the number of ifgs is valid.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">v</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">v</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Number of ifgs must be greater than zero.&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">v</span></div>
+
+
+<div class="viewcode-block" id="Preparation.checkMaxTBase">
+<a class="viewcode-back" href="../../sarvey.html#sarvey.config.Preparation.checkMaxTBase">[docs]</a>
+    <span class="nd">@validator</span><span class="p">(</span><span class="s1">&#39;max_tbase&#39;</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">checkMaxTBase</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">v</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Check if the value for maximum time baseline is valid.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">v</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">v</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Maximum baseline must be greater than zero.&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">v</span></div>
+
+
+<div class="viewcode-block" id="Preparation.checkFilterWdwSize">
+<a class="viewcode-back" href="../../sarvey.html#sarvey.config.Preparation.checkFilterWdwSize">[docs]</a>
+    <span class="nd">@validator</span><span class="p">(</span><span class="s1">&#39;filter_window_size&#39;</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">checkFilterWdwSize</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">v</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Check if the filter window size is valid.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">v</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Filter window size must be greater than zero.&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">v</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="ConsistencyCheck">
+<a class="viewcode-back" href="../../sarvey.html#sarvey.config.ConsistencyCheck">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">ConsistencyCheck</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">,</span> <span class="n">extra</span><span class="o">=</span><span class="n">Extra</span><span class="o">.</span><span class="n">forbid</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Template for settings in config file.&quot;&quot;&quot;</span>
+
+    <span class="n">coherence_p1</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Temporal coherence threshold for first-order points&quot;</span><span class="p">,</span>
+        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Set the temporal coherence threshold of first-order points for the consistency check.&quot;</span><span class="p">,</span>
+        <span class="n">default</span><span class="o">=</span><span class="mf">0.9</span>
+    <span class="p">)</span>
+
+    <span class="n">grid_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Grid size [m]&quot;</span><span class="p">,</span>
+        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Set the grid size in [m] for the consistency check. No grid is applied if &#39;grid_size&#39; is Zero.&quot;</span><span class="p">,</span>
+        <span class="n">default</span><span class="o">=</span><span class="mi">200</span>
+    <span class="p">)</span>
+
+    <span class="n">mask_p1_file</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Path to mask file for first-order points&quot;</span><span class="p">,</span>
+        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Set the path to the mask file in .h5 format.&quot;</span><span class="p">,</span>
+        <span class="n">default</span><span class="o">=</span><span class="s2">&quot;&quot;</span>
+    <span class="p">)</span>
+
+    <span class="n">num_nearest_neighbours</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Number of nearest neighbours&quot;</span><span class="p">,</span>
+        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Set number of nearest neighbours for creating arcs.&quot;</span><span class="p">,</span>
+        <span class="n">default</span><span class="o">=</span><span class="mi">30</span>
+    <span class="p">)</span>
+
+    <span class="n">max_arc_length</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Maximum length of arcs [m]&quot;</span><span class="p">,</span>
+        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Set the maximum length of arcs.&quot;</span><span class="p">,</span>
+        <span class="n">default</span><span class="o">=</span><span class="kc">None</span>
+    <span class="p">)</span>
+
+    <span class="n">velocity_bound</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Bounds on mean velocity for temporal unwrapping [m/year]&quot;</span><span class="p">,</span>
+        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Set the bound (symmetric) for the mean velocity estimation in temporal unwrapping.&quot;</span><span class="p">,</span>
+        <span class="n">default</span><span class="o">=</span><span class="mf">0.1</span>
+    <span class="p">)</span>
+
+    <span class="n">dem_error_bound</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Bounds on DEM error for temporal unwrapping [m]&quot;</span><span class="p">,</span>
+        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Set the bound (symmetric) for the DEM error estimation in temporal unwrapping.&quot;</span><span class="p">,</span>
+        <span class="n">default</span><span class="o">=</span><span class="mf">100.0</span>
+    <span class="p">)</span>
+
+    <span class="n">num_optimization_samples</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Number of samples in the search space for temporal unwrapping&quot;</span><span class="p">,</span>
+        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Set the number of samples evaluated along the search space for temporal unwrapping.&quot;</span><span class="p">,</span>
+        <span class="n">default</span><span class="o">=</span><span class="mi">100</span>
+    <span class="p">)</span>
+
+    <span class="n">arc_unwrapping_coherence</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Arc unwrapping coherence threshold&quot;</span><span class="p">,</span>
+        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Set the arc unwrapping coherence threshold for the consistency check.&quot;</span><span class="p">,</span>
+        <span class="n">default</span><span class="o">=</span><span class="mf">0.6</span>
+    <span class="p">)</span>
+
+    <span class="n">min_num_arc</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Minimum number of arcs per point&quot;</span><span class="p">,</span>
+        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Set the minimum number of arcs per point.&quot;</span><span class="p">,</span>
+        <span class="n">default</span><span class="o">=</span><span class="mi">3</span>
+    <span class="p">)</span>
+
+<div class="viewcode-block" id="ConsistencyCheck.checkCoherenceP1">
+<a class="viewcode-back" href="../../sarvey.html#sarvey.config.ConsistencyCheck.checkCoherenceP1">[docs]</a>
+    <span class="nd">@validator</span><span class="p">(</span><span class="s1">&#39;coherence_p1&#39;</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">checkCoherenceP1</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">v</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Check if the temporal coherence threshold is valid.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">v</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Temporal coherence threshold cannot be negative.&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">v</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Temporal coherence threshold cannot be greater than 1.&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">v</span></div>
+
+
+<div class="viewcode-block" id="ConsistencyCheck.checkGridSize">
+<a class="viewcode-back" href="../../sarvey.html#sarvey.config.ConsistencyCheck.checkGridSize">[docs]</a>
+    <span class="nd">@validator</span><span class="p">(</span><span class="s1">&#39;grid_size&#39;</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">checkGridSize</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">v</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Check if the grid size is valid.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">v</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Grid size cannot be negative.&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">v</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">v</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">return</span> <span class="n">v</span></div>
+
+
+<div class="viewcode-block" id="ConsistencyCheck.checkSpatialMaskPath">
+<a class="viewcode-back" href="../../sarvey.html#sarvey.config.ConsistencyCheck.checkSpatialMaskPath">[docs]</a>
+    <span class="nd">@validator</span><span class="p">(</span><span class="s1">&#39;mask_p1_file&#39;</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">checkSpatialMaskPath</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">v</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Check if the path is correct.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">v</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span> <span class="ow">or</span> <span class="n">v</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">v</span><span class="p">)):</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;mask_p1_file path is invalid: </span><span class="si">{</span><span class="n">v</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">v</span></div>
+
+
+<div class="viewcode-block" id="ConsistencyCheck.checkKNN">
+<a class="viewcode-back" href="../../sarvey.html#sarvey.config.ConsistencyCheck.checkKNN">[docs]</a>
+    <span class="nd">@validator</span><span class="p">(</span><span class="s1">&#39;num_nearest_neighbours&#39;</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">checkKNN</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">v</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Check if the k-nearest neighbours is valid.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">v</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Number of nearest neighbours cannot be negative or zero.&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">v</span></div>
+
+
+<div class="viewcode-block" id="ConsistencyCheck.checkMaxArcLength">
+<a class="viewcode-back" href="../../sarvey.html#sarvey.config.ConsistencyCheck.checkMaxArcLength">[docs]</a>
+    <span class="nd">@validator</span><span class="p">(</span><span class="s1">&#39;max_arc_length&#39;</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">checkMaxArcLength</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">v</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Check if the maximum length of arcs is valid.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">v</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mi">999999</span>
+        <span class="k">if</span> <span class="n">v</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Maximum arc length must be positive.&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">v</span></div>
+
+
+<div class="viewcode-block" id="ConsistencyCheck.checkVelocityBound">
+<a class="viewcode-back" href="../../sarvey.html#sarvey.config.ConsistencyCheck.checkVelocityBound">[docs]</a>
+    <span class="nd">@validator</span><span class="p">(</span><span class="s1">&#39;velocity_bound&#39;</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">checkVelocityBound</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">v</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Check if the velocity bound is valid.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">v</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Velocity bound cannot be negative or zero.&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">v</span></div>
+
+
+<div class="viewcode-block" id="ConsistencyCheck.checkDEMErrorBound">
+<a class="viewcode-back" href="../../sarvey.html#sarvey.config.ConsistencyCheck.checkDEMErrorBound">[docs]</a>
+    <span class="nd">@validator</span><span class="p">(</span><span class="s1">&#39;dem_error_bound&#39;</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">checkDEMErrorBound</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">v</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Check if the DEM error bound is valid.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">v</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;DEM error bound cannot be negative or zero.&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">v</span></div>
+
+
+<div class="viewcode-block" id="ConsistencyCheck.checkNumSamples">
+<a class="viewcode-back" href="../../sarvey.html#sarvey.config.ConsistencyCheck.checkNumSamples">[docs]</a>
+    <span class="nd">@validator</span><span class="p">(</span><span class="s1">&#39;num_optimization_samples&#39;</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">checkNumSamples</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">v</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Check if the number of samples for the search space is valid.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">v</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Number of optimization samples cannot be negative or zero.&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">v</span></div>
+
+
+<div class="viewcode-block" id="ConsistencyCheck.checkArcCoherence">
+<a class="viewcode-back" href="../../sarvey.html#sarvey.config.ConsistencyCheck.checkArcCoherence">[docs]</a>
+    <span class="nd">@validator</span><span class="p">(</span><span class="s1">&#39;arc_unwrapping_coherence&#39;</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">checkArcCoherence</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">v</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Check if the arc coherence threshold is valid.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">v</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Arc unwrapping coherence threshold cannot be negativ.&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">v</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Arc unwrapping coherence threshold cannot be greater than 1.&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">v</span></div>
+
+
+<div class="viewcode-block" id="ConsistencyCheck.checkMinNumArc">
+<a class="viewcode-back" href="../../sarvey.html#sarvey.config.ConsistencyCheck.checkMinNumArc">[docs]</a>
+    <span class="nd">@validator</span><span class="p">(</span><span class="s1">&#39;min_num_arc&#39;</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">checkMinNumArc</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">v</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Check if the minimum number of arcs is valid.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">v</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Velocity bound cannot be negative.&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">v</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="Unwrapping">
+<a class="viewcode-back" href="../../sarvey.html#sarvey.config.Unwrapping">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">Unwrapping</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">,</span> <span class="n">extra</span><span class="o">=</span><span class="n">Extra</span><span class="o">.</span><span class="n">forbid</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Template for settings in config file.&quot;&quot;&quot;</span>
+
+    <span class="n">use_arcs_from_temporal_unwrapping</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Use arcs from temporal unwrapping&quot;</span><span class="p">,</span>
+        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;If true, use same arcs from temporal unwrapping, where bad arcs were already removed.&quot;</span>
+                    <span class="s2">&quot;If false, apply new delaunay triangulation.&quot;</span><span class="p">,</span>
+        <span class="n">default</span><span class="o">=</span><span class="kc">True</span>
+    <span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="Filtering">
+<a class="viewcode-back" href="../../sarvey.html#sarvey.config.Filtering">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">Filtering</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">,</span> <span class="n">extra</span><span class="o">=</span><span class="n">Extra</span><span class="o">.</span><span class="n">forbid</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Template for filtering settings in config file.&quot;&quot;&quot;</span>
+
+    <span class="n">coherence_p2</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Temporal coherence threshold&quot;</span><span class="p">,</span>
+        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Set the temporal coherence threshold for the filtering step.&quot;</span><span class="p">,</span>
+        <span class="n">default</span><span class="o">=</span><span class="mf">0.8</span>
+    <span class="p">)</span>
+
+    <span class="n">apply_aps_filtering</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Apply atmosphere filtering&quot;</span><span class="p">,</span>
+        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Set whether to filter atmosphere or to skip it.&quot;</span><span class="p">,</span>
+        <span class="n">default</span><span class="o">=</span><span class="kc">True</span>
+    <span class="p">)</span>
+
+    <span class="n">interpolation_method</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Spatial interpolation method.&quot;</span><span class="p">,</span>
+        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Method for interpolating atmosphere in space (&#39;linear&#39;, &#39;cubic&#39; or &#39;kriging&#39;).&quot;</span><span class="p">,</span>
+        <span class="n">default</span><span class="o">=</span><span class="s2">&quot;kriging&quot;</span>
+    <span class="p">)</span>
+
+    <span class="n">grid_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Grid size [m].&quot;</span><span class="p">,</span>
+        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Set the grid size for spatial filtering.&quot;</span><span class="p">,</span>
+        <span class="n">default</span><span class="o">=</span><span class="mi">1000</span>
+    <span class="p">)</span>
+
+    <span class="n">mask_p2_file</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Path to spatial mask file for second-order points.&quot;</span><span class="p">,</span>
+        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Path to the mask file, e.g. created by sarvey_mask.&quot;</span><span class="p">,</span>
+        <span class="n">default</span><span class="o">=</span><span class="s2">&quot;&quot;</span>
+    <span class="p">)</span>
+
+    <span class="n">use_moving_points</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Use moving points&quot;</span><span class="p">,</span>
+        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Set whether to use moving points in the filtering step.&quot;</span><span class="p">,</span>
+        <span class="n">default</span><span class="o">=</span><span class="kc">True</span>
+    <span class="p">)</span>
+
+    <span class="n">max_temporal_autocorrelation</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Max temporal auto correlation.&quot;</span><span class="p">,</span>
+        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Set temporal autocorrelation threshold for the selection of stable/linearly moving points.&quot;</span><span class="p">,</span>
+        <span class="n">default</span><span class="o">=</span><span class="mf">0.3</span>
+    <span class="p">)</span>
+
+<div class="viewcode-block" id="Filtering.checkTempCohThrsh2">
+<a class="viewcode-back" href="../../sarvey.html#sarvey.config.Filtering.checkTempCohThrsh2">[docs]</a>
+    <span class="nd">@validator</span><span class="p">(</span><span class="s1">&#39;coherence_p2&#39;</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">checkTempCohThrsh2</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">v</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Check if the temporal coherence threshold is valid.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">v</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Temporal coherence threshold cannot be negative.&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">v</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Temporal coherence threshold cannot be greater than 1.&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">v</span></div>
+
+
+<div class="viewcode-block" id="Filtering.checkInterpolationMethod">
+<a class="viewcode-back" href="../../sarvey.html#sarvey.config.Filtering.checkInterpolationMethod">[docs]</a>
+    <span class="nd">@validator</span><span class="p">(</span><span class="s1">&#39;interpolation_method&#39;</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">checkInterpolationMethod</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">v</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Check if the interpolation method is valid.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">v</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">!=</span> <span class="s2">&quot;linear&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">v</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">!=</span> <span class="s2">&quot;cubic&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">v</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">!=</span> <span class="s2">&quot;kriging&quot;</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Method for interpolating atmosphere in space needs to be either &#39;linear&#39;, &#39;cubic&#39; &quot;</span>
+                             <span class="s2">&quot;or &#39;kriging&#39;.&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">v</span></div>
+
+
+<div class="viewcode-block" id="Filtering.checkGridSize">
+<a class="viewcode-back" href="../../sarvey.html#sarvey.config.Filtering.checkGridSize">[docs]</a>
+    <span class="nd">@validator</span><span class="p">(</span><span class="s1">&#39;grid_size&#39;</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">checkGridSize</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">v</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Check if the grid size is valid.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">v</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Grid size cannot be negative.&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">v</span></div>
+
+
+<div class="viewcode-block" id="Filtering.checkSpatialMaskPath">
+<a class="viewcode-back" href="../../sarvey.html#sarvey.config.Filtering.checkSpatialMaskPath">[docs]</a>
+    <span class="nd">@validator</span><span class="p">(</span><span class="s1">&#39;mask_p2_file&#39;</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">checkSpatialMaskPath</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">v</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Check if the path is correct.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">v</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span> <span class="ow">or</span> <span class="n">v</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">v</span><span class="p">)):</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;mask_p2_file path is invalid: </span><span class="si">{</span><span class="n">v</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">v</span></div>
+
+
+<div class="viewcode-block" id="Filtering.checkMaxAutoCorr">
+<a class="viewcode-back" href="../../sarvey.html#sarvey.config.Filtering.checkMaxAutoCorr">[docs]</a>
+    <span class="nd">@validator</span><span class="p">(</span><span class="s1">&#39;max_temporal_autocorrelation&#39;</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">checkMaxAutoCorr</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">v</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Check if the value is correct.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">v</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">v</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;max_temporal_autocorrelation has to be between 0 and 1: </span><span class="si">{</span><span class="n">v</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">v</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="Densification">
+<a class="viewcode-back" href="../../sarvey.html#sarvey.config.Densification">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">Densification</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">,</span> <span class="n">extra</span><span class="o">=</span><span class="n">Extra</span><span class="o">.</span><span class="n">forbid</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Template for densification settings in config file.&quot;&quot;&quot;</span>
+
+    <span class="n">num_connections_to_p1</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Number of connections in temporal unwrapping.&quot;</span><span class="p">,</span>
+        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Set number of connections between second-order point and closest first-order points for temporal &quot;</span>
+                    <span class="s2">&quot;unwrapping.&quot;</span><span class="p">,</span>
+        <span class="n">default</span><span class="o">=</span><span class="mi">5</span>
+    <span class="p">)</span>
+
+    <span class="n">max_distance_to_p1</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Maximum distance to nearest first-order point [m]&quot;</span><span class="p">,</span>
+        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Set threshold on the distance between first-order points and to be temporally unwrapped&quot;</span>
+                    <span class="s2">&quot;second-order point.&quot;</span><span class="p">,</span>
+        <span class="n">default</span><span class="o">=</span><span class="mi">2000</span>
+    <span class="p">)</span>
+
+    <span class="n">velocity_bound</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Bounds on mean velocity for temporal unwrapping [m/year]&quot;</span><span class="p">,</span>
+        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Set the bound (symmetric) for the mean velocity in temporal unwrapping.&quot;</span><span class="p">,</span>
+        <span class="n">default</span><span class="o">=</span><span class="mf">0.15</span>
+    <span class="p">)</span>
+
+    <span class="n">dem_error_bound</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Bounds on DEM error for temporal unwrapping [m]&quot;</span><span class="p">,</span>
+        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Set the bound (symmetric) for the DEM error estimation in temporal unwrapping.&quot;</span><span class="p">,</span>
+        <span class="n">default</span><span class="o">=</span><span class="mf">100.0</span>
+    <span class="p">)</span>
+
+    <span class="n">num_optimization_samples</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Number of samples in the search space for temporal unwrapping&quot;</span><span class="p">,</span>
+        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Set the number of samples evaluated along the search space for temporal unwrapping.&quot;</span><span class="p">,</span>
+        <span class="n">default</span><span class="o">=</span><span class="mi">100</span>
+    <span class="p">)</span>
+
+    <span class="n">arc_unwrapping_coherence</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Arc unwrapping coherence threshold for densification&quot;</span><span class="p">,</span>
+        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Set arc unwrapping coherence threshold for densification.&quot;</span><span class="p">,</span>
+        <span class="n">default</span><span class="o">=</span><span class="mf">0.5</span>
+    <span class="p">)</span>
+
+<div class="viewcode-block" id="Densification.checkNumConn1">
+<a class="viewcode-back" href="../../sarvey.html#sarvey.config.Densification.checkNumConn1">[docs]</a>
+    <span class="nd">@validator</span><span class="p">(</span><span class="s1">&#39;num_connections_to_p1&#39;</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">checkNumConn1</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">v</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Check if num_connections_p1 are valid.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">v</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;num_connections_p1 must be greater than 0: </span><span class="si">{</span><span class="n">v</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">v</span></div>
+
+
+<div class="viewcode-block" id="Densification.checkMaxDistanceP1">
+<a class="viewcode-back" href="../../sarvey.html#sarvey.config.Densification.checkMaxDistanceP1">[docs]</a>
+    <span class="nd">@validator</span><span class="p">(</span><span class="s1">&#39;max_distance_to_p1&#39;</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">checkMaxDistanceP1</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">v</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Check if the maximum distance to nearest first-order points is valid.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">v</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Maximum distance to first-order points cannot be negative.&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">v</span></div>
+
+
+<div class="viewcode-block" id="Densification.checkVelocityBound">
+<a class="viewcode-back" href="../../sarvey.html#sarvey.config.Densification.checkVelocityBound">[docs]</a>
+    <span class="nd">@validator</span><span class="p">(</span><span class="s1">&#39;velocity_bound&#39;</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">checkVelocityBound</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">v</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Check if the velocity bound is valid.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">v</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Velocity bound cannot be negative or zero.&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">v</span></div>
+
+
+<div class="viewcode-block" id="Densification.checkDEMErrorBound">
+<a class="viewcode-back" href="../../sarvey.html#sarvey.config.Densification.checkDEMErrorBound">[docs]</a>
+    <span class="nd">@validator</span><span class="p">(</span><span class="s1">&#39;dem_error_bound&#39;</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">checkDEMErrorBound</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">v</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Check if the DEM error bound is valid.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">v</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;DEM error bound cannot be negative or zero.&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">v</span></div>
+
+
+<div class="viewcode-block" id="Densification.checkNumSamples">
+<a class="viewcode-back" href="../../sarvey.html#sarvey.config.Densification.checkNumSamples">[docs]</a>
+    <span class="nd">@validator</span><span class="p">(</span><span class="s1">&#39;num_optimization_samples&#39;</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">checkNumSamples</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">v</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Check if the number of samples for the search space is valid.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">v</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Number of optimization samples cannot be negative or zero.&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">v</span></div>
+
+
+<div class="viewcode-block" id="Densification.checkCoherenceThresh">
+<a class="viewcode-back" href="../../sarvey.html#sarvey.config.Densification.checkCoherenceThresh">[docs]</a>
+    <span class="nd">@validator</span><span class="p">(</span><span class="s1">&#39;arc_unwrapping_coherence&#39;</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">checkCoherenceThresh</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">v</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Check if arc_unwrapping_coherence is valid.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">v</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">v</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;coherence_threshold is not between 0 and 1: </span><span class="si">{</span><span class="n">v</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">v</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="Config">
+<a class="viewcode-back" href="../../sarvey.html#sarvey.config.Config">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">Config</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Configuration for sarvey.&quot;&quot;&quot;</span>
+
+    <span class="c1"># title has to be the name of the class. Needed for creating default file</span>
+    <span class="n">general</span><span class="p">:</span> <span class="n">General</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="n">title</span><span class="o">=</span><span class="s2">&quot;General&quot;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;&quot;</span>
+    <span class="p">)</span>
+
+    <span class="n">phase_linking</span><span class="p">:</span> <span class="n">PhaseLinking</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="n">title</span><span class="o">=</span><span class="s2">&quot;PhaseLinking&quot;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;&quot;</span>
+    <span class="p">)</span>
+
+    <span class="n">preparation</span><span class="p">:</span> <span class="n">Preparation</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Preparation&quot;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;&quot;</span>
+    <span class="p">)</span>
+
+    <span class="n">consistency_check</span><span class="p">:</span> <span class="n">ConsistencyCheck</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="n">title</span><span class="o">=</span><span class="s2">&quot;ConsistencyCheck&quot;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;&quot;</span>
+    <span class="p">)</span>
+
+    <span class="n">unwrapping</span><span class="p">:</span> <span class="n">Unwrapping</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Unwrapping&quot;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;&quot;</span>
+    <span class="p">)</span>
+
+    <span class="n">filtering</span><span class="p">:</span> <span class="n">Filtering</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Filtering&quot;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;&quot;</span>
+    <span class="p">)</span>
+
+    <span class="n">densification</span><span class="p">:</span> <span class="n">Densification</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Densification&quot;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;&quot;</span>
+    <span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="loadConfiguration">
+<a class="viewcode-back" href="../../sarvey.html#sarvey.config.loadConfiguration">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">loadConfiguration</span><span class="p">(</span><span class="o">*</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Load configuration json file.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    path : str</span>
+<span class="sd">        Path to the configuration json file.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    : Config</span>
+<span class="sd">        An object of class Config</span>
+
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    JSONDecodeError</span>
+<span class="sd">        If failed to parse the json file to the dictionary.</span>
+<span class="sd">    FileNotFoundError</span>
+<span class="sd">        Config file not found.</span>
+<span class="sd">    IOError</span>
+<span class="sd">        Invalid JSON file.</span>
+<span class="sd">    ValueError</span>
+<span class="sd">        Invalid value for configuration object.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="p">)</span> <span class="k">as</span> <span class="n">config_fp</span><span class="p">:</span>
+            <span class="n">config</span> <span class="o">=</span> <span class="n">json5</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">config_fp</span><span class="p">)</span>
+            <span class="n">config</span> <span class="o">=</span> <span class="n">Config</span><span class="p">(</span><span class="o">**</span><span class="n">config</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">JSONDecodeError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">IOError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Failed to load the configuration json file =&gt; </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">config</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, IPI - Leibniz Universitaet Hannover.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
