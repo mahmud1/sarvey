@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Redirecting...</title>
+    
+    <script src="https://your-username.github.io/your-repo/version-switcher.js"></script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const defaultVersionUrl = "main/docs/index.html";
+
+            // Redirect after a short delay to ensure the dropdown loads
+            setTimeout(() => {
+                window.location.href = defaultVersionUrl;
+            }, 1000);
+        });
+    </script>
+</head>
+<body>
+    <p>If you are not redirected, <a href="main/docs/index.html">click here</a>.</p>
+</body>
+</html>
