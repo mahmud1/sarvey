@@ -1,8 +1,8 @@
 {
-    "dev": "main/docs/index.html",
+    "dev": "https://mahmud1.github.io/sarvey/main/docs/index.html",
     "tags": {
-        "2.0 (stable)": "tags/test-theme1/index.html",
-        "1.1": "tags/test-deploy5/index.html",
-        "1.0": "tags/test-deploy5/index.html"
+        "2.0 (stable)": "https://mahmud1.github.io/sarvey/tags/test-theme1/index.html",
+        "1.1": "https://mahmud1.github.io/sarvey/tags/test-deploy5/index.html",
+        "1.0": "https://mahmud1.github.io/sarvey/tags/test-deploy5/index.html"
     }
 }
