@@ -277,13 +277,15 @@ jobs:
         with:
           name: test-report
 
-      - name: Deploy to GitHub Pages
-        # trigger if merged into the main branch || published new tag
-        if: env.SKIP_DEPLOY == 'false' && github.event_name != 'pull_request' && (github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/'))
+      - name: Set up SSH
+        uses: webfactory/ssh-agent@v0.5.4
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - name: Clone gh-pages branch
         run: |
           rm -rf public
-          
-          git clone --branch gh-pages https://github.com/${{ github.repository }} public
+          git clone --branch gh-pages git@github.com:${{ github.repository }} public
 
           if [[ "${GITHUB_REF}" == refs/tags/* ]]; then
             TAG_NAME=${GITHUB_REF##*/}
@@ -311,9 +313,9 @@ jobs:
 
         shell: bash
 
-      - name: Upload to GitHub Pages
-        if: env.SKIP_DEPLOY == 'false'
-        uses: peaceiris/actions-gh-pages@v4
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./public
+      - name: Commit & push changes
+        run: |
+          cd public
+          git add .
+          git commit -m "Update GitHub Pages"
+          git push origin gh-pages
