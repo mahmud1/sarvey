@@ -19,31 +19,31 @@ env:
     SKIP_INSTALL: true
     SKIP_TEST: false
 
-jobs:
-  before_script:
-    runs-on: self-hosted
-    strategy:
-      matrix:
-        node-version: [ 20.x ]
+# jobs:
+#   before_script:
+#     runs-on: self-hosted
+#     strategy:
+#       matrix:
+#         node-version: [ 20.x ]
 
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+#     steps:
+#       - name: Checkout code
+#         uses: actions/checkout@v4
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.x'
+#       - name: Set up Python
+#         uses: actions/setup-python@v5
+#         with:
+#           python-version: '3.x'
 
-      - name: Install dependencies
-        run: |
-          source /opt/conda/etc/profile.d/conda.sh
-          conda init bash
-          source ~/.bashrc
-          conda env remove --prefix /home/runneruser/.conda/envs/ci_temp_env --yes || rm -rf /home/runneruser/.conda/envs/ci_temp_env
-          conda create --prefix /home/runneruser/.conda/envs/ci_temp_env --clone ci_env
-          conda activate ci_temp_env
-        shell: bash
+#       - name: Install dependencies
+#         run: |
+#           source /opt/conda/etc/profile.d/conda.sh
+#           conda init bash
+#           source ~/.bashrc
+#           conda env remove --prefix /home/runneruser/.conda/envs/ci_temp_env --yes || rm -rf /home/runneruser/.conda/envs/ci_temp_env
+#           conda create --prefix /home/runneruser/.conda/envs/ci_temp_env --clone ci_env
+#           conda activate ci_temp_env
+#         shell: bash
 
   test_sarvey:
     runs-on: self-hosted
@@ -63,7 +63,7 @@ jobs:
           source /opt/conda/etc/profile.d/conda.sh
           conda init bash
           source ~/.bashrc
-          conda activate ci_temp_env
+          conda activate ci_env
           rm -rf tests/testdata
           # wget -nv -c -O testdata.zip https://seafile.projekt.uni-hannover.de/f/4b3be399dffa488e98db/?dl=1
           wget -nv -c -O testdata.zip https://seafile.projekt.uni-hannover.de/f/104b499f6f7e4360877d/?dl=1          
@@ -93,7 +93,7 @@ jobs:
           source /opt/conda/etc/profile.d/conda.sh
           conda init bash
           source ~/.bashrc
-          conda activate ci_temp_env
+          conda activate ci_env
           
           IFS='/' read -r OWNER REPO <<< "${GITHUB_REPOSITORY}"
           URL_IO="https://${OWNER}.github.io/${REPO}"
@@ -183,7 +183,7 @@ jobs:
           source /opt/conda/etc/profile.d/conda.sh
           conda init bash
           source ~/.bashrc
-          conda activate ci_temp_env
+          conda activate ci_env
           make lint
         shell: bash
 
@@ -226,7 +226,7 @@ jobs:
           source /opt/conda/etc/profile.d/conda.sh
           conda init bash
           source ~/.bashrc
-          conda activate ci_temp_env
+          conda activate ci_env
           make urlcheck
         shell: bash
 
