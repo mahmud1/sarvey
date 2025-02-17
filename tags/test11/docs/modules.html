@@ -1,0 +1,515 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Python API reference &mdash; SARvey 1.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/custom.css?v=86cf1cd6" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=fc837d61"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="sarvey package" href="sarvey.html" />
+    <link rel="prev" title="Fast Track Guide for Masjed Soleyman Dam" href="demo/demo_masjed_dam_fast_track.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            SARvey
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="readme.html">SARvey - survey with SAR</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/luhipi/sarvey">Source code repository</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usage.html">Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="preparation.html">Preparation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="processing.html">Multitemporal InSAR processing workflow</a></li>
+<li class="toctree-l1"><a class="reference internal" href="demo_datasets.html">Demo Datasets</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Python API reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="sarvey.html">sarvey package</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="authors.html">Credits</a></li>
+<li class="toctree-l1"><a class="reference internal" href="history.html">History</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">SARvey</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Python API reference</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/modules.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="python-api-reference">
+<h1>Python API reference<a class="headerlink" href="#python-api-reference" title="Link to this heading"></a></h1>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="sarvey.html">sarvey package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="sarvey.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sarvey.html#module-sarvey.coherence">sarvey.coherence module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="sarvey.html#sarvey.coherence.computeIfgs"><code class="docutils literal notranslate"><span class="pre">computeIfgs()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sarvey.html#sarvey.coherence.computeIfgsAndTemporalCoherence"><code class="docutils literal notranslate"><span class="pre">computeIfgsAndTemporalCoherence()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sarvey.html#sarvey.coherence.launchConvolve2d"><code class="docutils literal notranslate"><span class="pre">launchConvolve2d()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="sarvey.html#module-sarvey.config">sarvey.config module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="sarvey.html#sarvey.config.Config"><code class="docutils literal notranslate"><span class="pre">Config</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="sarvey.html#sarvey.config.Config._abc_impl"><code class="docutils literal notranslate"><span class="pre">Config._abc_impl</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sarvey.html#sarvey.config.Config.consistency_check"><code class="docutils literal notranslate"><span class="pre">Config.consistency_check</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sarvey.html#sarvey.config.Config.densification"><code class="docutils literal notranslate"><span class="pre">Config.densification</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sarvey.html#sarvey.config.Config.filtering"><code class="docutils literal notranslate"><span class="pre">Config.filtering</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sarvey.html#sarvey.config.Config.general"><code class="docutils literal notranslate"><span class="pre">Config.general</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sarvey.html#sarvey.config.Config.phase_linking"><code class="docutils literal notranslate"><span class="pre">Config.phase_linking</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sarvey.html#sarvey.config.Config.preparation"><code class="docutils literal notranslate"><span class="pre">Config.preparation</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sarvey.html#sarvey.config.Config.unwrapping"><code class="docutils literal notranslate"><span class="pre">Config.unwrapping</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="sarvey.html#sarvey.config.ConsistencyCheck"><code class="docutils literal notranslate"><span class="pre">ConsistencyCheck</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="sarvey.html#sarvey.config.ConsistencyCheck._abc_impl"><code class="docutils literal notranslate"><span class="pre">ConsistencyCheck._abc_impl</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sarvey.html#sarvey.config.ConsistencyCheck.arc_unwrapping_coherence"><code class="docutils literal notranslate"><span class="pre">ConsistencyCheck.arc_unwrapping_coherence</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sarvey.html#sarvey.config.ConsistencyCheck.checkArcCoherence"><code class="docutils literal notranslate"><span class="pre">ConsistencyCheck.checkArcCoherence()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sarvey.html#sarvey.config.ConsistencyCheck.checkCoherenceP1"><code class="docutils literal notranslate"><span class="pre">ConsistencyCheck.checkCoherenceP1()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sarvey.html#sarvey.config.ConsistencyCheck.checkDEMErrorBound"><code class="docutils literal notranslate"><span class="pre">ConsistencyCheck.checkDEMErrorBound()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sarvey.html#sarvey.config.ConsistencyCheck.checkGridSize"><code class="docutils literal notranslate"><span class="pre">ConsistencyCheck.checkGridSize()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sarvey.html#sarvey.config.ConsistencyCheck.checkKNN"><code class="docutils literal notranslate"><span class="pre">ConsistencyCheck.checkKNN()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sarvey.html#sarvey.config.ConsistencyCheck.checkMaxArcLength"><code class="docutils literal notranslate"><span class="pre">ConsistencyCheck.checkMaxArcLength()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sarvey.html#sarvey.config.ConsistencyCheck.checkMinNumArc"><code class="docutils literal notranslate"><span class="pre">ConsistencyCheck.checkMinNumArc()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sarvey.html#sarvey.config.ConsistencyCheck.checkNumSamples"><code class="docutils literal notranslate"><span class="pre">ConsistencyCheck.checkNumSamples()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sarvey.html#sarvey.config.ConsistencyCheck.checkSpatialMaskPath"><code class="docutils literal notranslate"><span class="pre">ConsistencyCheck.checkSpatialMaskPath()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sarvey.html#sarvey.config.ConsistencyCheck.checkVelocityBound"><code class="docutils literal notranslate"><span class="pre">ConsistencyCheck.checkVelocityBound()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sarvey.html#sarvey.config.ConsistencyCheck.coherence_p1"><code class="docutils literal notranslate"><span class="pre">ConsistencyCheck.coherence_p1</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sarvey.html#sarvey.config.ConsistencyCheck.dem_error_bound"><code class="docutils literal notranslate"><span class="pre">ConsistencyCheck.dem_error_bound</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sarvey.html#sarvey.config.ConsistencyCheck.grid_size"><code class="docutils literal notranslate"><span class="pre">ConsistencyCheck.grid_size</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sarvey.html#sarvey.config.ConsistencyCheck.mask_p1_file"><code class="docutils literal notranslate"><span class="pre">ConsistencyCheck.mask_p1_file</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sarvey.html#sarvey.config.ConsistencyCheck.max_arc_length"><code class="docutils literal notranslate"><span class="pre">ConsistencyCheck.max_arc_length</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sarvey.html#sarvey.config.ConsistencyCheck.min_num_arc"><code class="docutils literal notranslate"><span class="pre">ConsistencyCheck.min_num_arc</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sarvey.html#sarvey.config.ConsistencyCheck.num_nearest_neighbours"><code class="docutils literal notranslate"><span class="pre">ConsistencyCheck.num_nearest_neighbours</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sarvey.html#sarvey.config.ConsistencyCheck.num_optimization_samples"><code class="docutils literal notranslate"><span class="pre">ConsistencyCheck.num_optimization_samples</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sarvey.html#sarvey.config.ConsistencyCheck.velocity_bound"><code class="docutils literal notranslate"><span class="pre">ConsistencyCheck.velocity_bound</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="sarvey.html#sarvey.config.Densification"><code class="docutils literal notranslate"><span class="pre">Densification</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="sarvey.html#sarvey.config.Densification._abc_impl"><code class="docutils literal notranslate"><span class="pre">Densification._abc_impl</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sarvey.html#sarvey.config.Densification.arc_unwrapping_coherence"><code class="docutils literal notranslate"><span class="pre">Densification.arc_unwrapping_coherence</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sarvey.html#sarvey.config.Densification.checkCoherenceThresh"><code class="docutils literal notranslate"><span class="pre">Densification.checkCoherenceThresh()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sarvey.html#sarvey.config.Densification.checkDEMErrorBound"><code class="docutils literal notranslate"><span class="pre">Densification.checkDEMErrorBound()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sarvey.html#sarvey.config.Densification.checkMaxDistanceP1"><code class="docutils literal notranslate"><span class="pre">Densification.checkMaxDistanceP1()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sarvey.html#sarvey.config.Densification.checkNumConn1"><code class="docutils literal notranslate"><span class="pre">Densification.checkNumConn1()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sarvey.html#sarvey.config.Densification.checkNumSamples"><code class="docutils literal notranslate"><span class="pre">Densification.checkNumSamples()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sarvey.html#sarvey.config.Densification.checkVelocityBound"><code class="docutils literal notranslate"><span class="pre">Densification.checkVelocityBound()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sarvey.html#sarvey.config.Densification.dem_error_bound"><code class="docutils literal notranslate"><span class="pre">Densification.dem_error_bound</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sarvey.html#sarvey.config.Densification.max_distance_to_p1"><code class="docutils literal notranslate"><span class="pre">Densification.max_distance_to_p1</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sarvey.html#sarvey.config.Densification.num_connections_to_p1"><code class="docutils literal notranslate"><span class="pre">Densification.num_connections_to_p1</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sarvey.html#sarvey.config.Densification.num_optimization_samples"><code class="docutils literal notranslate"><span class="pre">Densification.num_optimization_samples</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sarvey.html#sarvey.config.Densification.velocity_bound"><code class="docutils literal notranslate"><span class="pre">Densification.velocity_bound</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="sarvey.html#sarvey.config.Filtering"><code class="docutils literal notranslate"><span class="pre">Filtering</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="sarvey.html#sarvey.config.Filtering._abc_impl"><code class="docutils literal notranslate"><span class="pre">Filtering._abc_impl</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sarvey.html#sarvey.config.Filtering.apply_aps_filtering"><code class="docutils literal notranslate"><span class="pre">Filtering.apply_aps_filtering</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sarvey.html#sarvey.config.Filtering.checkGridSize"><code class="docutils literal notranslate"><span class="pre">Filtering.checkGridSize()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sarvey.html#sarvey.config.Filtering.checkInterpolationMethod"><code class="docutils literal notranslate"><span class="pre">Filtering.checkInterpolationMethod()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sarvey.html#sarvey.config.Filtering.checkMaxAutoCorr"><code class="docutils literal notranslate"><span class="pre">Filtering.checkMaxAutoCorr()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sarvey.html#sarvey.config.Filtering.checkSpatialMaskPath"><code class="docutils literal notranslate"><span class="pre">Filtering.checkSpatialMaskPath()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sarvey.html#sarvey.config.Filtering.checkTempCohThrsh2"><code class="docutils literal notranslate"><span class="pre">Filtering.checkTempCohThrsh2()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sarvey.html#sarvey.config.Filtering.coherence_p2"><code class="docutils literal notranslate"><span class="pre">Filtering.coherence_p2</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sarvey.html#sarvey.config.Filtering.grid_size"><code class="docutils literal notranslate"><span class="pre">Filtering.grid_size</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sarvey.html#sarvey.config.Filtering.interpolation_method"><code class="docutils literal notranslate"><span class="pre">Filtering.interpolation_method</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sarvey.html#sarvey.config.Filtering.mask_p2_file"><code class="docutils literal notranslate"><span class="pre">Filtering.mask_p2_file</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sarvey.html#sarvey.config.Filtering.max_temporal_autocorrelation"><code class="docutils literal notranslate"><span class="pre">Filtering.max_temporal_autocorrelation</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sarvey.html#sarvey.config.Filtering.use_moving_points"><code class="docutils literal notranslate"><span class="pre">Filtering.use_moving_points</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="sarvey.html#sarvey.config.General"><code class="docutils literal notranslate"><span class="pre">General</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="sarvey.html#sarvey.config.General._abc_impl"><code class="docutils literal notranslate"><span class="pre">General._abc_impl</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sarvey.html#sarvey.config.General.apply_temporal_unwrapping"><code class="docutils literal notranslate"><span class="pre">General.apply_temporal_unwrapping</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sarvey.html#sarvey.config.General.checkLoggingLevel"><code class="docutils literal notranslate"><span class="pre">General.checkLoggingLevel()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sarvey.html#sarvey.config.General.checkNumCores"><code class="docutils literal notranslate"><span class="pre">General.checkNumCores()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sarvey.html#sarvey.config.General.checkNumPatches"><code class="docutils literal notranslate"><span class="pre">General.checkNumPatches()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sarvey.html#sarvey.config.General.checkPathInputs"><code class="docutils literal notranslate"><span class="pre">General.checkPathInputs()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sarvey.html#sarvey.config.General.checkUnwMethod"><code class="docutils literal notranslate"><span class="pre">General.checkUnwMethod()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sarvey.html#sarvey.config.General.input_path"><code class="docutils literal notranslate"><span class="pre">General.input_path</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sarvey.html#sarvey.config.General.logfile_path"><code class="docutils literal notranslate"><span class="pre">General.logfile_path</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sarvey.html#sarvey.config.General.logging_level"><code class="docutils literal notranslate"><span class="pre">General.logging_level</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sarvey.html#sarvey.config.General.num_cores"><code class="docutils literal notranslate"><span class="pre">General.num_cores</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sarvey.html#sarvey.config.General.num_patches"><code class="docutils literal notranslate"><span class="pre">General.num_patches</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sarvey.html#sarvey.config.General.output_path"><code class="docutils literal notranslate"><span class="pre">General.output_path</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sarvey.html#sarvey.config.General.spatial_unwrapping_method"><code class="docutils literal notranslate"><span class="pre">General.spatial_unwrapping_method</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="sarvey.html#sarvey.config.PhaseLinking"><code class="docutils literal notranslate"><span class="pre">PhaseLinking</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="sarvey.html#sarvey.config.PhaseLinking._abc_impl"><code class="docutils literal notranslate"><span class="pre">PhaseLinking._abc_impl</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sarvey.html#sarvey.config.PhaseLinking.checkNumSiblings"><code class="docutils literal notranslate"><span class="pre">PhaseLinking.checkNumSiblings()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sarvey.html#sarvey.config.PhaseLinking.checkPathInverted"><code class="docutils literal notranslate"><span class="pre">PhaseLinking.checkPathInverted()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sarvey.html#sarvey.config.PhaseLinking.checkPathMaskFilePS"><code class="docutils literal notranslate"><span class="pre">PhaseLinking.checkPathMaskFilePS()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sarvey.html#sarvey.config.PhaseLinking.checkSpatialMaskPath"><code class="docutils literal notranslate"><span class="pre">PhaseLinking.checkSpatialMaskPath()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sarvey.html#sarvey.config.PhaseLinking.checkUsePS"><code class="docutils literal notranslate"><span class="pre">PhaseLinking.checkUsePS()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sarvey.html#sarvey.config.PhaseLinking.inverted_path"><code class="docutils literal notranslate"><span class="pre">PhaseLinking.inverted_path</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sarvey.html#sarvey.config.PhaseLinking.mask_phase_linking_file"><code class="docutils literal notranslate"><span class="pre">PhaseLinking.mask_phase_linking_file</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sarvey.html#sarvey.config.PhaseLinking.mask_ps_file"><code class="docutils literal notranslate"><span class="pre">PhaseLinking.mask_ps_file</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sarvey.html#sarvey.config.PhaseLinking.num_siblings"><code class="docutils literal notranslate"><span class="pre">PhaseLinking.num_siblings</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sarvey.html#sarvey.config.PhaseLinking.use_phase_linking_results"><code class="docutils literal notranslate"><span class="pre">PhaseLinking.use_phase_linking_results</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sarvey.html#sarvey.config.PhaseLinking.use_ps"><code class="docutils literal notranslate"><span class="pre">PhaseLinking.use_ps</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="sarvey.html#sarvey.config.Preparation"><code class="docutils literal notranslate"><span class="pre">Preparation</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="sarvey.html#sarvey.config.Preparation._abc_impl"><code class="docutils literal notranslate"><span class="pre">Preparation._abc_impl</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sarvey.html#sarvey.config.Preparation.checkDates"><code class="docutils literal notranslate"><span class="pre">Preparation.checkDates()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sarvey.html#sarvey.config.Preparation.checkFilterWdwSize"><code class="docutils literal notranslate"><span class="pre">Preparation.checkFilterWdwSize()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sarvey.html#sarvey.config.Preparation.checkMaxTBase"><code class="docutils literal notranslate"><span class="pre">Preparation.checkMaxTBase()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sarvey.html#sarvey.config.Preparation.checkNetworkType"><code class="docutils literal notranslate"><span class="pre">Preparation.checkNetworkType()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sarvey.html#sarvey.config.Preparation.checkNumIfgs"><code class="docutils literal notranslate"><span class="pre">Preparation.checkNumIfgs()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sarvey.html#sarvey.config.Preparation.end_date"><code class="docutils literal notranslate"><span class="pre">Preparation.end_date</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sarvey.html#sarvey.config.Preparation.filter_window_size"><code class="docutils literal notranslate"><span class="pre">Preparation.filter_window_size</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sarvey.html#sarvey.config.Preparation.ifg_network_type"><code class="docutils literal notranslate"><span class="pre">Preparation.ifg_network_type</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sarvey.html#sarvey.config.Preparation.max_tbase"><code class="docutils literal notranslate"><span class="pre">Preparation.max_tbase</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sarvey.html#sarvey.config.Preparation.num_ifgs"><code class="docutils literal notranslate"><span class="pre">Preparation.num_ifgs</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sarvey.html#sarvey.config.Preparation.start_date"><code class="docutils literal notranslate"><span class="pre">Preparation.start_date</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="sarvey.html#sarvey.config.Unwrapping"><code class="docutils literal notranslate"><span class="pre">Unwrapping</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="sarvey.html#sarvey.config.Unwrapping._abc_impl"><code class="docutils literal notranslate"><span class="pre">Unwrapping._abc_impl</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sarvey.html#sarvey.config.Unwrapping.use_arcs_from_temporal_unwrapping"><code class="docutils literal notranslate"><span class="pre">Unwrapping.use_arcs_from_temporal_unwrapping</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="sarvey.html#sarvey.config.loadConfiguration"><code class="docutils literal notranslate"><span class="pre">loadConfiguration()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="sarvey.html#module-sarvey.console">sarvey.console module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="sarvey.html#sarvey.console.printCurrentConfig"><code class="docutils literal notranslate"><span class="pre">printCurrentConfig()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sarvey.html#sarvey.console.printStep"><code class="docutils literal notranslate"><span class="pre">printStep()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sarvey.html#sarvey.console.showLogoSARvey"><code class="docutils literal notranslate"><span class="pre">showLogoSARvey()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="sarvey.html#module-sarvey.densification">sarvey.densification module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="sarvey.html#sarvey.densification.densificationInitializer"><code class="docutils literal notranslate"><span class="pre">densificationInitializer()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sarvey.html#sarvey.densification.densifyNetwork"><code class="docutils literal notranslate"><span class="pre">densifyNetwork()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sarvey.html#sarvey.densification.launchDensifyNetworkConsistencyCheck"><code class="docutils literal notranslate"><span class="pre">launchDensifyNetworkConsistencyCheck()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="sarvey.html#module-sarvey.filtering">sarvey.filtering module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="sarvey.html#sarvey.filtering.estimateAtmosphericPhaseScreen"><code class="docutils literal notranslate"><span class="pre">estimateAtmosphericPhaseScreen()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sarvey.html#sarvey.filtering.launchSpatialFiltering"><code class="docutils literal notranslate"><span class="pre">launchSpatialFiltering()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sarvey.html#sarvey.filtering.simpleInterpolation"><code class="docutils literal notranslate"><span class="pre">simpleInterpolation()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="sarvey.html#module-sarvey.geolocation">sarvey.geolocation module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="sarvey.html#sarvey.geolocation.calculateGeolocationCorrection"><code class="docutils literal notranslate"><span class="pre">calculateGeolocationCorrection()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sarvey.html#sarvey.geolocation.getHeading"><code class="docutils literal notranslate"><span class="pre">getHeading()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="sarvey.html#module-sarvey.ifg_network">sarvey.ifg_network module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="sarvey.html#sarvey.ifg_network.DelaunayNetwork"><code class="docutils literal notranslate"><span class="pre">DelaunayNetwork</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="sarvey.html#sarvey.ifg_network.DelaunayNetwork.configure"><code class="docutils literal notranslate"><span class="pre">DelaunayNetwork.configure()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="sarvey.html#sarvey.ifg_network.IfgNetwork"><code class="docutils literal notranslate"><span class="pre">IfgNetwork</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="sarvey.html#sarvey.ifg_network.IfgNetwork.getDesignMatrix"><code class="docutils literal notranslate"><span class="pre">IfgNetwork.getDesignMatrix()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sarvey.html#sarvey.ifg_network.IfgNetwork.ifg_list"><code class="docutils literal notranslate"><span class="pre">IfgNetwork.ifg_list</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sarvey.html#sarvey.ifg_network.IfgNetwork.open"><code class="docutils literal notranslate"><span class="pre">IfgNetwork.open()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sarvey.html#sarvey.ifg_network.IfgNetwork.plot"><code class="docutils literal notranslate"><span class="pre">IfgNetwork.plot()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sarvey.html#sarvey.ifg_network.IfgNetwork.writeToFile"><code class="docutils literal notranslate"><span class="pre">IfgNetwork.writeToFile()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="sarvey.html#sarvey.ifg_network.SmallBaselineNetwork"><code class="docutils literal notranslate"><span class="pre">SmallBaselineNetwork</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="sarvey.html#sarvey.ifg_network.SmallBaselineNetwork.configure"><code class="docutils literal notranslate"><span class="pre">SmallBaselineNetwork.configure()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="sarvey.html#sarvey.ifg_network.SmallBaselineYearlyNetwork"><code class="docutils literal notranslate"><span class="pre">SmallBaselineYearlyNetwork</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="sarvey.html#sarvey.ifg_network.SmallBaselineYearlyNetwork.configure"><code class="docutils literal notranslate"><span class="pre">SmallBaselineYearlyNetwork.configure()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="sarvey.html#sarvey.ifg_network.SmallTemporalBaselinesNetwork"><code class="docutils literal notranslate"><span class="pre">SmallTemporalBaselinesNetwork</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="sarvey.html#sarvey.ifg_network.SmallTemporalBaselinesNetwork.configure"><code class="docutils literal notranslate"><span class="pre">SmallTemporalBaselinesNetwork.configure()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="sarvey.html#sarvey.ifg_network.StarNetwork"><code class="docutils literal notranslate"><span class="pre">StarNetwork</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="sarvey.html#sarvey.ifg_network.StarNetwork.configure"><code class="docutils literal notranslate"><span class="pre">StarNetwork.configure()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="sarvey.html#module-sarvey.objects">sarvey.objects module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="sarvey.html#sarvey.objects.AmplitudeImage"><code class="docutils literal notranslate"><span class="pre">AmplitudeImage</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="sarvey.html#sarvey.objects.AmplitudeImage.open"><code class="docutils literal notranslate"><span class="pre">AmplitudeImage.open()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sarvey.html#sarvey.objects.AmplitudeImage.plot"><code class="docutils literal notranslate"><span class="pre">AmplitudeImage.plot()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sarvey.html#sarvey.objects.AmplitudeImage.prepare"><code class="docutils literal notranslate"><span class="pre">AmplitudeImage.prepare()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="sarvey.html#sarvey.objects.BaseStack"><code class="docutils literal notranslate"><span class="pre">BaseStack</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="sarvey.html#sarvey.objects.BaseStack.close"><code class="docutils literal notranslate"><span class="pre">BaseStack.close()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sarvey.html#sarvey.objects.BaseStack.getShape"><code class="docutils literal notranslate"><span class="pre">BaseStack.getShape()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sarvey.html#sarvey.objects.BaseStack.prepareDataset"><code class="docutils literal notranslate"><span class="pre">BaseStack.prepareDataset()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sarvey.html#sarvey.objects.BaseStack.read"><code class="docutils literal notranslate"><span class="pre">BaseStack.read()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sarvey.html#sarvey.objects.BaseStack.writeToFile"><code class="docutils literal notranslate"><span class="pre">BaseStack.writeToFile()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sarvey.html#sarvey.objects.BaseStack.writeToFileBlock"><code class="docutils literal notranslate"><span class="pre">BaseStack.writeToFileBlock()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="sarvey.html#sarvey.objects.CoordinatesUTM"><code class="docutils literal notranslate"><span class="pre">CoordinatesUTM</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="sarvey.html#sarvey.objects.CoordinatesUTM.open"><code class="docutils literal notranslate"><span class="pre">CoordinatesUTM.open()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sarvey.html#sarvey.objects.CoordinatesUTM.prepare"><code class="docutils literal notranslate"><span class="pre">CoordinatesUTM.prepare()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="sarvey.html#sarvey.objects.Network"><code class="docutils literal notranslate"><span class="pre">Network</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="sarvey.html#sarvey.objects.Network.computeArcObservations"><code class="docutils literal notranslate"><span class="pre">Network.computeArcObservations()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sarvey.html#sarvey.objects.Network.open"><code class="docutils literal notranslate"><span class="pre">Network.open()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sarvey.html#sarvey.objects.Network.openExternalData"><code class="docutils literal notranslate"><span class="pre">Network.openExternalData()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sarvey.html#sarvey.objects.Network.removeArcs"><code class="docutils literal notranslate"><span class="pre">Network.removeArcs()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sarvey.html#sarvey.objects.Network.writeToFile"><code class="docutils literal notranslate"><span class="pre">Network.writeToFile()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="sarvey.html#sarvey.objects.NetworkParameter"><code class="docutils literal notranslate"><span class="pre">NetworkParameter</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="sarvey.html#sarvey.objects.NetworkParameter.open"><code class="docutils literal notranslate"><span class="pre">NetworkParameter.open()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sarvey.html#sarvey.objects.NetworkParameter.prepare"><code class="docutils literal notranslate"><span class="pre">NetworkParameter.prepare()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sarvey.html#sarvey.objects.NetworkParameter.writeToFile"><code class="docutils literal notranslate"><span class="pre">NetworkParameter.writeToFile()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="sarvey.html#sarvey.objects.Points"><code class="docutils literal notranslate"><span class="pre">Points</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="sarvey.html#sarvey.objects.Points.addPointsFromObj"><code class="docutils literal notranslate"><span class="pre">Points.addPointsFromObj()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sarvey.html#sarvey.objects.Points.coord_xy"><code class="docutils literal notranslate"><span class="pre">Points.coord_xy</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sarvey.html#sarvey.objects.Points.createMask"><code class="docutils literal notranslate"><span class="pre">Points.createMask()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sarvey.html#sarvey.objects.Points.file_path"><code class="docutils literal notranslate"><span class="pre">Points.file_path</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sarvey.html#sarvey.objects.Points.length"><code class="docutils literal notranslate"><span class="pre">Points.length</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sarvey.html#sarvey.objects.Points.num_points"><code class="docutils literal notranslate"><span class="pre">Points.num_points</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sarvey.html#sarvey.objects.Points.open"><code class="docutils literal notranslate"><span class="pre">Points.open()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sarvey.html#sarvey.objects.Points.openExternalData"><code class="docutils literal notranslate"><span class="pre">Points.openExternalData()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sarvey.html#sarvey.objects.Points.phase"><code class="docutils literal notranslate"><span class="pre">Points.phase</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sarvey.html#sarvey.objects.Points.point_id"><code class="docutils literal notranslate"><span class="pre">Points.point_id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sarvey.html#sarvey.objects.Points.prepare"><code class="docutils literal notranslate"><span class="pre">Points.prepare()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sarvey.html#sarvey.objects.Points.removePoints"><code class="docutils literal notranslate"><span class="pre">Points.removePoints()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sarvey.html#sarvey.objects.Points.times"><code class="docutils literal notranslate"><span class="pre">Points.times</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sarvey.html#sarvey.objects.Points.wavelength"><code class="docutils literal notranslate"><span class="pre">Points.wavelength</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sarvey.html#sarvey.objects.Points.width"><code class="docutils literal notranslate"><span class="pre">Points.width</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sarvey.html#sarvey.objects.Points.writeToFile"><code class="docutils literal notranslate"><span class="pre">Points.writeToFile()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="sarvey.html#module-sarvey.osm_utils">sarvey.osm_utils module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="sarvey.html#sarvey.osm_utils.getSpatialExtend"><code class="docutils literal notranslate"><span class="pre">getSpatialExtend()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sarvey.html#sarvey.osm_utils.runOsmQuery"><code class="docutils literal notranslate"><span class="pre">runOsmQuery()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sarvey.html#sarvey.osm_utils.runOsmQueryBridge"><code class="docutils literal notranslate"><span class="pre">runOsmQueryBridge()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="sarvey.html#module-sarvey.preparation">sarvey.preparation module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="sarvey.html#sarvey.preparation.createArcsBetweenPoints"><code class="docutils literal notranslate"><span class="pre">createArcsBetweenPoints()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sarvey.html#sarvey.preparation.createTimeMaskFromDates"><code class="docutils literal notranslate"><span class="pre">createTimeMaskFromDates()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sarvey.html#sarvey.preparation.readCoherenceFromMiaplpy"><code class="docutils literal notranslate"><span class="pre">readCoherenceFromMiaplpy()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sarvey.html#sarvey.preparation.readSlcFromMiaplpy"><code class="docutils literal notranslate"><span class="pre">readSlcFromMiaplpy()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sarvey.html#sarvey.preparation.selectPixels"><code class="docutils literal notranslate"><span class="pre">selectPixels()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="sarvey.html#module-sarvey.processing">sarvey.processing module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="sarvey.html#sarvey.processing.Processing"><code class="docutils literal notranslate"><span class="pre">Processing</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="sarvey.html#sarvey.processing.Processing.runConsistencyCheck"><code class="docutils literal notranslate"><span class="pre">Processing.runConsistencyCheck()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sarvey.html#sarvey.processing.Processing.runDensificationSpace"><code class="docutils literal notranslate"><span class="pre">Processing.runDensificationSpace()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sarvey.html#sarvey.processing.Processing.runDensificationTimeAndSpace"><code class="docutils literal notranslate"><span class="pre">Processing.runDensificationTimeAndSpace()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sarvey.html#sarvey.processing.Processing.runFiltering"><code class="docutils literal notranslate"><span class="pre">Processing.runFiltering()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sarvey.html#sarvey.processing.Processing.runPreparation"><code class="docutils literal notranslate"><span class="pre">Processing.runPreparation()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sarvey.html#sarvey.processing.Processing.runUnwrappingSpace"><code class="docutils literal notranslate"><span class="pre">Processing.runUnwrappingSpace()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sarvey.html#sarvey.processing.Processing.runUnwrappingTimeAndSpace"><code class="docutils literal notranslate"><span class="pre">Processing.runUnwrappingTimeAndSpace()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="sarvey.html#module-sarvey.sarvey_export">sarvey.sarvey_export module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="sarvey.html#sarvey.sarvey_export.createParser"><code class="docutils literal notranslate"><span class="pre">createParser()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sarvey.html#sarvey.sarvey_export.exportDataToGisFormat"><code class="docutils literal notranslate"><span class="pre">exportDataToGisFormat()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sarvey.html#sarvey.sarvey_export.main"><code class="docutils literal notranslate"><span class="pre">main()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="sarvey.html#module-sarvey.sarvey_mask">sarvey.sarvey_mask module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="sarvey.html#sarvey.sarvey_mask.CoordinateSearch"><code class="docutils literal notranslate"><span class="pre">CoordinateSearch</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="sarvey.html#sarvey.sarvey_mask.CoordinateSearch.createSearchTree"><code class="docutils literal notranslate"><span class="pre">CoordinateSearch.createSearchTree()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sarvey.html#sarvey.sarvey_mask.CoordinateSearch.getMeanDistanceBetweenPixels"><code class="docutils literal notranslate"><span class="pre">CoordinateSearch.getMeanDistanceBetweenPixels()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sarvey.html#sarvey.sarvey_mask.CoordinateSearch.getNearestNeighbour"><code class="docutils literal notranslate"><span class="pre">CoordinateSearch.getNearestNeighbour()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="sarvey.html#sarvey.sarvey_mask.Node"><code class="docutils literal notranslate"><span class="pre">Node</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sarvey.html#sarvey.sarvey_mask.computeLastRoadPixel"><code class="docutils literal notranslate"><span class="pre">computeLastRoadPixel()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sarvey.html#sarvey.sarvey_mask.convertToRadarCoord"><code class="docutils literal notranslate"><span class="pre">convertToRadarCoord()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sarvey.html#sarvey.sarvey_mask.convertToRadarCoordPolygon"><code class="docutils literal notranslate"><span class="pre">convertToRadarCoordPolygon()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sarvey.html#sarvey.sarvey_mask.createMask"><code class="docutils literal notranslate"><span class="pre">createMask()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sarvey.html#sarvey.sarvey_mask.create_parser"><code class="docutils literal notranslate"><span class="pre">create_parser()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sarvey.html#sarvey.sarvey_mask.euclDist"><code class="docutils literal notranslate"><span class="pre">euclDist()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sarvey.html#sarvey.sarvey_mask.findLastRoadPixel"><code class="docutils literal notranslate"><span class="pre">findLastRoadPixel()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sarvey.html#sarvey.sarvey_mask.main"><code class="docutils literal notranslate"><span class="pre">main()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sarvey.html#sarvey.sarvey_mask.saveMask"><code class="docutils literal notranslate"><span class="pre">saveMask()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="sarvey.html#module-sarvey.sarvey_mti">sarvey.sarvey_mti module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="sarvey.html#sarvey.sarvey_mti.createParser"><code class="docutils literal notranslate"><span class="pre">createParser()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sarvey.html#sarvey.sarvey_mti.generateTemplateFromConfigModel"><code class="docutils literal notranslate"><span class="pre">generateTemplateFromConfigModel()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sarvey.html#sarvey.sarvey_mti.main"><code class="docutils literal notranslate"><span class="pre">main()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sarvey.html#sarvey.sarvey_mti.run"><code class="docutils literal notranslate"><span class="pre">run()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="sarvey.html#module-sarvey.sarvey_osm">sarvey.sarvey_osm module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="sarvey.html#sarvey.sarvey_osm.create_parser"><code class="docutils literal notranslate"><span class="pre">create_parser()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sarvey.html#sarvey.sarvey_osm.downloadOSM"><code class="docutils literal notranslate"><span class="pre">downloadOSM()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sarvey.html#sarvey.sarvey_osm.main"><code class="docutils literal notranslate"><span class="pre">main()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="sarvey.html#module-sarvey.sarvey_plot">sarvey.sarvey_plot module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="sarvey.html#sarvey.sarvey_plot.createParser"><code class="docutils literal notranslate"><span class="pre">createParser()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sarvey.html#sarvey.sarvey_plot.main"><code class="docutils literal notranslate"><span class="pre">main()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sarvey.html#sarvey.sarvey_plot.plotAllIfgs"><code class="docutils literal notranslate"><span class="pre">plotAllIfgs()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sarvey.html#sarvey.sarvey_plot.plotMap"><code class="docutils literal notranslate"><span class="pre">plotMap()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sarvey.html#sarvey.sarvey_plot.plotPhase"><code class="docutils literal notranslate"><span class="pre">plotPhase()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sarvey.html#sarvey.sarvey_plot.plotResidualPhase"><code class="docutils literal notranslate"><span class="pre">plotResidualPhase()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sarvey.html#sarvey.sarvey_plot.plotTS"><code class="docutils literal notranslate"><span class="pre">plotTS()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="sarvey.html#module-sarvey.triangulation">sarvey.triangulation module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="sarvey.html#sarvey.triangulation.PointNetworkTriangulation"><code class="docutils literal notranslate"><span class="pre">PointNetworkTriangulation</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="sarvey.html#sarvey.triangulation.PointNetworkTriangulation.getArcsFromAdjMat"><code class="docutils literal notranslate"><span class="pre">PointNetworkTriangulation.getArcsFromAdjMat()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sarvey.html#sarvey.triangulation.PointNetworkTriangulation.isConnected"><code class="docutils literal notranslate"><span class="pre">PointNetworkTriangulation.isConnected()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sarvey.html#sarvey.triangulation.PointNetworkTriangulation.removeLongArcs"><code class="docutils literal notranslate"><span class="pre">PointNetworkTriangulation.removeLongArcs()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sarvey.html#sarvey.triangulation.PointNetworkTriangulation.triangulateGlobal"><code class="docutils literal notranslate"><span class="pre">PointNetworkTriangulation.triangulateGlobal()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sarvey.html#sarvey.triangulation.PointNetworkTriangulation.triangulateKnn"><code class="docutils literal notranslate"><span class="pre">PointNetworkTriangulation.triangulateKnn()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="sarvey.html#module-sarvey.unwrapping">sarvey.unwrapping module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="sarvey.html#sarvey.unwrapping.computeAvgCoherencePerPoint"><code class="docutils literal notranslate"><span class="pre">computeAvgCoherencePerPoint()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sarvey.html#sarvey.unwrapping.computeNumArcsPerPoints"><code class="docutils literal notranslate"><span class="pre">computeNumArcsPerPoints()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sarvey.html#sarvey.unwrapping.findOptimum"><code class="docutils literal notranslate"><span class="pre">findOptimum()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sarvey.html#sarvey.unwrapping.gradientSearchTemporalCoherence"><code class="docutils literal notranslate"><span class="pre">gradientSearchTemporalCoherence()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sarvey.html#sarvey.unwrapping.gridSearchTemporalCoherence"><code class="docutils literal notranslate"><span class="pre">gridSearchTemporalCoherence()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sarvey.html#sarvey.unwrapping.launchAmbiguityFunctionSearch"><code class="docutils literal notranslate"><span class="pre">launchAmbiguityFunctionSearch()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sarvey.html#sarvey.unwrapping.launchSpatialUnwrapping"><code class="docutils literal notranslate"><span class="pre">launchSpatialUnwrapping()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sarvey.html#sarvey.unwrapping.objFuncTemporalCoherence"><code class="docutils literal notranslate"><span class="pre">objFuncTemporalCoherence()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sarvey.html#sarvey.unwrapping.oneDimSearchTemporalCoherence"><code class="docutils literal notranslate"><span class="pre">oneDimSearchTemporalCoherence()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sarvey.html#sarvey.unwrapping.parameterBasedNoisyPointRemoval"><code class="docutils literal notranslate"><span class="pre">parameterBasedNoisyPointRemoval()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sarvey.html#sarvey.unwrapping.removeArcsByPointMask"><code class="docutils literal notranslate"><span class="pre">removeArcsByPointMask()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sarvey.html#sarvey.unwrapping.removeGrossOutliers"><code class="docutils literal notranslate"><span class="pre">removeGrossOutliers()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sarvey.html#sarvey.unwrapping.spatialParameterIntegration"><code class="docutils literal notranslate"><span class="pre">spatialParameterIntegration()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sarvey.html#sarvey.unwrapping.spatialParameterIntegrationIterative"><code class="docutils literal notranslate"><span class="pre">spatialParameterIntegrationIterative()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sarvey.html#sarvey.unwrapping.spatialUnwrapping"><code class="docutils literal notranslate"><span class="pre">spatialUnwrapping()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sarvey.html#sarvey.unwrapping.temporalUnwrapping"><code class="docutils literal notranslate"><span class="pre">temporalUnwrapping()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="sarvey.html#module-sarvey.utils">sarvey.utils module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="sarvey.html#sarvey.utils.checkIfRequiredFilesExist"><code class="docutils literal notranslate"><span class="pre">checkIfRequiredFilesExist()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sarvey.html#sarvey.utils.convertBboxToBlock"><code class="docutils literal notranslate"><span class="pre">convertBboxToBlock()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sarvey.html#sarvey.utils.createSpatialGrid"><code class="docutils literal notranslate"><span class="pre">createSpatialGrid()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sarvey.html#sarvey.utils.detectValidAreas"><code class="docutils literal notranslate"><span class="pre">detectValidAreas()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sarvey.html#sarvey.utils.estimateParameters"><code class="docutils literal notranslate"><span class="pre">estimateParameters()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sarvey.html#sarvey.utils.invertIfgNetwork"><code class="docutils literal notranslate"><span class="pre">invertIfgNetwork()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sarvey.html#sarvey.utils.launchInvertIfgNetwork"><code class="docutils literal notranslate"><span class="pre">launchInvertIfgNetwork()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sarvey.html#sarvey.utils.predictPhase"><code class="docutils literal notranslate"><span class="pre">predictPhase()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sarvey.html#sarvey.utils.predictPhaseCore"><code class="docutils literal notranslate"><span class="pre">predictPhaseCore()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sarvey.html#sarvey.utils.predictPhaseSingle"><code class="docutils literal notranslate"><span class="pre">predictPhaseSingle()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sarvey.html#sarvey.utils.preparePatches"><code class="docutils literal notranslate"><span class="pre">preparePatches()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sarvey.html#sarvey.utils.readPhasePatchwise"><code class="docutils literal notranslate"><span class="pre">readPhasePatchwise()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sarvey.html#sarvey.utils.selectBestPointsInGrid"><code class="docutils literal notranslate"><span class="pre">selectBestPointsInGrid()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sarvey.html#sarvey.utils.setReferenceToPeakOfHistogram"><code class="docutils literal notranslate"><span class="pre">setReferenceToPeakOfHistogram()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sarvey.html#sarvey.utils.spatiotemporalConsistency"><code class="docutils literal notranslate"><span class="pre">spatiotemporalConsistency()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sarvey.html#sarvey.utils.splitDatasetForParallelProcessing"><code class="docutils literal notranslate"><span class="pre">splitDatasetForParallelProcessing()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sarvey.html#sarvey.utils.splitImageIntoBoxesRngAz"><code class="docutils literal notranslate"><span class="pre">splitImageIntoBoxesRngAz()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sarvey.html#sarvey.utils.temporalAutoCorrelation"><code class="docutils literal notranslate"><span class="pre">temporalAutoCorrelation()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="sarvey.html#module-sarvey.version">sarvey.version module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sarvey.html#module-sarvey.viewer">sarvey.viewer module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="sarvey.html#sarvey.viewer.TimeSeriesViewer"><code class="docutils literal notranslate"><span class="pre">TimeSeriesViewer</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="sarvey.html#sarvey.viewer.TimeSeriesViewer.initFigureMap"><code class="docutils literal notranslate"><span class="pre">TimeSeriesViewer.initFigureMap()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sarvey.html#sarvey.viewer.TimeSeriesViewer.initFigureTimeseries"><code class="docutils literal notranslate"><span class="pre">TimeSeriesViewer.initFigureTimeseries()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sarvey.html#sarvey.viewer.TimeSeriesViewer.onClick"><code class="docutils literal notranslate"><span class="pre">TimeSeriesViewer.onClick()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sarvey.html#sarvey.viewer.TimeSeriesViewer.plotMap"><code class="docutils literal notranslate"><span class="pre">TimeSeriesViewer.plotMap()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sarvey.html#sarvey.viewer.TimeSeriesViewer.plotPointTimeseries"><code class="docutils literal notranslate"><span class="pre">TimeSeriesViewer.plotPointTimeseries()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sarvey.html#sarvey.viewer.TimeSeriesViewer.updateButtonStatus"><code class="docutils literal notranslate"><span class="pre">TimeSeriesViewer.updateButtonStatus()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sarvey.html#sarvey.viewer.TimeSeriesViewer.updateReference"><code class="docutils literal notranslate"><span class="pre">TimeSeriesViewer.updateReference()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="sarvey.html#sarvey.viewer.plotColoredPointNetwork"><code class="docutils literal notranslate"><span class="pre">plotColoredPointNetwork()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sarvey.html#sarvey.viewer.plotGridFromBoxList"><code class="docutils literal notranslate"><span class="pre">plotGridFromBoxList()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sarvey.html#sarvey.viewer.plotIfgs"><code class="docutils literal notranslate"><span class="pre">plotIfgs()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sarvey.html#sarvey.viewer.plotScatter"><code class="docutils literal notranslate"><span class="pre">plotScatter()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="sarvey.html#module-sarvey">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="demo/demo_masjed_dam_fast_track.html" class="btn btn-neutral float-left" title="Fast Track Guide for Masjed Soleyman Dam" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="sarvey.html" class="btn btn-neutral float-right" title="sarvey package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, IPI - Leibniz Universitaet Hannover.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
