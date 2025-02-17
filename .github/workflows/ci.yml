@@ -79,7 +79,7 @@ jobs:
         run: |
           conda init bash
           source ~/.bashrc
-          source activate ci_temp_env
+          conda activate ci_temp_env
           
           # replace documentation address for tags befro make docs
           IFS='/' read -r OWNER REPO <<< "${GITHUB_REPOSITORY}"
@@ -208,7 +208,7 @@ jobs:
           source /opt/conda/etc/profile.d/conda.sh
           conda init bash
           source ~/.bashrc
-          source activate ci_temp_env
+          conda activate ci_temp_env
           make urlcheck
         shell: bash
 
@@ -250,7 +250,7 @@ jobs:
       - test_sarvey
       - test_urls
       - test_styles
-    if: github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/')
+    if: env.SKIP_DEPLOY == 'false' && github.event_name != 'pull_request' && (github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/'))
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
