@@ -19,32 +19,7 @@ env:
     SKIP_INSTALL: true
     SKIP_TEST: false
 
-# jobs:
-#   before_script:
-#     runs-on: self-hosted
-#     strategy:
-#       matrix:
-#         node-version: [ 20.x ]
-
-#     steps:
-#       - name: Checkout code
-#         uses: actions/checkout@v4
-
-#       - name: Set up Python
-#         uses: actions/setup-python@v5
-#         with:
-#           python-version: '3.x'
-
-#       - name: Install dependencies
-#         run: |
-#           source /opt/conda/etc/profile.d/conda.sh
-#           conda init bash
-#           source ~/.bashrc
-#           conda env remove --prefix /home/runneruser/.conda/envs/ci_temp_env --yes || rm -rf /home/runneruser/.conda/envs/ci_temp_env
-#           conda create --prefix /home/runneruser/.conda/envs/ci_temp_env --clone ci_env
-#           conda activate ci_temp_env
-#         shell: bash
-
+jobs:
   test_sarvey:
     runs-on: self-hosted
     steps:
@@ -225,7 +200,7 @@ env:
           source /opt/conda/etc/profile.d/conda.sh
           conda init bash
           source ~/.bashrc
-          conda activate ci_env
+          conda activate ci_temp_env
           make urlcheck
         shell: bash
 
