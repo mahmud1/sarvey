@@ -48,7 +48,6 @@ jobs:
 
   test_sarvey:
     runs-on: self-hosted
-    needs: before_script
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
