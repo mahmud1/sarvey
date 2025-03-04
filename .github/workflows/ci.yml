@@ -218,6 +218,7 @@ jobs:
               fi
               current_branch="${GITHUB_REF#refs/heads/}"
               # TODO: update the following with luhipi repository link
+              echo current branch: https://github.com/mahmud1/sarvey.git@$current_branch
               pip install git+https://github.com/mahmud1/sarvey.git@$current_branch
               pip install sarvey[dev]
 
