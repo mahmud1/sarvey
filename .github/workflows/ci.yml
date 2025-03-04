@@ -15,7 +15,7 @@ permissions:
   contents: write
 
 env:
-    SKIP_DEPLOY: false
+    SKIP_DEPLOY: true
     SKIP_INSTALL: false
     SKIP_TEST: false
 
@@ -208,7 +208,10 @@ jobs:
               conda install conda-forge::pysolid -y
               conda install conda-forge::gdal
               pip install git+https://github.com/insarlab/MiaplPy.git
-              pip install git+https://github.com/mahmud1/sarvey.git@update-runner2
+              # get current branch for installation
+              current_branch=$(git symbolic-ref --short HEAD)
+              # TODO: update the following with luhipi repository link
+              pip install git+https://github.com/mahmud1/sarvey.git@$current_branch
               pip install sarvey[dev]
 
               OUTPUT=$(pip check) || { echo "$OUTPUT"; true; }
