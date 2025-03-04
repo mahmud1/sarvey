@@ -209,6 +209,13 @@ jobs:
               conda install conda-forge::gdal
               pip install git+https://github.com/insarlab/MiaplPy.git
               # get current branch for installation
+              if [[ "$GITHUB_REF" == refs/heads/* ]]; then
+                  current_branch="${GITHUB_REF#refs/heads/}"
+              elif [[ "$GITHUB_REF" == refs/pull/* ]]; then
+                  current_branch="${GITHUB_HEAD_REF}"
+              else
+                  current_branch="${GITHUB_REF}"
+              fi
               current_branch="${GITHUB_REF#refs/heads/}"
               # TODO: update the following with luhipi repository link
               pip install git+https://github.com/mahmud1/sarvey.git@$current_branch
