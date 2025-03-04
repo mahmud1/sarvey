@@ -208,13 +208,16 @@ jobs:
               conda install conda-forge::pysolid -y
               conda install conda-forge::gdal
               pip install git+https://github.com/insarlab/MiaplPy.git
+              
               # get current branch for installation
               IFS='/' read -r OWNER REPO <<< "${GITHUB_REPOSITORY}"
-              URL_IO="https://${OWNER}.github.io/${REPO}"
+                            
               URL="https://github.com/${OWNER}/${REPO}"
-              echo "Repository URL: $URL"
-              echo "Repository Documentation URL: $URL"
-
+              URL_IO="https://${OWNER}.github.io/${REPO}"
+              
+              echo "Repository URL: ${URL}"
+              echo "Repository Documentation URL: ${URL}"
+                            
               if [[ "$GITHUB_REF" == refs/tags/* ]]; then
                   current_ref="${GITHUB_REF##*/}"
               elif [[ "$GITHUB_REF" == refs/heads/* ]]; then
@@ -225,9 +228,8 @@ jobs:
                   current_ref="${GITHUB_REF}"
               fi
               
-              # TODO: update the following with luhipi repository link
-              echo current branch: ${URL}.git@${current_ref}
-              pip install git+${URL}.git@${current_ref}.git@$current_ref
+              echo "Current branch/tag: ${URL}.git@$current_ref"
+              pip install git+${URL}.git@$current_ref
               pip install sarvey[dev]
 
               OUTPUT=$(pip check) || { echo "$OUTPUT"; true; }
