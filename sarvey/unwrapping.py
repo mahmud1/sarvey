@@ -1000,7 +1000,7 @@ def parameterBasedNoisyPointRemoval(*, net_par_obj: NetworkParameter, point_id: 
 
         if bool_plot:
             # vel
-            ax = bmap_obj.plot(logger=logger)
+            ax = bmap_obj.plot()
             sc = ax.scatter(coord_xy[:, 1], coord_xy[:, 0], c=rmse_vel * 1000, s=3.5,
                             cmap=cmc.cm.cmaps["lajolla"], vmin=0, vmax=rmse_thrsh * 1000)
             plt.colorbar(sc, pad=0.03, shrink=0.5)
@@ -1012,7 +1012,7 @@ def parameterBasedNoisyPointRemoval(*, net_par_obj: NetworkParameter, point_id: 
             plt.close(fig)
 
             # demerr
-            ax = bmap_obj.plot(logger=logger)
+            ax = bmap_obj.plot()
             sc = ax.scatter(coord_xy[:, 1], coord_xy[:, 0], c=rmse_demerr, s=3.5,
                             cmap=cmc.cm.cmaps["lajolla"])
             plt.colorbar(sc, pad=0.03, shrink=0.5)

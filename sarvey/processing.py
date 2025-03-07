@@ -188,9 +188,9 @@ class Processing:
         coord_utm_obj.prepare(input_path=join(self.config.general.input_path, "geometryRadar.h5"))
         del coord_utm_obj
 
-        bmap_obj = AmplitudeImage(file_path=join(self.path, "background_map.h5"))
-        bmap_obj.prepare(slc_stack_obj=slc_stack_obj, img=mean_amp_img, logger=self.logger)
-        ax = bmap_obj.plot(logger=self.logger)
+        bmap_obj = AmplitudeImage(file_path=join(self.path, "background_map.h5"), az_look=az_look, ra_look=ra_look, logger=self.logger)
+        bmap_obj.prepare(slc_stack_obj=slc_stack_obj, img=mean_amp_img)
+        ax = bmap_obj.plot()
         img = ax.get_images()[0]
         cbar = plt.colorbar(img, pad=0.03, shrink=0.5)
         cbar.ax.set_visible(False)
@@ -225,7 +225,7 @@ class Processing:
             grid_size=self.config.consistency_check.grid_size, bool_plot=True, logger=self.logger
         )
 
-        bmap_obj = AmplitudeImage(file_path=join(self.path, "background_map.h5"))
+        bmap_obj = AmplitudeImage(file_path=join(self.path, "background_map.h5"), logger=self.logger)
         mask_valid_area = ut.detectValidAreas(bmap_obj=bmap_obj, logger=self.logger)
 
         if self.config.consistency_check.mask_p1_file is not None:
@@ -241,7 +241,7 @@ class Processing:
         fig = plt.figure(figsize=(15, 5))
         ax = fig.add_subplot()
         ax.imshow(mask_valid_area, cmap=cmc.cm.cmaps["grayC"], alpha=0.5, zorder=10, vmin=0, vmax=1)
-        bmap_obj.plot(ax=ax, logger=self.logger)
+        bmap_obj.plot(ax=ax)
         coord_xy = np.array(np.where(cand_mask1)).transpose()
         val = np.ones_like(cand_mask1)
         sc = ax.scatter(coord_xy[:, 1], coord_xy[:, 0], c=val[cand_mask1], s=0.5, cmap=cmc.cm.cmaps["lajolla_r"],
@@ -310,11 +310,11 @@ class Processing:
         net_par_obj.writeToFile()
 
         # 3) spatial unwrapping of the arc network and removal of outliers (arcs and points)
-        bmap_obj = AmplitudeImage(file_path=join(self.path, "background_map.h5"))
+        bmap_obj = AmplitudeImage(file_path=join(self.path, "background_map.h5"), logger=self.logger)
         thrsh_visualisation = 0.7
 
         try:
-            ax = bmap_obj.plot(logger=self.logger)
+            ax = bmap_obj.plot()
             arc_mask = net_par_obj.gamma.reshape(-1) <= thrsh_visualisation
             ax, cbar = viewer.plotColoredPointNetwork(x=point_obj.coord_xy[:, 1], y=point_obj.coord_xy[:, 0],
                                                       arcs=net_par_obj.arcs[arc_mask, :],
@@ -339,7 +339,7 @@ class Processing:
         )
 
         try:
-            ax = bmap_obj.plot(logger=self.logger)
+            ax = bmap_obj.plot()
             arc_mask = net_par_obj.gamma.reshape(-1) <= thrsh_visualisation
             ax, cbar = viewer.plotColoredPointNetwork(x=coord_xy[:, 1], y=coord_xy[:, 0],
                                                       arcs=net_par_obj.arcs[arc_mask, :],
@@ -383,7 +383,7 @@ class Processing:
         # reference point can be set arbitrarily, because outliers are removed.
         spatial_ref_idx = 0
 
-        bmap_obj = AmplitudeImage(file_path=join(self.path, "background_map.h5"))
+        bmap_obj = AmplitudeImage(file_path=join(self.path, "background_map.h5"), logger=self.logger)
 
         self.logger.info(msg="Integrate parameters from arcs to points.")
         self.logger.info(msg="Integrate DEM correction.")
@@ -502,8 +502,8 @@ class Processing:
             triang_obj.triangulateGlobal()
             arcs = triang_obj.getArcsFromAdjMat()
 
-        bmap_obj = AmplitudeImage(file_path=join(self.path, "background_map.h5"))
-        ax = bmap_obj.plot(logger=self.logger)
+        bmap_obj = AmplitudeImage(file_path=join(self.path, "background_map.h5"), logger=self.logger)
+        ax = bmap_obj.plot()
         ax, cbar = viewer.plotColoredPointNetwork(x=point_obj.coord_xy[:, 1],
                                                   y=point_obj.coord_xy[:, 0],
                                                   arcs=arcs,
@@ -563,7 +563,7 @@ class Processing:
         # select only pixels which have low phase noise and are well distributed
         mask = point1_obj.createMask()
 
-        bmap_obj = AmplitudeImage(file_path=join(self.path, "background_map.h5"))
+        bmap_obj = AmplitudeImage(file_path=join(self.path, "background_map.h5"), logger=self.logger)
 
         # temporal auto-correlation
         auto_corr_img = np.zeros_like(mask, np.float64)
@@ -673,7 +673,7 @@ class Processing:
                 fig = plt.figure(figsize=(15, 5))
                 ax = fig.add_subplot()
                 ax.imshow(mask_pl_aoi, cmap=cmc.cm.cmaps["grayC"], alpha=0.5, zorder=10, vmin=0, vmax=1)
-                bmap_obj.plot(ax=ax, logger=self.logger)
+                bmap_obj.plot(ax=ax)
                 coord_xy = np.array(np.where(cand_mask_pl)).transpose()
                 val = np.ones_like(cand_mask_pl)
                 sc = ax.scatter(coord_xy[:, 1], coord_xy[:, 0], c=val[cand_mask_pl], s=0.5,
@@ -711,7 +711,7 @@ class Processing:
         fig = plt.figure(figsize=(15, 5))
         ax = fig.add_subplot()
         ax.imshow(mask_valid_area, cmap=cmc.cm.cmaps["grayC"], alpha=0.5, zorder=10, vmin=0, vmax=1)
-        bmap_obj.plot(ax=ax, logger=self.logger)
+        bmap_obj.plot(ax=ax)
         coord_xy = np.array(np.where(cand_mask2)).transpose()
         val = np.ones_like(cand_mask2)
         sc = ax.scatter(coord_xy[:, 1], coord_xy[:, 0], c=val[cand_mask2], s=0.5, cmap=cmc.cm.cmaps["lajolla_r"],

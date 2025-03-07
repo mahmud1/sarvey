@@ -135,7 +135,7 @@ def plotScatter(*, value: np.ndarray, coord: np.ndarray, bmap_obj: AmplitudeImag
         current colorbar
     """
     if bmap_obj is not None:
-        ax = bmap_obj.plot(logger=logger)
+        ax = bmap_obj.plot()
         fig = plt.gcf()
     else:
         fig = plt.figure()
@@ -451,7 +451,7 @@ class TimeSeriesViewer:
         self.ref_atmo = ref_atmo
 
         self.bmap_obj = AmplitudeImage(file_path=os.path.join(os.path.dirname(self.point_obj.file_path),
-                                                              "background_map.h5"))
+                                                              "background_map.h5"), logger=self.logger)
         self.bmap_obj.open()
         self.height = readfile.read(os.path.join(input_path, "geometryRadar.h5"), datasetName='height')[0]
 
@@ -570,7 +570,7 @@ class TimeSeriesViewer:
 
         # get selected background from radiobutton
         if self.rb_backgr.value_selected == "Amplitude":
-            self.ax_img = self.bmap_obj.plot(ax=self.ax_img, logger=self.logger)
+            self.ax_img = self.bmap_obj.plot(ax=self.ax_img)
             if self.ax_slide_coh is not None:
                 self.sl_last_val = self.sl_coh.val
                 self.ax_slide_coh.remove()

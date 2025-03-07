@@ -50,21 +50,30 @@ from sarvey.ifg_network import IfgNetwork
 class AmplitudeImage:
     """AmplitudeImage."""
 
-    def __init__(self, *, file_path: str):
+    def __init__(self, *, file_path: str, az_look: int = 1, ra_look: int = 1, logger: Logger):
         """Init.
 
         Parameters
         ----------
         file_path: str
             path to filename
+        az_look: int
+            Number of looks in azimuth direction for multilooking (default: 1 for no multilooking).
+        ra_look: int
+            Number of looks in range direction for multilooking (default: 1 for no multilooking).
+        logger: Logger
+            Logging handler.
         """
         self.width = None
         self.length = None
         self.file_path = file_path
         self.background_map = None
         self.orbit_direction = None
+        self.az_look = az_look
+        self.ra_look = ra_look
+        self.logger = logger
 
-    def prepare(self, *, slc_stack_obj: slcStack, img: np.ndarray, logger: Logger):
+    def prepare(self, *, slc_stack_obj: slcStack, img: np.ndarray):
         """Read the SLC stack, compute the mean amplitude image and store it into a file.
 
         Parameters
@@ -73,16 +82,14 @@ class AmplitudeImage:
             object of class slcStack from MiaplPy
         img: np.ndarray
             amplitude image, e.g. the mean over time
-        logger: Logger
-            Logging handler
         """
         self.orbit_direction = slc_stack_obj.metadata["ORBIT_DIRECTION"]
-        self.length = slc_stack_obj.length
-        self.width = slc_stack_obj.width
+        self.length = slc_stack_obj.length // self.az_look
+        self.width = slc_stack_obj.width // self.ra_look
 
         self.background_map = img
 
-        logger.info(msg="write data to {}...".format(self.file_path))
+        self.logger.info(msg="write data to {}...".format(self.file_path))
 
         if exists(self.file_path):
             os.remove(self.file_path)
@@ -92,6 +99,8 @@ class AmplitudeImage:
             f.attrs["ORBIT_DIRECTION"] = self.orbit_direction
             f.attrs["LENGTH"] = self.length
             f.attrs["WIDTH"] = self.width
+            f.attrs["AZ_LOOK"] = self.az_look
+            f.attrs["RA_LOOK"] = self.ra_look
 
     def open(self):
         """Open."""
@@ -103,15 +112,13 @@ class AmplitudeImage:
             self.length = f.attrs["LENGTH"]
             self.width = f.attrs["WIDTH"]
 
-    def plot(self, *, ax: plt.Axes = None, logger: Logger):
+    def plot(self, *, ax: plt.Axes = None):
         """Plot the mean amplitude image as a background map.
 
         Parameters
         ----------
         ax: plt.Axes
             axes for plotting (default: None, a new figure will be created).
-        logger: Logger
-            Logging handler.
 
         Return
         ------
@@ -122,10 +129,10 @@ class AmplitudeImage:
             try:
                 self.open()
             except OSError as e:
-                logger.error(msg="Could not open file: {}".format(e))
+                self.logger.error(msg="Could not open file: {}".format(e))
                 fig = plt.figure(figsize=(15, 5))
                 ax = fig.add_subplot()
-                logger.error(msg="Orbit direction not available.")
+                self.logger.error(msg="Orbit direction not available.")
                 return ax
 
         if ax is None:

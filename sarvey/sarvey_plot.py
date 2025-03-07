@@ -94,10 +94,10 @@ def plotMap(*, obj_name: str, save_path: str, interactive: bool = False, input_p
     point_obj = Points(file_path=obj_name, logger=logger)
     point_obj.open(input_path=input_path)
 
-    bmap_obj = AmplitudeImage(file_path=join(dirname(obj_name), "background_map.h5"))
+    bmap_obj = AmplitudeImage(file_path=join(dirname(obj_name), "background_map.h5"), logger=logger)
     vel, demerr, _, coherence, omega, v_hat = ut.estimateParameters(obj=point_obj, ifg_space=False)
 
-    ax = bmap_obj.plot(logger=logger)
+    ax = bmap_obj.plot()
     sc = ax.scatter(point_obj.coord_xy[:, 1], point_obj.coord_xy[:, 0], c=demerr, s=scatter_size,
                     cmap=cmc.cm.cmaps["vanimo"])
     plt.colorbar(sc, label="[m]", pad=0.03, shrink=0.5)
@@ -113,7 +113,7 @@ def plotMap(*, obj_name: str, save_path: str, interactive: bool = False, input_p
 
     v_range = np.max(np.abs(vel * 100))
 
-    ax = bmap_obj.plot(logger=logger)
+    ax = bmap_obj.plot()
     sc = ax.scatter(point_obj.coord_xy[:, 1], point_obj.coord_xy[:, 0], c=vel * 100, s=scatter_size,
                     cmap=cmc.cm.cmaps["roma"],
                     vmin=-v_range, vmax=v_range)
@@ -128,7 +128,7 @@ def plotMap(*, obj_name: str, save_path: str, interactive: bool = False, input_p
     else:
         plt.close(plt.gcf())
 
-    ax = bmap_obj.plot(logger=logger)
+    ax = bmap_obj.plot()
     sc = ax.scatter(point_obj.coord_xy[:, 1], point_obj.coord_xy[:, 0], c=coherence, vmin=0, vmax=1, s=scatter_size,
                     cmap=cmc.cm.cmaps["lajolla"])
     plt.colorbar(sc, label="[-]", pad=0.03, shrink=0.5)
@@ -146,7 +146,7 @@ def plotMap(*, obj_name: str, save_path: str, interactive: bool = False, input_p
                                        wavelength=point_obj.wavelength,
                                        min_dist=50, max_dist=np.inf, knn=40)
 
-    ax = bmap_obj.plot(logger=logger)
+    ax = bmap_obj.plot()
     sc = ax.scatter(point_obj.coord_xy[:, 1], point_obj.coord_xy[:, 0], c=stc * 100, s=scatter_size,
                     cmap=cmc.cm.cmaps["lajolla"])
     plt.colorbar(sc, label="[cm]", pad=0.03, shrink=0.5)
