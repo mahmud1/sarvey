@@ -62,3 +62,55 @@ def cpxMultilook(*, cpx_data, az_look=1, ra_look=1, tar=[0, 1, 2], logger=Logger
     logger.debug(msg="Multilooking done.")
 
     return output
+
+
+def updateMultilookedMetadata(*, metadata: dict, az_look: int=1, ra_look: int =1, length: int = None, width: int = None) -> dict:
+    """
+    Update metadata with multilooking parameters.
+
+    Parameters
+    ----------
+    metadata: dict
+        metadata dictionary os SLC stack
+    az_look: int
+        azimuth looks
+    ra_look: int
+        range looks
+    length: int
+        number of azimuth pixels in the image
+    width: int
+        number of range pixels in the image
+
+    Returns
+    -------
+    metadata: dict
+        updated metadata
+    """
+
+    # a dict of keys and values to chang
+    update_dict= {
+        'ALOOKS': az_look,
+        'AZIMUTH_PIXEL_SIZE': az_look,
+        'FILE_LENGTH': length,
+        'LENGTH': length,
+        'RANGE_PIXEL_SIZE': float(metadata.get('RANGE_PIXEL_SIZE', 1)) * ra_look,
+        'RLOOKS': ra_look,
+        'SUBSET_XMAX': width,
+        'SUBSET_YMAX': length,
+        'WIDTH': width,
+        'XMAX': width,
+        'YMAX': length,
+        'azimuth_looks': az_look,
+        'azimuth_pixel_spacing': float(metadata.get('azimuth_pixel_spacing', 1)) * az_look,
+        'range_looks': ra_look,
+        'range_pixel_spacing': float(metadata.get('range_pixel_spacing', 1)) * ra_look,
+        'range_samples': width
+    }
+
+    for key, value in update_dict.items():
+        if key.lower() in metadata:
+            metadata[key.lower()] = str(value)
+        if key.upper() in metadata:
+            metadata[key.upper()] = str(value)
+
+    return metadata
