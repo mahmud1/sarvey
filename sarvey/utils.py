@@ -805,6 +805,37 @@ def detectValidAreas(*, bmap_obj: AmplitudeImage, logger: Logger):
         logger.info(msg=f"Number of invalid pixels found in image: {num_invalid}")
     return mask_valid_area
 
+def setReferenceToBox(*, point_obj: Points, phase: np.ndarray, ref_box: list):
+    """
+    Set reference phase value to the mean phase value of the points within the reference box.
+    Parameters
+    ----------
+    point_obj: Points
+        sarvey points object
+    phase: np.ndarray
+        phase time series of the points
+    ref_box: list
+        reference box [min_lat, min_lon, max_lat, max_lon]
+
+    Returns
+    -------
+
+    """
+    la_min = np.min([ref_box[0][0], ref_box[1][0]])
+    la_max = np.max([ref_box[0][0], ref_box[1][0]])
+    lo_min = np.min([ref_box[0][1], ref_box[1][1]])
+    lo_max = np.max([ref_box[0][1], ref_box[1][1]])
+
+    mask = (
+        (point_obj.coord_lalo[:, 0] >= la_min) & (point_obj.coord_lalo[:, 0] <= la_max) &
+        (point_obj.coord_lalo[:, 1] >= lo_min) & (point_obj.coord_lalo[:, 1] <= lo_max)
+    )
+    ref_phase = np.mean(phase[mask, :], axis=0)
+
+    phase -= ref_phase
+
+    return phase
+
 
 def setReferenceToPeakOfHistogram(*, phase: np.ndarray, vel: np.ndarray, num_bins: int = 100):
     """Set reference phase value to peak of the velocity histogram.
