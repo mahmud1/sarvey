@@ -223,7 +223,7 @@ def selectPixels(*, path: str, selection_method: str, thrsh: float,
 
     if bool_plot:
         coord_xy = np.array(np.where(cand_mask)).transpose()
-        bmap_obj = AmplitudeImage(file_path=join(path, "background_map.h5"))
+        bmap_obj = AmplitudeImage(file_path=join(path, "background_map.h5"), logger=logger)
         viewer.plotScatter(value=quality[cand_mask], coord=coord_xy, bmap_obj=bmap_obj, ttl="Selected pixels",
                            unit=unit, s=2, cmap=cmap, vmin=0, vmax=1, logger=logger)
         # if grid_size is not None:
