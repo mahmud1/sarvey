@@ -105,6 +105,8 @@ Step 0: Preparation
 
 - Generating a stack of interferograms:
     The stack of interferograms is generated based on the specified interferogram network.
+    By default single-look interferograms are generated and analyzed in SARvey.
+    It is possible to generate and analyze multi-look interferograms by setting **preparation:ra_looks** and **preparation:az_looks** in the config file.
 
 - Estimating the temporal coherence:
     The phase noise of each pixel is approximated by the estimation of the temporal phase coherence (Zhao and Mallorqui 2019).
