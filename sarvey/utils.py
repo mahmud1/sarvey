@@ -407,7 +407,7 @@ def estimateParameters(*, obj: Union[Points, Network], estimate_ref_atmo: bool =
     return vel, demerr, ref_atmo, coherence, omega, v_hat
 
 
-def splitImageIntoBoxesRngAz(*, length: int, width: int, num_box_az: int, num_box_rng: int):
+def splitImageIntoBoxesRngAz(*, length: int, width: int, num_box_az: int, num_box_rng: int, az_look: int = 1, ra_look: int = 1):
     """Split the image into several boxes.
 
     (adapted from mintpy.ifgram_inversion.split2boxes)
@@ -422,6 +422,10 @@ def splitImageIntoBoxesRngAz(*, length: int, width: int, num_box_az: int, num_bo
         length of the image
     width: int
         width of the image
+    az_look: int
+        Number of looks in azimuth direction for multilooking (default: 1 for no multilooking).
+    ra_look: int
+        Number of looks in range direction for multilooking (default: 1 for no multilook
 
     Returns
     -------
@@ -432,6 +436,16 @@ def splitImageIntoBoxesRngAz(*, length: int, width: int, num_box_az: int, num_bo
     """
     y_step = int(length / num_box_rng)
     x_step = int(width / num_box_az)
+
+    # make sure y_step and x_step are multiples of az_look and ra_look
+    if y_step % az_look != 0:
+        y_step = (y_step // az_look) * az_look
+
+    if x_step % ra_look != 0:
+        x_step = (x_step // ra_look) * ra_look
+
+    # y_step = 1 if y_step == 0 else y_step
+    # x_step = 1 if x_step == 0 else x_step
 
     box_list = []
     y0 = 0
@@ -459,7 +473,7 @@ def splitImageIntoBoxesRngAz(*, length: int, width: int, num_box_az: int, num_bo
     return box_list, num_box
 
 
-def preparePatches(*, num_patches: int, width: int, length: int, logger: Logger):
+def preparePatches(*, num_patches: int, width: int, length: int, az_look: int = 1, ra_look: int = 1, logger: Logger):
     """Create patches to subset the image stack for parallel processing to reduce memory usage.
 
     Parameters
@@ -470,6 +484,10 @@ def preparePatches(*, num_patches: int, width: int, length: int, logger: Logger)
         width of the image
     length: int
         length of the image
+    az_look: int
+        Number of looks in azimuth direction for multilooking (default: 1 for no multilooking).
+    ra_look: int
+        Number of looks in range direction for multilooking (default: 1 for no multilooking).
     logger: Logger
         logging handler
 
@@ -506,7 +524,9 @@ def preparePatches(*, num_patches: int, width: int, length: int, logger: Logger)
         box_list, num_patches = splitImageIntoBoxesRngAz(length=length,
                                                          width=width,
                                                          num_box_az=patch_size_lut[num_patches][1],
-                                                         num_box_rng=patch_size_lut[num_patches][0])
+                                                         num_box_rng=patch_size_lut[num_patches][0],
+                                                         az_look=az_look,
+                                                         ra_look=ra_look)
         logger.info(msg=f"Process {num_patches} patches " +
                     f"({patch_size_lut[num_patches][1]} x {patch_size_lut[num_patches][0]}).")
     return box_list, num_patches

@@ -97,24 +97,20 @@ def computeIfgsAndTemporalCoherence(*, path_temp_coh: str, path_ifgs: str, path_
 
     for idx in range(num_boxes):
         bbox = box_list[idx]
-        block2d = convertBboxToBlock(bbox=bbox)
+        bbox_ml = (bbox[0] // ra_look, bbox[1] // az_look, bbox[2] // ra_look, bbox[3] // az_look)
+        block2d = convertBboxToBlock(bbox=bbox_ml)
 
         # read slc
-        # slc = slc_stack_obj.read(datasetName='slc', box=bbox, print_msg=False)
-        # slc = slc[time_mask, :, :]
-
-        # mean_amp = np.mean(np.abs(slc), axis=0)
-
-        ## This does not consider boxex! Multilooking does not work with boxes # FIXME
-        slc = slc_stack_obj.read(datasetName='slc', print_msg=False)
+        slc = slc_stack_obj.read(datasetName='slc', box=bbox, print_msg=False)
         slc = slc[time_mask, :, :]
+
         mean_amp = np.mean(np.abs(slc), axis=0)
 
         if az_look > 1 or ra_look > 1:
             mean_amp = multiLook(cpx_data=mean_amp, az_look=az_look, ra_look=ra_look, logger=logger)
 
         mean_amp[mean_amp == 0] = np.nan
-        mean_amp_img[bbox[1]:bbox[3], bbox[0]:bbox[2]] = np.log10(mean_amp)
+        mean_amp_img[bbox_ml[1]:bbox_ml[3], bbox_ml[0]:bbox_ml[2]] = np.log10(mean_amp)
 
         # compute ifgs
         ifgs = computeIfgs(slc=slc, ifg_array=ifg_array)

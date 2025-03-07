@@ -168,8 +168,10 @@ class Processing:
             metadata = updateMultilookedMetadata(metadata=metadata, az_look=az_look, ra_look=ra_look, length=length, width=width)
 
         box_list, num_patches = ut.preparePatches(num_patches=self.config.general.num_patches,
-                                                  width=width,
-                                                  length=length,
+                                                  width=slc_stack_obj.width,
+                                                  length=slc_stack_obj.length,
+                                                  az_look=az_look,
+                                                  ra_look=ra_look,
                                                   logger=log)
 
         # create placeholder in result file for datasets which are stored patch-wise
