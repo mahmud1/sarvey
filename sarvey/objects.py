@@ -40,7 +40,7 @@ from pyproj.database import query_utm_crs_info
 from logging import Logger
 from cmcrameri import cm
 
-from sarvey.helpers.multilook import cpxMultilook
+from sarvey.helpers.multilook import multiLook
 from miaplpy.objects.slcStack import slcStack
 from mintpy.utils import readfile
 from mintpy.utils.plot import auto_flip_direction
@@ -191,8 +191,8 @@ class CoordinatesUTM:
         az_look = self.az_look
         ra_look = self.ra_look
 
-        lat = cpxMultilook(cpx_data=lat, ra_look=ra_look, az_look=az_look, logger=log)
-        lon = cpxMultilook(cpx_data=lon, ra_look=ra_look, az_look=az_look, logger=log)
+        lat = multiLook(cpx_data=lat, ra_look=ra_look, az_look=az_look, logger=log)
+        lon = multiLook(cpx_data=lon, ra_look=ra_look, az_look=az_look, logger=log)
         log.info(msg="Transform coordinates from latitude and longitude (WGS84) to North and East (UTM).")
         # noinspection PyTypeChecker
         utm_crs_list = query_utm_crs_info(
@@ -589,11 +589,11 @@ class Points:
         lat = readfile.read(geom_path, datasetName='latitude')[0]
         lon = readfile.read(geom_path, datasetName='longitude')[0]
 
-        loc_inc = cpxMultilook(cpx_data=loc_inc, az_look=az_look, ra_look=ra_look, logger=self.logger)
-        slant_range = cpxMultilook(cpx_data=slant_range, az_look=az_look, ra_look=ra_look, logger=self.logger)
-        height = cpxMultilook(cpx_data=height, az_look=az_look, ra_look=ra_look, logger=self.logger)
-        lat = cpxMultilook(cpx_data=lat, az_look=az_look, ra_look=ra_look, logger=self.logger)
-        lon = cpxMultilook(cpx_data=lon, az_look=az_look, ra_look=ra_look, logger=self.logger)
+        loc_inc = multiLook(cpx_data=loc_inc, az_look=az_look, ra_look=ra_look, logger=self.logger)
+        slant_range = multiLook(cpx_data=slant_range, az_look=az_look, ra_look=ra_look, logger=self.logger)
+        height = multiLook(cpx_data=height, az_look=az_look, ra_look=ra_look, logger=self.logger)
+        lat = multiLook(cpx_data=lat, az_look=az_look, ra_look=ra_look, logger=self.logger)
+        lon = multiLook(cpx_data=lon, az_look=az_look, ra_look=ra_look, logger=self.logger)
 
         self.loc_inc = loc_inc[mask].ravel()
         self.slant_range = slant_range[mask].ravel()

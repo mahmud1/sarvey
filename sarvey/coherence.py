@@ -37,7 +37,7 @@ from logging import Logger
 from miaplpy.objects.slcStack import slcStack
 from sarvey.objects import BaseStack
 from sarvey.utils import convertBboxToBlock
-from sarvey.helpers.multilook import cpxMultilook
+from sarvey.helpers.multilook import multiLook
 
 
 def computeIfgsAndTemporalCoherence(*, path_temp_coh: str, path_ifgs: str, path_slc: str, ifg_array: np.ndarray,
@@ -111,14 +111,14 @@ def computeIfgsAndTemporalCoherence(*, path_temp_coh: str, path_ifgs: str, path_
         mean_amp = np.mean(np.abs(slc), axis=0)
 
         if az_look > 1 or ra_look > 1:
-            mean_amp = cpxMultilook(cpx_data=mean_amp, az_look=az_look, ra_look=ra_look, logger=logger)
+            mean_amp = multiLook(cpx_data=mean_amp, az_look=az_look, ra_look=ra_look, logger=logger)
 
         mean_amp[mean_amp == 0] = np.nan
         mean_amp_img[bbox[1]:bbox[3], bbox[0]:bbox[2]] = np.log10(mean_amp)
 
         # compute ifgs
         ifgs = computeIfgs(slc=slc, ifg_array=ifg_array)
-        ifgs_ml = cpxMultilook(cpx_data=ifgs, az_look=az_look, ra_look=ra_look, tar=[2, 0, 1], logger=logger)
+        ifgs_ml = multiLook(cpx_data=ifgs, az_look=az_look, ra_look=ra_look, tar=[2, 0, 1], logger=logger)
         ifg_stack_obj.writeToFileBlock(data=ifgs_ml, dataset_name="ifgs", block=block2d, print_msg=False)
         ifgs = ifgs_ml
         del slc

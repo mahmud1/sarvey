@@ -2,7 +2,7 @@ from logging import Logger
 import numpy as np
 
 
-def cpxMultilook(*, cpx_data, az_look=1, ra_look=1, tar=[0, 1, 2], logger=Logger):
+def multiLook(*, cpx_data, az_look=1, ra_look=1, tar=[0, 1, 2], logger=Logger):
     """
     Multilook complex data.
 
