@@ -2,6 +2,10 @@
 History
 =======
 
+Future Major version
+---------------------
+
+* Add ra_looks and az_looks to config.json
 
 Future minor version (release soon)
 -----------------------------------

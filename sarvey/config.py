@@ -258,6 +258,18 @@ class Preparation(BaseModel, extra=Extra.forbid):
         default=100
     )
 
+    az_looks: Optional[int] = Field(
+        title="Azimuth looks",
+        description="Set the number of azimuth looks to apply multilooking to the interferograms. 1 is single look.",
+        default=1
+    )
+
+    ra_looks: Optional[int] = Field(
+        title="Range looks",
+        description="Set the number of range looks to apply multilooking to the interferograms. 1 is single look.",
+        default=1
+    )
+
     filter_window_size: int = Field(
         title="Size of filtering window [pixel]",
         description="Set the size of window for lowpass filtering.",
@@ -298,6 +310,20 @@ class Preparation(BaseModel, extra=Extra.forbid):
         if v is not None:
             if v <= 0:
                 raise ValueError("Maximum baseline must be greater than zero.")
+        return v
+
+    @validator('az_looks')
+    def checkALook(cls, v):
+        """Check if the value for range and azimuth looks are valid."""
+        if v <= 0:
+            raise ValueError("Azimuth looks must be an integer greater than zero.")
+        return v
+
+    @validator('ra_looks')
+    def checkRLook(cls, v):
+        """Check if the value for range and azimuth looks are valid."""
+        if v <= 0:
+            raise ValueError("Range looks must be an integer greater than zero.")
         return v
 
     @validator('filter_window_size')
