@@ -762,8 +762,15 @@ class Processing:
 
         ifg_stack_obj = BaseStack(file=join(self.path, "ifg_stack.h5"), logger=self.logger)
 
+        num_patches = self.config.general.num_patches
+
+        # when multilooked, reduce number of patches
+        num_looks = self.config.preparation.az_looks * self.config.preparation.ra_looks
+        if num_looks > 1:
+            num_patches // num_looks
+
         point2_obj.phase = ut.readPhasePatchwise(stack_obj=ifg_stack_obj, dataset_name="ifgs",
-                                                 num_patches=self.config.general.num_patches, cand_mask=cand_mask2,
+                                                 num_patches=num_patches, cand_mask=cand_mask2,
                                                  point_id_img=point_id_img, logger=self.logger)
 
         if self.config.phase_linking.use_phase_linking_results:
