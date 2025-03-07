@@ -37,11 +37,12 @@ from logging import Logger
 from miaplpy.objects.slcStack import slcStack
 from sarvey.objects import BaseStack
 from sarvey.utils import convertBboxToBlock
+from sarvey.helpers.multilook import cpxMultilook
 
 
 def computeIfgsAndTemporalCoherence(*, path_temp_coh: str, path_ifgs: str, path_slc: str, ifg_array: np.ndarray,
                                     time_mask: np.ndarray, wdw_size: int, num_boxes: int, box_list: list,
-                                    num_cores: int, logger: Logger):
+                                    num_cores: int, az_look: int = 1, ra_look: int = 1, logger: Logger):
     """ComputeIfgsAndTemporalCoherence.
 
     Compute the interferograms and temporal coherence from the SLC stack for a given set of (spatial) patches.
@@ -66,6 +67,10 @@ def computeIfgsAndTemporalCoherence(*, path_temp_coh: str, path_ifgs: str, path_
         List containing the indices of each patch.
     num_cores : int
         Number of cores for parallel processing.
+    az_look: int
+        Number of looks in azimuth direction for multilooking (default: 1 for no multilooking).
+    ra_look: int
+        Number of looks in range direction for multilooking (default: 1 for no multilooking).
     logger : Logger
         Logger object.
 
@@ -83,7 +88,11 @@ def computeIfgsAndTemporalCoherence(*, path_temp_coh: str, path_ifgs: str, path_
     temp_coh_obj = BaseStack(file=path_temp_coh, logger=logger)
     ifg_stack_obj = BaseStack(file=path_ifgs, logger=logger)
 
-    mean_amp_img = np.zeros((slc_stack_obj.length, slc_stack_obj.width), dtype=np.float32)
+    # calculate munltilooked dimensions
+    length = slc_stack_obj.length // az_look
+    width = slc_stack_obj.width // ra_look
+
+    mean_amp_img = np.zeros((length, width), dtype=np.float32)
     num_ifgs = ifg_array.shape[0]
 
     for idx in range(num_boxes):
@@ -91,16 +100,27 @@ def computeIfgsAndTemporalCoherence(*, path_temp_coh: str, path_ifgs: str, path_
         block2d = convertBboxToBlock(bbox=bbox)
 
         # read slc
-        slc = slc_stack_obj.read(datasetName='slc', box=bbox, print_msg=False)
-        slc = slc[time_mask, :, :]
+        # slc = slc_stack_obj.read(datasetName='slc', box=bbox, print_msg=False)
+        # slc = slc[time_mask, :, :]
 
+        # mean_amp = np.mean(np.abs(slc), axis=0)
+
+        ## This does not consider boxex! Multilooking does not work with boxes # FIXME
+        slc = slc_stack_obj.read(datasetName='slc', print_msg=False)
+        slc = slc[time_mask, :, :]
         mean_amp = np.mean(np.abs(slc), axis=0)
+
+        if az_look > 1 or ra_look > 1:
+            mean_amp = cpxMultilook(cpx_data=mean_amp, az_look=az_look, ra_look=ra_look, logger=logger)
+
         mean_amp[mean_amp == 0] = np.nan
         mean_amp_img[bbox[1]:bbox[3], bbox[0]:bbox[2]] = np.log10(mean_amp)
 
         # compute ifgs
         ifgs = computeIfgs(slc=slc, ifg_array=ifg_array)
-        ifg_stack_obj.writeToFileBlock(data=ifgs, dataset_name="ifgs", block=block2d, print_msg=False)
+        ifgs_ml = cpxMultilook(cpx_data=ifgs, az_look=az_look, ra_look=ra_look, tar=[2, 0, 1], logger=logger)
+        ifg_stack_obj.writeToFileBlock(data=ifgs_ml, dataset_name="ifgs", block=block2d, print_msg=False)
+        ifgs = ifgs_ml
         del slc
 
         # filter ifgs

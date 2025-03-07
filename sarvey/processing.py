@@ -155,21 +155,33 @@ class Processing:
         msg += "#" * 10
         log.info(msg=msg)
 
+        length = slc_stack_obj.length
+        width = slc_stack_obj.width
+        metadata = slc_stack_obj.metadata
+
+        # adapt multilooking
+        az_look = self.config.preparation.az_looks
+        ra_look = self.config.preparation.ra_looks
+        if az_look > 1 or ra_look > 1:
+            length = slc_stack_obj.length // az_look
+            width = slc_stack_obj.width // ra_look
+            metadata = updateMultilookedMetadata(metadata=metadata, az_look=az_look, ra_look=ra_look, length=length, width=width)
+
         box_list, num_patches = ut.preparePatches(num_patches=self.config.general.num_patches,
-                                                  width=slc_stack_obj.width,
-                                                  length=slc_stack_obj.length,
+                                                  width=width,
+                                                  length=length,
                                                   logger=log)
 
         # create placeholder in result file for datasets which are stored patch-wise
-        dshape = (slc_stack_obj.length, slc_stack_obj.width, ifg_net_obj.num_ifgs)
+        dshape = (length, width, ifg_net_obj.num_ifgs)
         ifg_stack_obj = BaseStack(file=join(self.path, "ifg_stack.h5"), logger=log)
         ifg_stack_obj.prepareDataset(dataset_name="ifgs", dshape=dshape, dtype=np.csingle,
-                                     metadata=slc_stack_obj.metadata, mode='w', chunks=(30, 30, ifg_net_obj.num_ifgs))
+                                     metadata=metadata, mode='w', chunks=(30, 30, ifg_net_obj.num_ifgs))
 
         # create placeholder in result file for datasets which are stored patch-wise
         temp_coh_obj = BaseStack(file=join(self.path, "temporal_coherence.h5"), logger=log)
-        dshape = (slc_stack_obj.length, slc_stack_obj.width)
-        temp_coh_obj.prepareDataset(dataset_name="temp_coh", metadata=slc_stack_obj.metadata,
+        dshape = (length, width)
+        temp_coh_obj.prepareDataset(dataset_name="temp_coh", metadata=metadata,
                                     dshape=dshape, dtype=np.float32, mode="w", chunks=True)
 
         mean_amp_img = computeIfgsAndTemporalCoherence(
@@ -182,10 +194,12 @@ class Processing:
             num_boxes=num_patches,
             box_list=box_list,
             num_cores=self.config.general.num_cores,
+            az_look=az_look,
+            ra_look=ra_look,
             logger=log)
 
         # store auxilliary datasets for faster access during processing
-        coord_utm_obj = CoordinatesUTM(file_path=join(self.path, "coordinates_utm.h5"), logger=self.logger)
+        coord_utm_obj = CoordinatesUTM(file_path=join(self.path, "coordinates_utm.h5"), az_look=az_look, ra_look=ra_look, logger=self.logger)
         coord_utm_obj.prepare(input_path=join(self.config.general.input_path, "geometryRadar.h5"))
         del coord_utm_obj
 
@@ -206,7 +220,7 @@ class Processing:
         fig = plt.figure(figsize=(15, 5))
         ax = fig.add_subplot()
         im = ax.imshow(temp_coh, cmap=cmc.cm.cmaps["grayC"], vmin=0, vmax=1)
-        auto_flip_direction(slc_stack_obj.metadata, ax=ax, print_msg=True)
+        auto_flip_direction(metadata, ax=ax, print_msg=True)
         ax.set_xlabel("Range")
         ax.set_ylabel("Azimuth")
         plt.colorbar(im, pad=0.03, shrink=0.5)
@@ -262,13 +276,18 @@ class Processing:
         # in the densification step. point_id is ordered so that it fits to anydata[mask].ravel() when loading the data.
         point_id_img = np.arange(0, length * width).reshape((length, width))
 
-        point_obj = Points(file_path=join(self.path, "p1_ifg_wr.h5"), logger=self.logger)
+        point_obj = Points(
+            file_path=join(self.path, "p1_ifg_wr.h5"),
+           az_look = self.config.preparation.az_looks,
+            ra_look = self.config.preparation.ra_looks,
+            logger=self.logger)
+
         point_id1 = point_id_img[cand_mask1]
 
         point_obj.prepare(
             point_id=point_id1,
             coord_xy=coord_xy,
-            input_path=self.config.general.input_path
+            input_path=self.config.general.input_path,
         )
 
         point_obj.phase = ut.readPhasePatchwise(stack_obj=ifg_stack_obj, dataset_name="ifgs",
@@ -375,7 +394,9 @@ class Processing:
                                        logger=self.logger)
         net_par_obj.open(input_path=self.config.general.input_path)
 
-        point_obj = Points(file_path=join(self.path, "p1_ifg_unw.h5"), logger=self.logger)
+        point_obj = Points(
+            file_path=join(self.path, "p1_ifg_unw.h5"),
+            logger=self.logger)
         point_obj.open(
             other_file_path=join(self.path, "p1_ifg_wr.h5"),
             input_path=self.config.general.input_path
@@ -724,7 +745,11 @@ class Processing:
         fig.savefig(join(self.path, "pic", "step_3_mask_p2_coh{}.png".format(coh_value)), dpi=300)
         plt.close(fig)
 
-        point2_obj = Points(file_path=join(self.path, "p2_coh{}_ifg_wr.h5".format(coh_value)), logger=self.logger)
+        point2_obj = Points(
+            file_path=join(self.path, "p2_coh{}_ifg_wr.h5".format(coh_value)),
+            az_look=self.config.preparation.az_looks,
+            ra_look=self.config.preparation.ra_looks,
+            logger=self.logger)
         coord_xy = np.array(np.where(cand_mask2)).transpose()
         point_id2 = point_id_img[cand_mask2]
         point2_obj.prepare(

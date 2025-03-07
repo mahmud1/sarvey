@@ -40,6 +40,7 @@ from pyproj.database import query_utm_crs_info
 from logging import Logger
 from cmcrameri import cm
 
+from sarvey.helpers.multilook import cpxMultilook
 from miaplpy.objects.slcStack import slcStack
 from mintpy.utils import readfile
 from mintpy.utils.plot import auto_flip_direction
@@ -151,18 +152,24 @@ class AmplitudeImage:
 class CoordinatesUTM:
     """Coordinates in UTM for all pixels in the radar image."""
 
-    def __init__(self, *, file_path: str, logger: Logger):
+    def __init__(self, *, file_path: str, ra_look: int = 1, az_look: int = 1, logger: Logger):
         """Init.
 
         Parameters
         ----------
         file_path: str
             path to filename
+        ra_look: int
+            Number of looks in range direction for multilooking (default: 1 for no multilooking).
+        az_look: int
+            Number of looks in azimuth direction for multilooking (default: 1 for no multilooking).
         logger: Logger
             Logging handler.
         """
         self.file_path = file_path
         self.coord_utm = None
+        self.az_look = az_look
+        self.ra_look = ra_look
         self.logger = logger
 
     def prepare(self, *, input_path: str):
@@ -172,11 +179,20 @@ class CoordinatesUTM:
         ----------
         input_path: str
             path to slcStack.h5 file.
+        ra_look: int
+            Number of looks in range direction for multilooking (default: 1 for no multilooking).
+        az_look: int
+            Number of looks in azimuth direction for multilooking (default: 1 for no multilooking).
         """
         log = self.logger
         lat = readfile.read(input_path, datasetName='latitude')[0]
         lon = readfile.read(input_path, datasetName='longitude')[0]
 
+        az_look = self.az_look
+        ra_look = self.ra_look
+
+        lat = cpxMultilook(cpx_data=lat, ra_look=ra_look, az_look=az_look, logger=log)
+        lon = cpxMultilook(cpx_data=lon, ra_look=ra_look, az_look=az_look, logger=log)
         log.info(msg="Transform coordinates from latitude and longitude (WGS84) to North and East (UTM).")
         # noinspection PyTypeChecker
         utm_crs_list = query_utm_crs_info(
@@ -208,13 +224,17 @@ class CoordinatesUTM:
 class BaseStack:
     """Class for 3D image-like data stacks."""
 
-    def __init__(self, *, file: str = None, logger: Logger):
+    def __init__(self, *, file: str = None, ra_look: int = 1, az_look: int = 1, logger: Logger):
         """Init.
 
         Parameters
         ----------
         file: str
             path to filename
+        ra_look: int
+            Number of looks in range direction for multilooking (default: 1 for no multilooking).
+        az_look: int
+            Number of looks in azimuth direction for multilooking (default: 1 for no multilooking).
         logger: Logger
             Logging handler.
         """
@@ -224,6 +244,8 @@ class BaseStack:
         self.num_time = None
         self.length = None
         self.width = None
+        self.ra_look = ra_look
+        self.az_look = az_look
         self.f = None
 
     def close(self, *, print_msg: bool = True):
@@ -445,13 +467,17 @@ class Points:
 
     # etc.
 
-    def __init__(self, *, file_path: str, logger: Logger):
+    def __init__(self, *, file_path: str, az_look:int = 1, ra_look:int = 1, logger: Logger):
         """Init.
 
         Parameters
         ----------
         file_path: str
              ath to filename
+        az_look: int
+            Number of looks in azimuth direction for multilooking (default: 1 for no multilooking).
+        ra_look: int
+            Number of looks in range direction for multilooking (default: 1 for no multilooking).
         logger: Logger
             Logging handler.
         """
@@ -462,6 +488,8 @@ class Points:
         self.slant_range = None
         self.loc_inc = None
         self.file_path = file_path
+        self.az_look = az_look
+        self.ra_look = ra_look
         self.logger = logger
 
     def prepare(self, *, point_id: np.ndarray, coord_xy: np.ndarray, input_path: str):
@@ -494,6 +522,8 @@ class Points:
 
         with h5py.File(self.file_path, 'w') as f:
             f.attrs["num_points"] = self.num_points
+            f.attrs["az_look"] = self.az_look
+            f.attrs["ra_look"] = self.ra_look
             f.create_dataset('coord_xy', data=self.coord_xy)
             f.create_dataset('point_id', data=self.point_id)
             f.create_dataset('phase', data=self.phase)
@@ -524,6 +554,8 @@ class Points:
             self.coord_xy = f["coord_xy"][:]
             self.point_id = f["point_id"][:]
             self.phase = f["phase"][:]
+            self.az_look = f.attrs["az_look"]
+            self.ra_look = f.attrs["ra_look"]
 
         self.openExternalData(input_path=input_path)
 
@@ -539,6 +571,11 @@ class Points:
         self.length = slc_stack_obj.length  # y-coordinate axis (azimut)
         self.width = slc_stack_obj.width  # x-coordinate axis (range)
 
+        az_look = self.az_look
+        ra_look = self.ra_look
+        self.length = self.length // az_look
+        self.width = self.width // ra_look
+
         # 3) read from geometry file
         mask = self.createMask()
 
@@ -551,6 +588,12 @@ class Points:
         height = readfile.read(geom_path, datasetName='height')[0]
         lat = readfile.read(geom_path, datasetName='latitude')[0]
         lon = readfile.read(geom_path, datasetName='longitude')[0]
+
+        loc_inc = cpxMultilook(cpx_data=loc_inc, az_look=az_look, ra_look=ra_look, logger=self.logger)
+        slant_range = cpxMultilook(cpx_data=slant_range, az_look=az_look, ra_look=ra_look, logger=self.logger)
+        height = cpxMultilook(cpx_data=height, az_look=az_look, ra_look=ra_look, logger=self.logger)
+        lat = cpxMultilook(cpx_data=lat, az_look=az_look, ra_look=ra_look, logger=self.logger)
+        lon = cpxMultilook(cpx_data=lon, az_look=az_look, ra_look=ra_look, logger=self.logger)
 
         self.loc_inc = loc_inc[mask].ravel()
         self.slant_range = slant_range[mask].ravel()
