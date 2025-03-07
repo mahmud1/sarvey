@@ -5,6 +5,7 @@ History
 Future Major version
 ---------------------
 
+* Enable applying multi-looking to the interferograms, mean amplitude and geometry files.
 * Add ra_looks and az_looks to config.json
 
 Future minor version (release soon)
