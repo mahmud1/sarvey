@@ -51,6 +51,7 @@ import sarvey.utils as ut
 from sarvey.coherence import computeIfgsAndTemporalCoherence
 from sarvey.triangulation import PointNetworkTriangulation
 from sarvey.config import Config
+from sarvey.helpers.multilook import updateMultilookedMetadata
 
 
 class Processing:
@@ -952,7 +953,7 @@ class Processing:
             input_path=self.config.general.input_path
         )
 
-        bmap_obj = AmplitudeImage(file_path=join(self.path, "background_map.h5"))
+        bmap_obj = AmplitudeImage(file_path=join(self.path, "background_map.h5"), logger=self.logger)
         fig = viewer.plotScatter(value=gamma, coord=point2_obj.coord_xy, bmap_obj=bmap_obj,
                                  ttl="Coherence from temporal unwrapping\nBefore outlier removal", s=3.5,
                                  cmap="lajolla", vmin=0, vmax=1, logger=self.logger)[0]
