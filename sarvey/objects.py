@@ -173,7 +173,7 @@ class CoordinatesUTM:
         self.logger = logger
 
     def prepare(self, *, input_path: str):
-        """Read the slc stack, computes the mean amplitude image and stores it into a file.
+        """Read geometryRadar.h5 file, compute the UTM coordinates and store them into a file.
 
         Parameters
         ----------
