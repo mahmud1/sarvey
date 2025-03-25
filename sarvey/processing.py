@@ -160,8 +160,9 @@ class Processing:
         metadata = slc_stack_obj.metadata
 
         # adapt multilooking
-        az_look = self.config.preparation.az_looks
-        ra_look = self.config.preparation.ra_looks
+        az_look = self.config.multilooking.az_looks
+        ra_look = self.config.multilooking.ra_looks
+
         if az_look > 1 or ra_look > 1:
             length = slc_stack_obj.length // az_look
             width = slc_stack_obj.width // ra_look
@@ -280,8 +281,8 @@ class Processing:
 
         point_obj = Points(
             file_path=join(self.path, "p1_ifg_wr.h5"),
-           az_look = self.config.preparation.az_looks,
-            ra_look = self.config.preparation.ra_looks,
+            az_look = self.config.multilooking.az_looks,
+            ra_look = self.config.multilooking.ra_looks,
             logger=self.logger)
 
         point_id1 = point_id_img[cand_mask1]
@@ -749,8 +750,8 @@ class Processing:
 
         point2_obj = Points(
             file_path=join(self.path, "p2_coh{}_ifg_wr.h5".format(coh_value)),
-            az_look=self.config.preparation.az_looks,
-            ra_look=self.config.preparation.ra_looks,
+            az_look=self.config.multilooking.az_looks,
+            ra_look=self.config.multilooking.ra_looks,
             logger=self.logger)
         coord_xy = np.array(np.where(cand_mask2)).transpose()
         point_id2 = point_id_img[cand_mask2]
@@ -765,7 +766,7 @@ class Processing:
         num_patches = self.config.general.num_patches
 
         # when multilooked, reduce number of patches
-        num_looks = self.config.preparation.az_looks * self.config.preparation.ra_looks
+        num_looks = self.config.multilooking.az_looks * self.config.multilooking.ra_looks
         if num_looks > 1:
             num_patches // num_looks
 
