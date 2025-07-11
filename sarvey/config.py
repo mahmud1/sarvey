@@ -307,7 +307,7 @@ class Preparation(BaseModel, extra="forbid"):
             raise ValueError("Filter window size must be greater than zero.")
         return v
 
-class Multilooking(BaseModel, extra=Extra.forbid):
+class Multilooking(BaseModel, extra="forbid"):
     """Template for settings in config file."""
 
     az_looks: Optional[int] = Field(
@@ -322,14 +322,14 @@ class Multilooking(BaseModel, extra=Extra.forbid):
         default=1
     )
 
-    @validator('az_looks')
+    @field_validator('az_looks')
     def checkALook(cls, v):
         """Check if the value for range and azimuth looks are valid."""
         if v <= 0:
             raise ValueError("Azimuth looks must be an integer greater than zero.")
         return v
 
-    @validator('ra_looks')
+    @field_validator('ra_looks')
     def checkRLook(cls, v):
         """Check if the value for range and azimuth looks are valid."""
         if v <= 0:
