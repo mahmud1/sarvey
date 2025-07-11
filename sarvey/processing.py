@@ -333,10 +333,10 @@ class Processing:
         net_par_obj.writeToFile()
 
         # 3) spatial unwrapping of the arc network and removal of outliers (arcs and points)
-        bmap_obj = AmplitudeImage(file_path=join(self.path, "background_map.h5"))
+        bmap_obj = AmplitudeImage(file_path=join(self.path, "background_map.h5"), logger=self.logger)
 
         try:
-            ax = bmap_obj.plot(logger=self.logger)
+            ax = bmap_obj.plot()
             ax, cbar = viewer.plotColoredPointNetwork(x=point_obj.coord_xy[:, 1], y=point_obj.coord_xy[:, 0],
                                                       arcs=net_par_obj.arcs,
                                                       val=net_par_obj.gamma,
@@ -359,7 +359,7 @@ class Processing:
         # todo: retriangulate the points if necessary and unwrap them
 
         try:
-            ax = bmap_obj.plot(logger=self.logger)
+            ax = bmap_obj.plot()
             ax, cbar = viewer.plotColoredPointNetwork(x=point_obj.coord_xy[:, 1], y=point_obj.coord_xy[:, 0],
                                                       arcs=net_par_obj.arcs,
                                                       val=net_par_obj.gamma,
@@ -378,7 +378,7 @@ class Processing:
         )
 
         try:
-            ax = bmap_obj.plot(logger=self.logger)
+            ax = bmap_obj.plot()
             ax, cbar = viewer.plotColoredPointNetwork(x=point_obj.coord_xy[:, 1], y=point_obj.coord_xy[:, 0],
                                                       arcs=net_par_obj.arcs,
                                                       val=net_par_obj.gamma,
