@@ -139,7 +139,8 @@ class PointNetworkTriangulation:
 
         for p1 in range(num_points):
             # find all nearest neighbours independent of the direction within the max_dist
-            idx = tree.query(self.coord_xy[p1, :], k=150)[1]
+            dist, idx = tree.query(self.coord_xy[p1, :], k=150)
+            idx = idx[np.isfinite(dist)]
             idx = idx[1:]
 
             # add the neighbours to the predefined bins based on the angle to the point
