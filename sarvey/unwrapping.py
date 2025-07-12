@@ -1028,21 +1028,22 @@ def removeBadPointsIteratively(*, net_obj: NetworkParameter, point_id: np.ndarra
         worst_node = list(graph.nodes())[worst_point]
 
         if median_coherence[worst_point] >= quality_thrsh:
-            logger.info(f"Removed {num_points_removed} point(s).")
+            logger.debug("Number of points removed due to low temporal coherence: %d", num_points_removed)
             break
 
         graph.remove_node(worst_node)
         num_points_removed += 1
-        logger.info(msg="Removing point {} with median coherence {}".format(
-            worst_node, median_coherence[worst_point]))
+        logger.debug("Removing point %d with median coherence %.2f", worst_node, median_coherence[worst_point])
 
     valid_nodes = [
         node for node in graph.nodes()
         if any(not np.isnan(graph[node][neighbor]['weight']) for neighbor in graph.successors(node)) or
-           any(not np.isnan(graph[neighbor][node]['weight']) for neighbor in graph.predecessors(node))
+        any(not np.isnan(graph[neighbor][node]['weight']) for neighbor in graph.predecessors(node))
     ]
 
     new_point_id = np.array(valid_nodes)
+
+    logger.debug("Number of nodes after/before removal: %d/%d", len(new_point_id), len(point_id))
 
     new_arc_list = []
     gamma_list = []
@@ -1070,6 +1071,20 @@ def removeBadPointsIteratively(*, net_obj: NetworkParameter, point_id: np.ndarra
     net_obj.phase = np.array(phase_list, dtype=np.float32)
     net_obj.num_arcs = len(net_obj.arcs)
     point_id = new_point_id
+
+    # log values after bad point removal
+    logger.debug("Min - Max temporal coherence of points after bad point removal: %.3f - %.3f",
+                 np.min(net_obj.gamma), np.max(net_obj.gamma))
+    logger.debug("Min - Max velocity of points after bad point removal: %.3f - %.3f",
+                 np.min(net_obj.vel), np.max(net_obj.vel))
+    logger.debug("Min - Max DEM error of points after bad point removal: %.3f - %.3f",
+                 np.min(net_obj.demerr), np.max(net_obj.demerr))
+    logger.debug("Min - Max incidence angle of points after bad point removal: %.3f - %.3f",
+                    np.min(net_obj.loc_inc), np.max(net_obj.loc_inc))
+    logger.debug("Min - Max slant range of points after bad point removal: %.3f - %.3f",
+                    np.min(net_obj.slant_range), np.max(net_obj.slant_range))
+    logger.debug("Min - Max phase of points after bad point removal: %.3f - %.3f",
+                    np.min(net_obj.phase), np.max(net_obj.phase))
 
     logger.info(msg="Finished removing bad points.")
     return net_obj, point_id
