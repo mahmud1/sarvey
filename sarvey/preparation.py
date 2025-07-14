@@ -71,8 +71,8 @@ def createTimeMaskFromDates(*, start_date: str, stop_date: str, date_list: list,
     if (start_date is None) and (stop_date is None):
         num_slc = time_mask.shape[0]
         result_date_list = [date.isoformat() for date in date_list]
-        logger.debug("Use all %s images in SLC stack. Time frame: %s - %s",
-                     num_slc, result_date_list[0], result_date_list[-1])
+        logger.debug(
+            f"Use all {num_slc} images in SLC stack. Time frame: {result_date_list[0]} - {result_date_list[-1]}")
         return time_mask, num_slc, result_date_list
 
     if start_date is None:
@@ -86,25 +86,25 @@ def createTimeMaskFromDates(*, start_date: str, stop_date: str, date_list: list,
         stop_date = datetime.date.fromisoformat(stop_date)
 
     if start_date >= stop_date:
-        logger.error("Start date (%s) < stop date (%s). Correct the config file. Exiting!", start_date, stop_date)
+        logger.error(f"Start date ({start_date}) < stop date ({stop_date}). Correct the config file. Exiting!")
         raise ValueError
 
     if stop_date < min(date_list):
         logger.error(
-            "Stop date (%s) is before the first image date (%s). Choose a later stop date in config file. Exiting!",
-            stop_date, min(date_list))
+            f"Stop date ({stop_date}) is before the first image date ({min(date_list)}). "
+            f"Choose a later stop date in config file. Exiting!")
         raise ValueError
 
     if start_date > max(date_list):
         logger.error(
-            "Start date (%s) is after the last image date (%s). Choose an earlier start date in config file. Exiting!!",
-            start_date, max(date_list))
+            f"Start date ({start_date}) is after the last image date ({max(date_list)}). "
+            f"Choose an earlier start date in config file. Exiting!!")
         raise ValueError
 
     shift = "    "
-    logger.debug("%s___________________________", shift)
-    logger.debug("%s|    Date     |  Selected |", shift)
-    logger.debug("%s|_____________|___________|", shift)
+    logger.debug(f"{shift}{'----------------------':>24}")
+    logger.debug(f"{shift}| {'Date':>10} | {'Selected':>10} |")
+    logger.debug(f"{shift}| {'----------':>10} | {'----------':>10} |")
 
     result_date_list = list()
     for i, date in enumerate(date_list):
@@ -112,15 +112,15 @@ def createTimeMaskFromDates(*, start_date: str, stop_date: str, date_list: list,
             time_mask[i] = False
         else:
             result_date_list.append(date.isoformat())
-        val = "     x     " if time_mask[i] else "           "
-        logger.debug("%s|  %10s |%3s|", shift, date.isoformat(), val)
+        val = "    x    " if time_mask[i] else "          "
+        logger.debug(f"{shift}| {date.isoformat():>10} | {val:>10} |")
 
-    logger.debug("%s|_____________|___________|", shift)
+    logger.debug(f"{shift}| {'----------':>10} | {'----------':>10} |")
 
     num_slc = time_mask[time_mask].shape[0]
     total_num_slc = time_mask.shape[0]
-    logger.debug("Use %s/%s images in time frame: %s - %s",
-                 num_slc, total_num_slc, start_date.isoformat(), stop_date.isoformat())
+    logger.debug(f"Use {num_slc}/{total_num_slc} images in time frame: "
+                 f"{start_date.isoformat()} - {stop_date.isoformat()}")
 
     return time_mask, num_slc, result_date_list
 
@@ -206,9 +206,9 @@ def selectPixels(*, path: str, selection_method: str, thrsh: float,
     cmap = None
     # compute candidates
     if selection_method == "temp_coh":
-        logger.debug("Reading temporal coherence from temporal_coherence.h5 and select pixels using threshold %s...",
-                     thrsh)
-        temp_coh_obj = BaseStack(file=join(path, "temporal_coherence.h5"), logger=logger)
+        tcoh_file = join(path, "temporal_coherence.h5")
+        logger.debug(f"Reading temporal coherence {tcoh_file} and selecting pixels ...")
+        temp_coh_obj = BaseStack(file=tcoh_file, logger=logger)
         quality = temp_coh_obj.read(dataset_name="temp_coh")
         cand_mask = quality >= thrsh
         grid_min_val = False
@@ -227,11 +227,12 @@ def selectPixels(*, path: str, selection_method: str, thrsh: float,
         # unit = "Phase-Linking\nCoherence [ ]"
         # cmap = "lajolla"
 
-    logger.debug("Number of selected pixels: %s.", np.sum(cand_mask))
+    logger.debug(
+        f"Number of selected pixels using {selection_method} temporal coherence threshold: {np.sum(cand_mask)}")
     if grid_size is not None:  # -> sparse pixel selection
-        logger.debug("Select sparse pixels using grid size %s m.", grid_size)
+        logger.debug(f"Select sparse pixels using grid size {grid_size} m.")
         coord_utm_file = join(path, "coordinates_utm.h5")
-        logger.debug("Reading coordinates from file: %s", coord_utm_file)
+        logger.debug(f"Reading coordinates from file: {coord_utm_file}")
         coord_utm_obj = CoordinatesUTM(file_path=coord_utm_file, logger=logger)
         coord_utm_obj.open()
         box_list = ut.createSpatialGrid(coord_utm_img=coord_utm_obj.coord_utm,
@@ -241,7 +242,15 @@ def selectPixels(*, path: str, selection_method: str, thrsh: float,
                                         logger=logger)[0]
         cand_mask_sparse = ut.selectBestPointsInGrid(box_list=box_list, quality=quality, sel_min=grid_min_val)
         cand_mask &= cand_mask_sparse
-        logger.debug("Number of selected sparse pixels: %s.", np.sum(cand_mask))
+        logger.debug(f"Number of selected sparse pixels: {np.sum(cand_mask)}")
+        min_map_coord = np.min(coord_utm_obj.coord_utm[..., cand_mask], axis=1)
+        max_map_coord = np.max(coord_utm_obj.coord_utm[..., cand_mask], axis=1)
+        logger.debug(
+            f"[Min, Max] of map coordinates of selected points along first axis: "
+            f"[{min_map_coord[0]:.1f}, {max_map_coord[0]:.1f}].")
+        logger.debug(
+            f"[Min, Max] of map coordinates of selected points along second axis: "
+            f"[{min_map_coord[1]:.1f}, {max_map_coord[1]:.1f}].")
 
     if bool_plot:
         logger.debug("Plotting selected pixels...")
@@ -283,7 +292,7 @@ def createArcsBetweenPoints(*, point_obj: Points, knn: int = None, max_arc_lengt
     arcs: np.ndarray
         Arcs of the triangulation containing the indices of the points for each arc.
     """
-    logger.debug("Triangulating %s points...", point_obj.coord_xy.shape[0])
+    logger.debug(f"Triangulating {point_obj.coord_xy.shape[0]} points...")
     triang_obj = PointNetworkTriangulation(coord_xy=point_obj.coord_xy, coord_utmxy=point_obj.coord_utm, logger=logger)
 
     if knn is not None:
@@ -293,12 +302,11 @@ def createArcsBetweenPoints(*, point_obj: Points, knn: int = None, max_arc_lengt
 
     # logger.info(f"remove arcs with length > {max_arc_length} m.")
     ut_mask = np.triu(triang_obj.dist_mat, k=1) != 0
-    logger.debug("Triangulation arc lengths - Min: %.0f m, Max: %.0f m, Mean: %.0f m.",
-                 np.min(triang_obj.dist_mat[ut_mask]),
-                 np.max(triang_obj.dist_mat[ut_mask]),
-                 np.mean(triang_obj.dist_mat[ut_mask]))
+    logger.debug(f"Triangulation arc lengths - Min: {np.min(triang_obj.dist_mat[ut_mask]):.0f} m, "
+                 f"Max: {np.max(triang_obj.dist_mat[ut_mask]):.0f} m, "
+                 f"Mean: {np.mean(triang_obj.dist_mat[ut_mask]):.0f} m.")
 
-    logger.info("Removing arcs with length > %s max_arc_length...", max_arc_length)
+    logger.info(f"Removing arcs with length > {max_arc_length} max_arc_length...")
     triang_obj.removeLongArcs(max_dist=max_arc_length)
 
     if not triang_obj.isConnected():
@@ -307,12 +315,11 @@ def createArcsBetweenPoints(*, point_obj: Points, knn: int = None, max_arc_lengt
 
     logger.info("retrieve arcs from adjacency matrix.")
     arcs = triang_obj.getArcsFromAdjMat()
-    logger.debug("Number of arcs: %s.", arcs.shape[0])
+    logger.debug(f"Number of arcs: {arcs.shape[0]}.")
 
     ut_mask = np.triu(triang_obj.dist_mat, k=1) != 0
-    logger.debug("Triangulation arc lengths - Min: %.0f m, Max: %.0f m, Mean: %.0f m.",
-                 np.min(triang_obj.dist_mat[ut_mask]),
-                 np.max(triang_obj.dist_mat[ut_mask]),
-                 np.mean(triang_obj.dist_mat[ut_mask]))
+    logger.debug(f"Triangulation arc lengths - Min: {np.min(triang_obj.dist_mat[ut_mask]):.0f} m, "
+                 f"Max: {np.max(triang_obj.dist_mat[ut_mask]):.0f} m, "
+                 f"Mean: {np.mean(triang_obj.dist_mat[ut_mask]):.0f} m.")
 
     return arcs
