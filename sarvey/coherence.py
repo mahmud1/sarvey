@@ -79,7 +79,7 @@ def computeIfgsAndTemporalCoherence(*, path_temp_coh: str, path_ifgs: str, path_
     filter_kernel = np.ones((wdw_size, wdw_size), dtype=np.float64)
     filter_kernel[wdw_size // 2, wdw_size // 2] = 0
 
-    logger.debug(f"Openning SLC stack: {path_slc}")
+    logger.debug(f"Opening SLC stack: {path_slc}")
     slc_stack_obj = slcStack(path_slc)
     slc_stack_obj.open(print_msg=False)
     logger.debug(f"Initializing temporal coherence stack: {path_temp_coh}")
@@ -121,7 +121,7 @@ def computeIfgsAndTemporalCoherence(*, path_temp_coh: str, path_ifgs: str, path_
             for i in range(num_ifgs):
                 avg_neighbours[:, :, i] = convolve2d(in1=ifgs[:, :, i], in2=filter_kernel, mode='same', boundary="symm")
         else:
-            logger.debug(f"Filter interferograms using {num_cores} parallel cores for temporal coherence estimation.")
+            logger.debug(f"Filtering interferograms using {num_cores} parallel cores for temporal coherence estimation.")
             args = [(
                 idx,
                 ifgs[:, :, idx],
@@ -146,7 +146,7 @@ def computeIfgsAndTemporalCoherence(*, path_temp_coh: str, path_ifgs: str, path_
              f"Min: {np.nanmin(temp_coh):.2}, Max: {np.nanmax(temp_coh):.2}, Mean: {np.nanmean(temp_coh):.2}"))
 
         del residual_phase, temp_coh
-        logger.info(f"Patches {idx+1}/{num_boxes} processed.")
+        logger.info(f"Patch {idx+1}/{num_boxes} processed.")
 
     m, s = divmod(time.time() - start_time, 60)
     logger.debug(f"Ifgs and temporal coherence computed. Time used: {m:02.0f} mins {s:02.1f} secs.")
