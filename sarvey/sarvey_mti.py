@@ -48,10 +48,6 @@ from sarvey.processing import Processing
 from sarvey.config import Config, loadConfiguration
 from sarvey.utils import checkIfRequiredFilesExist
 
-try:
-    matplotlib.use('QtAgg')
-except ImportError as e:
-    print(e)
 
 EXAMPLE = """Example:
   sarvey -f config.json 0 0 -g                   # create default config file with the name config.json and exit
